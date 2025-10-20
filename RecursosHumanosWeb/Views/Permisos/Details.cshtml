@@ -1,0 +1,287 @@
+﻿@model RecursosHumanosWeb.Models.Permiso
+@using System.IO
+@{
+    ViewData["Title"] = "Detalles del Permiso";
+
+    // Definir configuraciones de tipo de permiso (basado en el JS)
+    var typeConfigurations = new Dictionary<int, Dictionary<string, (bool show, string label)>>
+    {
+        [2] = new Dictionary<string, (bool, string)>
+        {
+            ["Fecha1"] = (true, "Del día"),
+            ["Fecha2"] = (true, "Al día"),
+            ["Hora1"] = (false, "Hora entrada"),
+            ["Hora2"] = (false, "Hora salida")
+        },
+        [3] = new Dictionary<string, (bool, string)>
+        {
+            ["Fecha1"] = (true, "En el día"),
+            ["Fecha2"] = (false, "Al día"),
+            ["Hora1"] = (true, "Hora de llegada"),
+            ["Hora2"] = (false, "Hora salida")
+        },
+        [4] = new Dictionary<string, (bool, string)>
+        {
+            ["Fecha1"] = (true, "Del día"),
+            ["Fecha2"] = (true, "Al día"),
+            ["Hora1"] = (true, "Hora entrada"),
+            ["Hora2"] = (true, "Hora salida")
+        },
+        [5] = new Dictionary<string, (bool, string)>
+        {
+            ["Fecha1"] = (true, "Del día"),
+            ["Fecha2"] = (true, "Por el día"),
+            ["Hora1"] = (true, "Hora entrada"),
+            ["Hora2"] = (true, "Hora salida")
+        }
+    };
+
+    // Obtener configuración para el tipo de permiso actual
+    var config = typeConfigurations.ContainsKey(Model.IdTipoPermiso) ? typeConfigurations[Model.IdTipoPermiso] : null;
+
+    // Determinar si se debe mostrar el campo Dias (solo para permisos con rango)
+    bool showDias = config != null && config["Fecha2"].show && Model.Fecha2.HasValue;
+
+    // Extraer horas de Fecha1 y Fecha2 si es necesario
+    string hora1 = config != null && config["Hora1"].show && Model.Fecha1 != null ? Model.Fecha1.ToString("HH:mm") : null;
+    string hora2 = config != null && config["Hora2"].show && Model.Fecha2.HasValue ? Model.Fecha2.Value.ToString("HH:mm") : null;
+
+    // Verificar si el archivo de evidencia existe
+    string evidencePath = !string.IsNullOrEmpty(Model.Evidencia) ? System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", Model.Evidencia.TrimStart('/').Replace('/', '\\')) : null;
+    bool evidenceExists = evidencePath != null && File.Exists(evidencePath);
+
+    // Normalizar la ruta para el enlace (usar barras inclinadas para URL)
+    string evidenceUrl = !string.IsNullOrEmpty(Model.Evidencia) ? Model.Evidencia.Replace('\\', '/') : null;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Permisos/details.css" asp-append-version="true" />
+}
+
+<div class="container">
+    <div class="permission-card">
+        <div class="card-header">
+            <div class="card-title">
+                <span>📋</span>
+                Permiso Laboral #@Model.Id
+            </div>
+            <div class="card-status">
+                @if (Model.Revisado)
+                {
+                    <div class="status-badge status-approved">✅ Aprobado</div>
+                }
+                else
+                {
+                    <div class="status-badge status-pending">⏳ Pendiente</div>
+                }
+
+                @if (Model.Goce)
+                {
+                    <div class="status-badge goce-si">💰 Con Goce</div>
+                }
+                else
+                {
+                    <div class="status-badge goce-no">💸 Sin Goce</div>
+                }
+            </div>
+        </div>
+
+        <div class="details-list">
+            @if (showDias)
+            {
+                <div class="detail-item dias-solicitados">
+                    <div class="detail-label">
+                        <span>📊</span>
+                        @Html.DisplayNameFor(model => model.Dias)
+                    </div>
+                    <div class="detail-value">@Html.DisplayFor(model => model.Dias) días</div>
+                </div>
+            }
+
+            <div class="detail-item motivo">
+                <div class="detail-label">
+                    <span>📝</span>
+                    @Html.DisplayNameFor(model => model.Motivo)
+                </div>
+                <div class="detail-value">@Html.DisplayFor(model => model.Motivo)</div>
+            </div>
+
+            @if (evidenceExists)
+            {
+                <div class="detail-item evidencia">
+                    <div class="detail-label">
+                        <span>📎</span>
+                        @Html.DisplayNameFor(model => model.Evidencia)
+                    </div>
+                    <div class="detail-value">
+                        <a href="@evidenceUrl" target="_blank" title="Abrir PDF" class="evidence-link">
+                            📎 @System.IO.Path.GetFileName(evidenceUrl)
+                        </a>
+                    </div>
+                </div>
+            }
+            else if (!string.IsNullOrEmpty(Model.Evidencia))
+            {
+                <div class="detail-item evidencia">
+                    <div class="detail-label">
+                        <span>📎</span>
+                        @Html.DisplayNameFor(model => model.Evidencia)
+                    </div>
+                    <div class="detail-value">📎 Archivo no encontrado (@System.IO.Path.GetFileName(Model.Evidencia))</div>
+                </div>
+            }
+
+            @if (Model.IdTipoPermisoNavigation != null)
+            {
+                <div class="detail-item">
+                    <div class="detail-label">
+                        <span>🏷️</span>
+                        Tipo de Permiso
+                    </div>
+                    <div class="detail-value">@Html.DisplayFor(model => model.IdTipoPermisoNavigation.Descripcion)</div>
+                </div>
+            }
+
+            @if (config != null && config["Fecha1"].show && Model.Fecha1 != null)
+            {
+                <div class="detail-item fecha">
+                    <div class="detail-label">
+                        <span>📅</span>
+                        @config["Fecha1"].label
+                    </div>
+                    <div class="detail-value">📅 @Model.Fecha1.ToString("dd/MM/yyyy")</div>
+                </div>
+            }
+
+            @if (config != null && config["Hora1"].show && !string.IsNullOrEmpty(hora1))
+            {
+                <div class="detail-item hora">
+                    <div class="detail-label">
+                        <span>🕐</span>
+                        @config["Hora1"].label
+                    </div>
+                    <div class="detail-value">🕐 @hora1</div>
+                </div>
+            }
+
+            @if (config != null && config["Fecha2"].show && Model.Fecha2.HasValue)
+            {
+                <div class="detail-item fecha">
+                    <div class="detail-label">
+                        <span>📅</span>
+                        @config["Fecha2"].label
+                    </div>
+                    <div class="detail-value">📅 @Model.Fecha2.Value.ToString("dd/MM/yyyy")</div>
+                </div>
+            }
+
+            @if (config != null && config["Hora2"].show && !string.IsNullOrEmpty(hora2))
+            {
+                <div class="detail-item hora">
+                    <div class="detail-label">
+                        <span>🕐</span>
+                        @config["Hora2"].label
+                    </div>
+                    <div class="detail-value">🕐 @hora2</div>
+                </div>
+            }
+
+            @if (Model.FechaCreacion != null)
+            {
+                <div class="detail-item fecha">
+                    <div class="detail-label">
+                        <span>🕐</span>
+                        @Html.DisplayNameFor(model => model.FechaCreacion)
+                    </div>
+                    <div class="detail-value">🕐 @Html.DisplayFor(model => model.FechaCreacion)</div>
+                </div>
+            }
+
+            @if (Model.FechaAutorizacion != null)
+            {
+                <div class="detail-item fecha">
+                    <div class="detail-label">
+                        <span>✅</span>
+                        @Html.DisplayNameFor(model => model.FechaAutorizacion)
+                    </div>
+                    <div class="detail-value">✅ @Html.DisplayFor(model => model.FechaAutorizacion)</div>
+                </div>
+            }
+
+            @if (Model.IdUsuarioSolicitaNavigation != null)
+            {
+                <div class="detail-item usuario">
+                    <div class="detail-label">
+                        <span>👤</span>
+                        Solicitante
+                    </div>
+                    <div class="detail-value">👤 @Html.DisplayFor(model => model.IdUsuarioSolicitaNavigation.Nombre)</div>
+                </div>
+            }
+
+            @if (Model.IdUsuarioAutorizaNavigation != null)
+            {
+                <div class="detail-item usuario">
+                    <div class="detail-label">
+                        <span>👨‍💼</span>
+                        Autorizado por
+                    </div>
+                    <div class="detail-value">👨‍💼 @Html.DisplayFor(model => model.IdUsuarioAutorizaNavigation.Nombre)</div>
+                </div>
+            }
+
+            @if (Model.IdUsuarioCreaNavigation != null)
+            {
+                <div class="detail-item usuario">
+                    <div class="detail-label">
+                        <span>👤</span>
+                        Creado por
+                    </div>
+                    <div class="detail-value">👤 @Html.DisplayFor(model => model.IdUsuarioCreaNavigation.Nombre)</div>
+                </div>
+            }
+
+            @if (Model.IdUsuarioModificaNavigation != null)
+            {
+                <div class="detail-item usuario">
+                    <div class="detail-label">
+                        <span>🔄</span>
+                        Modificado por
+                    </div>
+                    <div class="detail-value">🔄 @Html.DisplayFor(model => model.IdUsuarioModificaNavigation.Nombre)</div>
+                </div>
+            }
+
+            @if (Model.IdCorteNavigation != null)
+            {
+                <div class="detail-item">
+                    <div class="detail-label">
+                        <span>🔢</span>
+                        ID de Corte
+                    </div>
+                    <div class="detail-value">#@Html.DisplayFor(model => model.IdCorteNavigation.Id)</div>
+                </div>
+            }
+
+            @if (Model.FechaModificacion != null)
+            {
+                <div class="detail-item fecha">
+                    <div class="detail-label">
+                        <span>🔄</span>
+                        @Html.DisplayNameFor(model => model.FechaModificacion)
+                    </div>
+                    <div class="detail-value">🔄 @Html.DisplayFor(model => model.FechaModificacion)</div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Acciones -->
+    <div class="actions-section">
+        <a asp-action="Index" class="btn btn-primary">
+            <span>📋</span>
+            Volver a la Lista
+        </a>
+    </div>
+</div>
+

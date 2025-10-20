@@ -1,0 +1,106 @@
+﻿@model RecursosHumanosWeb.Models.ViewModels.LoginViewModel
+@{
+    ViewData["Title"] = "Iniciar Sesión";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/Account/login.css" asp-append-version="true" />
+}
+
+<!-- Contenedor de notificaciones -->
+<div class="notification-container" id="notificationContainer"></div>
+
+<main class="login-main">
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="header-content">
+                    <div class="login-logo">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h1 class="login-title">Bienvenido</h1>
+                    <p class="login-subtitle">Ingrese sus credenciales para acceder al sistema</p>
+                </div>
+            </div>
+
+            <!-- Errores generales -->
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+            <!-- Formulario -->
+            <form asp-action="Login" asp-controller="Account"
+                  method="post" class="login-form" id="loginForm"
+                  autocomplete="off" novalidate>
+
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(m => m.ReturnUrl)
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label class="form-label" asp-for="Correo"></label>
+                    <div class="input-wrapper">
+                        @Html.TextBoxFor(m => m.Correo, new {
+                        @class = "form-input",
+                                                type = "email",
+                                                placeholder = "tu@ejemplo.com",
+                                                autocomplete = "off"
+                                                })
+                        <i class="input-icon fas fa-envelope" aria-hidden="true"></i>
+                    </div>
+                    <span asp-validation-for="Correo" class="error-message text-danger"></span>
+                </div>
+
+                <!-- Contraseña -->
+                <div class="form-group">
+                    <label class="form-label" asp-for="Clave"></label>
+                    <div class="input-wrapper">
+                        @Html.PasswordFor(m => m.Clave, new {
+                                                @class = "form-input",
+                                                placeholder = "••••••••••",
+                                                autocomplete = "new-password"
+                                                })
+                        <i class="input-icon fas fa-lock" aria-hidden="true"></i>
+                        <button type="button" class="password-toggle" aria-label="Mostrar contraseña">
+                            <i id="passwordIcon" class="fas fa-eye" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <span asp-validation-for="Clave" class="error-message text-danger"></span>
+                </div>
+
+                <!-- Checkbox -->
+                <div class="form-group">
+                    <div class="checkbox-group">
+                        <div class="custom-checkbox">
+                            @Html.CheckBoxFor(m => m.RememberMe, new { id = "RememberMe" })
+                            <label for="RememberMe" class="checkbox-label">
+                                <div class="checkmark" aria-hidden="true">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <span>@Html.DisplayNameFor(m => m.RememberMe)</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botón -->
+                <button type="submit" class="login-button" id="loginBtn">
+                    Iniciar Sesión
+                </button>
+            </form>
+
+            <!-- Footer -->
+            <div class="login-footer">
+                <a href="@Url.Action("ForgotPassword", "Account")" class="forgot-password">
+                    ¿Olvidaste tu contraseña?
+                </a>
+            </div>
+        </div>
+    </div>
+</main>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/Account/login.js" asp-append-version="true"></script>
+}

@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - RecursosHumanosWeb</title>
+    <!-- CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+
+    
+
+
+    <!-- Preload crítico para mejor rendimiento -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+    <!-- Fonts optimizadas -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- CSS Framework y estilos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/RecursosHumanosWeb.styles.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+
+    <!-- Prefetch DNS para mejorar carga -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+</head>
+<body>
+    <header class="@(ViewData["IsAuthenticated"] != null && (bool)ViewData["IsAuthenticated"] ? "header-logged" : "header-not-logged")">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light">
+            <div class="container-fluid">
+                @if (ViewData["IsAuthenticated"] != null && (bool)ViewData["IsAuthenticated"])
+                {
+                    @Html.AntiForgeryToken()
+                    //<a class="navbar-brand">RHWeb</a>
+
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav flex-grow-1">
+                            @if ((bool)ViewData["IsAdministrador"] || (bool)ViewData["IsAutorizador"] || (bool)ViewData["IsRH"] || (bool)ViewData["IsEmpleado"])
+                            {
+                                <li class="nav-item" data-order="2">
+                                    <a class="nav-link" asp-area="" asp-controller="Permisos" asp-action="Index">Permisos</a>
+                                </li>
+                            }
+
+                            @if ((bool)ViewData["IsAdministrador"])
+                            {
+                                <li class="nav-item" data-order="3">
+                                    <a class="nav-link" asp-area="" asp-controller="Usuarios" asp-action="Index">Users</a>
+                                </li>
+                                <li class="nav-item" data-order="4">
+                                    <a class="nav-link" asp-area="" asp-controller="ApiKeys" asp-action="Index">ApiKeys</a>
+                                </li>
+                            }
+
+                            @if ((bool)ViewData["IsRH"] || (bool)ViewData["IsAdministrador"] || (bool)ViewData["IsAutorizador"])
+                            {
+                                <li class="nav-item" data-order="5">
+                                    <a class="nav-link" asp-area="" asp-controller="Cortes" asp-action="Index">Cortes</a>
+                                </li>
+                                <li class="nav-item" data-order="6">
+                                    <a class="nav-link" asp-area="" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
+                                </li>
+                            }
+                        </ul>
+
+                        <!-- Menú desplegable del usuario -->
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-dark" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    @if (ViewData["UserName"] != null)
+                                    {
+                                        <i class="fas fa-user-circle me-2"></i>
+                                        @ViewData["UserName"]
+                                    }
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Profile">
+                                            <i class="fas fa-user me-2"></i>Perfil
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Settings">
+                                            <i class="fas fa-cog me-2"></i>Configuración
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li>
+                                        <form asp-area="" asp-controller="Account" asp-action="Logout" method="post">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="dropdown-item text-danger">
+                                                <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                }
+                else
+                {
+                    <a class="navbar-brand mx-auto" asp-area="" asp-controller="Home" asp-action="Index">RHWeb</a>
+                }
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3 main-content">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - RecursosHumanosWeb - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Inicializar AOS
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true
+        });
+
+        // Configuración personalizada de SweetAlert2
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

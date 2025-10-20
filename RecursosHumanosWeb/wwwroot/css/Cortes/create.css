@@ -1,0 +1,104 @@
+﻿.form-content {
+    padding: 0;
+    margin-bottom: 0;
+}
+
+.card-footer-improved {
+    margin-top: var(--spacing-lg);
+    margin-left: calc(-1 * var(--spacing-lg));
+    margin-right: calc(-1 * var(--spacing-lg));
+    margin-bottom: calc(-1 * var(--spacing-lg));
+    padding: var(--spacing-lg);
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-top: 1px solid #e2e8f0;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    position: relative;
+}
+
+    .card-footer-improved::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent 0%, #cbd5e1 50%, transparent 100%);
+    }
+
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+}
+
+.btn-action {
+    min-width: 140px;
+    padding: 12px 24px;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    transition: all 0.2s ease-in-out;
+    position: relative;
+    overflow: hidden;
+}
+
+    .btn-action::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+        transition: left 0.5s;
+    }
+
+    .btn-action:hover::before {
+        left: 100%;
+    }
+
+.btn-primary.btn-action {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    border: none;
+    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
+}
+
+    .btn-primary.btn-action:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+    }
+
+.btn-secondary.btn-action {
+    background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+    border: none;
+    color: white;
+    box-shadow: 0 4px 14px rgba(100, 116, 139, 0.3);
+}
+
+    .btn-secondary.btn-action:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(100, 116, 139, 0.4);
+        background: linear-gradient(135deg, #475569 0%, #334155 100%);
+        color: white;
+    }
+
+/* Responsividad */
+@media (max-width: 576px) {
+    .action-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn-action {
+        width: 100%;
+        max-width: 200px;
+    }
+
+    .card-footer-improved {
+        margin-left: calc(-1 * var(--spacing-md));
+        margin-right: calc(-1 * var(--spacing-md));
+        margin-bottom: calc(-1 * var(--spacing-md));
+        padding: var(--spacing-md);
+    }
+}

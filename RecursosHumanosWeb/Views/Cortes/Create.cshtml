@@ -1,0 +1,52 @@
+﻿@model RecursosHumanosWeb.Models.ViewModels.CorteCreateViewModel
+
+@{
+    ViewData["Title"] = "Crear Corte";
+}
+
+<div class="permisos-container mb-5 pb-5">
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">
+                <span class="text-gradient">Crear Corte</span>
+                <i class="fas fa-calendar-plus"></i>
+            </h1>
+            <p class="page-subtitle">Registra un nuevo corte para la gestión de permisos</p>
+        </div>
+    </div>
+    <div class="filters-card fade-in">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="error-message mb-3"></div>
+
+            <div class="form-content">
+                <div class="form-group filter-group mb-3">
+                    <label asp-for="Inicia" class="control-label"></label>
+                    <input asp-for="Inicia" class="form-control" type="datetime-local" required />
+                    <span asp-validation-for="Inicia" class="error-message"></span>
+                </div>
+                <div class="form-group filter-group mb-3">
+                    <label asp-for="Termina" class="control-label"></label>
+                    <input asp-for="Termina" class="form-control" type="datetime-local" required />
+                    <span asp-validation-for="Termina" class="error-message"></span>
+                </div>
+            </div>
+
+            <div class="card-footer-improved">
+                <div class="action-buttons">
+                    <input type="submit" value="Crear" class="btn btn-primary btn-action" />
+                    <a asp-action="Index" class="btn btn-secondary btn-action">Volver al Listado</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Cortes/create.css" asp-append-version="true" />
+}

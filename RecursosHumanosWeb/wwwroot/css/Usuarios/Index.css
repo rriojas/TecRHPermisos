@@ -1,0 +1,348 @@
+﻿/* Estilos específicos para la tabla de usuarios */
+.table-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 5px 20px var(--shadow-color);
+    overflow: hidden;
+    margin-top: var(--spacing-xl);
+}
+
+/* DataTables wrapper personalizado */
+.dataTables_wrapper {
+    padding: var(--spacing-xl);
+}
+
+.dataTables_filter {
+    margin-bottom: var(--spacing-lg);
+}
+
+    .dataTables_filter label {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+        font-weight: 600;
+        color: var(--text-dark);
+    }
+
+    .dataTables_filter input {
+        border: 2px solid var(--border-color);
+        border-radius: var(--radius-md);
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: 0.95rem;
+        margin-left: var(--spacing-sm);
+        min-width: 300px;
+    }
+
+        .dataTables_filter input:focus {
+            outline: none;
+            border-color: var(--primary-medium);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+.dataTables_length {
+    margin-bottom: var(--spacing-lg);
+}
+
+    .dataTables_length label {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+        font-weight: 600;
+        color: var(--text-dark);
+    }
+
+    .dataTables_length select {
+        border: 2px solid var(--border-color);
+        border-radius: var(--radius-md);
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: 0.9rem;
+        margin: 0 var(--spacing-sm);
+    }
+
+/* Tabla moderna */
+.modern-datatable {
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-bottom: 0 !important;
+}
+
+    .modern-datatable thead tr {
+        background: var(--gradient-primary);
+    }
+
+    .modern-datatable thead th {
+        color: var(--white);
+        font-weight: 600;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: var(--spacing-lg);
+        border: none;
+        white-space: nowrap;
+    }
+
+    .modern-datatable tbody tr {
+        background: var(--white);
+        border-bottom: 1px solid var(--border-light);
+    }
+
+        .modern-datatable tbody tr:hover {
+            background: linear-gradient(90deg, var(--primary-lightest) 0%, transparent 100%);
+        }
+
+    .modern-datatable tbody td {
+        padding: var(--spacing-lg);
+        color: var(--text-medium);
+        font-size: 0.95rem;
+        vertical-align: middle;
+    }
+
+/* Información del usuario */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.avatar-circle {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: var(--gradient-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.avatar-initials {
+    color: var(--white);
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.user-name {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.email-cell {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.date-cell {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+    .date-cell i {
+        margin-right: var(--spacing-xs);
+        color: var(--primary-medium);
+    }
+
+/* Badges de departamento */
+.dept-badge {
+    background: var(--primary-lightest);
+    color: var(--primary-strong);
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+/* Badges de estado */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+    .status-badge i {
+        font-size: 0.9rem;
+    }
+
+/* Columna de acciones */
+.actions-column {
+    text-align: center;
+    width: 150px;
+}
+
+.actions-cell {
+    text-align: center;
+}
+
+.action-buttons {
+    display: flex;
+    gap: var(--spacing-sm);
+    justify-content: center;
+}
+
+.action-btn {
+    width: 38px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 !important;
+    border-radius: var(--radius-md);
+}
+
+    .action-btn i {
+        font-size: 1rem;
+    }
+
+/* DataTables info y paginación */
+.dataTables_info {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    padding: var(--spacing-md) 0;
+}
+
+.dataTables_paginate {
+    padding: var(--spacing-md) 0;
+}
+
+    .dataTables_paginate .paginate_button {
+        padding: var(--spacing-sm) var(--spacing-md);
+        margin: 0 var(--spacing-xs);
+        border-radius: var(--radius-md);
+        border: 2px solid var(--border-color);
+        background: var(--white);
+        color: var(--text-dark);
+        font-weight: 500;
+    }
+
+        .dataTables_paginate .paginate_button:hover {
+            background: var(--primary-lightest);
+            border-color: var(--primary-medium);
+            color: var(--primary-strong);
+        }
+
+        .dataTables_paginate .paginate_button.current {
+            background: var(--gradient-primary);
+            color: var(--white);
+            border-color: transparent;
+        }
+
+        .dataTables_paginate .paginate_button.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+            .dataTables_paginate .paginate_button.disabled:hover {
+                background: var(--white);
+                border-color: var(--border-color);
+                color: var(--text-dark);
+            }
+
+/* SearchPanes personalizado */
+.dtsp-searchPanes {
+    margin-bottom: var(--spacing-lg);
+}
+
+.dtsp-searchPane {
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--white);
+}
+
+.dtsp-topRow {
+    background: var(--surface-alt);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.dtsp-searchPane input {
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+    .dtsp-searchPane input:focus {
+        outline: none;
+        border-color: var(--primary-medium);
+    }
+
+.dtsp-searchPane .dtsp-countColumn {
+    background: var(--primary-lightest);
+    color: var(--primary-strong);
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    padding: 2px 6px;
+}
+
+.dtsp-searchPane .dtsp-selected {
+    background: var(--primary-lightest);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-lg);
+    }
+
+    .header-actions .btn-create {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .dataTables_wrapper {
+        padding: var(--spacing-md);
+    }
+
+    .dataTables_filter input {
+        min-width: 100%;
+        margin-left: 0;
+        margin-top: var(--spacing-xs);
+    }
+
+    .dataTables_filter label,
+    .dataTables_length label {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .user-info {
+        gap: var(--spacing-sm);
+    }
+
+    .avatar-circle {
+        width: 35px;
+        height: 35px;
+    }
+
+    .avatar-initials {
+        font-size: 0.9rem;
+    }
+
+    .action-btn {
+        width: 32px;
+        height: 32px;
+    }
+
+    .modern-datatable thead th,
+    .modern-datatable tbody td {
+        padding: var(--spacing-sm);
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .page-title {
+        font-size: 1.75rem;
+    }
+
+    .page-subtitle {
+        font-size: 0.9rem;
+    }
+}
