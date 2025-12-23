@@ -1,0 +1,266 @@
+﻿@model RecursosHumanosWeb.Models.ViewModels.PermissionsCreateViewModel
+@{
+    ViewData["Title"] = "Solicitud de Permiso";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Permisos/create.css" asp-append-version="true" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+}
+
+<div class="permission-request-container">
+    <div class="permission-header">
+        <div class="header-content">
+            <h1 class="page-title">
+                <i class="fas fa-calendar-check"></i>
+                Nueva Solicitud de Permiso
+            </h1>
+            <p class="page-subtitle">Complete el formulario para enviar su solicitud</p>
+        </div>
+        <div class="header-decoration">
+            <div class="floating-icon">
+                <i class="fas fa-user-clock"></i>
+            </div>
+        </div>
+    </div>
+
+    <form asp-action="Create" method="post" enctype="multipart/form-data" class="permission-form" id="permissionForm"
+          data-is-rh="@(ViewBag.IsRH ?? false)"
+          data-is-administrador="@(ViewBag.IsAdministrador ?? false)"
+          data-is-empleado="@(ViewBag.IsEmpleado ?? false)">
+
+        <div class="form-sections">
+            <!-- Sección: Selección de usuario (solo RH/Administrador) -->
+            @{
+                bool isRH = ViewBag.IsRH as bool? ?? false;
+                bool isAdministrador = ViewBag.IsAdministrador as bool? ?? false;
+            }
+            @if (isRH || isAdministrador)
+            {
+                <div class="form-section" id="user-section">
+                    <div class="section-header">
+                        <h3><i class="fas fa-user"></i> Seleccionar Usuario</h3>
+                        <span class="section-indicator">1</span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="IdUsuarioSolicita" class="form-label">
+                            Busque el usuario que solicita el permiso
+                            <span class="required">*</span>
+                        </label>
+                        <select id="IdUsuarioSolicita" name="IdUsuarioSolicita" class="form-control user-autocomplete" data-user-value="id" style="width:100%">
+                            <option value="">Escriba para buscar...</option>
+                        </select>
+                        <span asp-validation-for="IdUsuarioSolicita" class="text-danger validation-message"></span>
+                    </div>
+                </div>
+            }
+
+            <!-- Sección: Tipo de Permiso -->
+            <div class="form-section">
+                <div class="section-header">
+                    <h3><i class="fas fa-list-ul"></i> Tipo de Permiso</h3>
+                    <span class="section-indicator">@((isRH || isAdministrador) ? "2" : "1")</span>
+                </div>
+                <div class="permission-types">
+                    <div class="permission-type-card" data-type="2">
+                        <input type="radio" id="falta" name="IdTipoPermiso" value="2" asp-for="IdTipoPermiso">
+                        <label for="falta" class="type-label">
+                            <div class="type-icon">
+                                <i class="fas fa-calendar-times"></i>
+                            </div>
+                            <h4>Falta</h4>
+                            <p>Ausencia por uno o varios días</p>
+                        </label>
+                    </div>
+                    <div class="permission-type-card" data-type="3">
+                        <input type="radio" id="retardo" name="IdTipoPermiso" value="3" asp-for="IdTipoPermiso">
+                        <label for="retardo" class="type-label">
+                            <div class="type-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <h4>Retardo</h4>
+                            <p>Llegada tarde en un día específico</p>
+                        </label>
+                    </div>
+                    <div class="permission-type-card" data-type="4">
+                        <input type="radio" id="cambioHorario" name="IdTipoPermiso" value="4" asp-for="IdTipoPermiso">
+                        <label for="cambioHorario" class="type-label">
+                            <div class="type-icon">
+                                <i class="fas fa-exchange-alt"></i>
+                            </div>
+                            <h4>Cambio de Horario</h4>
+                            <p>Modificar horario de trabajo</p>
+                        </label>
+                    </div>
+                    <div class="permission-type-card" data-type="5">
+                        <input type="radio" id="turnoPorTurno" name="IdTipoPermiso" value="5" asp-for="IdTipoPermiso">
+                        <label for="turnoPorTurno" class="type-label">
+                            <div class="type-icon">
+                                <i class="fas fa-sync-alt"></i>
+                            </div>
+                            <h4>Turno por Turno</h4>
+                            <p>Intercambio de turnos con compañero</p>
+                        </label>
+                    </div>
+                </div>
+                <span asp-validation-for="IdTipoPermiso" class="text-danger validation-message"></span>
+            </div>
+
+            <!-- Sección: Fechas y Horarios -->
+            <div class="form-section" id="datetime-section" style="display: none;">
+                <div class="section-header">
+                    <h3><i class="fas fa-calendar-alt"></i> Fechas y Horarios</h3>
+                    <span class="section-indicator">@((isRH || isAdministrador) ? "3" : "2")</span>
+                </div>
+                <div class="datetime-grid">
+                    <div class="form-group" id="fecha1Date-group">
+                        <label asp-for="Fecha1Date" class="form-label">
+                            <span id="fecha1Date-label">Fecha de inicio</span>
+                            <span class="required">*</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-calendar input-icon"></i>
+                            <input asp-for="Fecha1Date" type="date" class="form-control" />
+                        </div>
+                        <span asp-validation-for="Fecha1Date" class="text-danger validation-message"></span>
+                    </div>
+                    <div class="form-group" id="hora1Time-group">
+                        <label asp-for="Hora1Time" class="form-label">
+                            <span id="hora1Time-label">Hora de entrada</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-clock input-icon"></i>
+                            <input asp-for="Hora1Time" type="time" class="form-control" />
+                        </div>
+                        <span asp-validation-for="Hora1Time" class="text-danger validation-message"></span>
+                    </div>
+                    <div class="form-group" id="fecha2Date-group">
+                        <label asp-for="Fecha2Date" class="form-label">
+                            <span id="fecha2Date-label">Fecha de fin</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-calendar input-icon"></i>
+                            <input asp-for="Fecha2Date" type="date" class="form-control" />
+                        </div>
+                        <span asp-validation-for="Fecha2Date" class="text-danger validation-message"></span>
+                    </div>
+                    <div class="form-group" id="hora2Time-group">
+                        <label asp-for="Hora2Time" class="form-label">
+                            <span id="hora2Time-label">Hora de salida</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-clock input-icon"></i>
+                            <input asp-for="Hora2Time" type="time" class="form-control" />
+                        </div>
+                        <span asp-validation-for="Hora2Time" class="text-danger validation-message"></span>
+                    </div>
+                </div>
+                <input type="hidden" asp-for="Fecha1" />
+                <input type="hidden" asp-for="Fecha2" />
+            </div>
+
+            <!-- Sección: Motivo -->
+            <div class="form-section" id="reason-section" style="display: none;">
+                <div class="section-header">
+                    <h3><i class="fas fa-comment-alt"></i> Motivo del Permiso</h3>
+                    <span class="section-indicator">@((isRH || isAdministrador) ? "4" : "3")</span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Motivo" class="form-label">
+                        Explique detalladamente el motivo de su solicitud
+                        <span class="required">*</span>
+                    </label>
+                    <div class="textarea-wrapper">
+                        <textarea asp-for="Motivo" class="form-control" rows="4" placeholder="Describa las razones por las cuales necesita este permiso..." maxlength="255"></textarea>
+                        <div class="char-counter">
+                            <span id="char-count">0</span>/255 caracteres
+                        </div>
+                    </div>
+                    <span asp-validation-for="Motivo" class="text-danger validation-message"></span>
+                </div>
+            </div>
+
+            <!-- Sección: Evidencia -->
+            <div class="form-section" id="evidence-section" style="display: none;">
+                <div class="section-header">
+                    <h3><i class="fas fa-paperclip"></i> Documentación de Soporte</h3>
+                    <span class="section-indicator">@((isRH || isAdministrador) ? "5" : "4")</span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="EvidenceFile" class="form-label">
+                        Adjuntar documento PDF (opcional)
+                    </label>
+                    <div class="file-upload-area" id="fileUploadArea">
+                        <input asp-for="EvidenceFile" type="file" accept=".pdf" class="file-input" id="evidenceFile">
+                        <div class="file-upload-content">
+                            <div class="file-upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <p class="file-upload-text">
+                                <strong>Haga clic para seleccionar</strong> o arrastre el archivo aquí
+                            </p>
+                            <p class="file-upload-hint">Solo archivos PDF, máximo 5MB</p>
+                        </div>
+                        <div class="file-preview" id="filePreview" style="display: none;">
+                            <div class="file-info">
+                                <i class="fas fa-file-pdf file-icon"></i>
+                                <span class="file-name" id="fileName"></span>
+                                <button type="button" class="remove-file" id="removeFile">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <input asp-for="Evidencia" type="hidden" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Botones de Acción -->
+        <div class="form-actions">
+            <div class="actions-content">
+                <button type="button" class="btn btn-secondary" onclick="history.back()">
+                    <i class="fas fa-arrow-left"></i>
+                    Cancelar
+                </button>
+                <button type="submit" class="btn btn-primary" id="submitBtn" disabled>
+                    <i class="fas fa-paper-plane"></i>
+                    Enviar Solicitud
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/js/Permisos/create.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        (function(){
+            // Inicializar select2 en el select de usuarios para búsqueda remota (específico de esta vista)
+            $(document).ready(function(){
+                $('#IdUsuarioSolicita').select2({
+                    placeholder: 'Escriba nombre de usuario...',
+                    minimumInputLength: 2,
+                    allowClear: true,
+                    ajax: {
+                        url: '/Permisos/SearchUsers',
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return { term: params.term };
+                        },
+                        processResults: function (data) {
+                            return { results: data };
+                        },
+                        cache: true
+                    }
+                });
+            });
+        })();
+    </script>
+}

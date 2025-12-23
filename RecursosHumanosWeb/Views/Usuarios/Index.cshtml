@@ -1,0 +1,290 @@
+﻿@model UsuarioSearchViewModel
+@using RecursosHumanosWeb.Models.ViewModels.Usuario
+@using X.PagedList.Mvc.Core
+
+@{
+    ViewData["Title"] = "Gestión de Usuarios";
+    bool isAdministrador = (bool)ViewData["IsAdministrador"]!;
+}
+
+@section Styles {
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <link href="~/css/Cortes/Index.css" rel="stylesheet" asp-append-version="true" />
+}
+
+<div class="index-container">
+    <div class="page-header fade-in">
+        <div class="header-content">
+            <h1 class="page-title text-gradient">
+                <i class="fas fa-users"></i>
+                Gestión de Usuarios
+            </h1>
+            <p class="page-subtitle">Administra y visualiza todos los usuarios del sistema</p>
+        </div>
+            <div class="header-actions">
+            <a asp-controller="Usuarios" asp-action="Create" class="btn btn-create" aria-label="Crear nuevo usuario">
+                <i class="fas fa-plus"></i>
+                Crear Usuario
+            </a>
+        </div>
+    </div>
+
+    <div class="filters-section slide-in-left">
+        <div class="card">
+            <form id="searchForm" method="get" asp-action="Index">
+                @Html.AntiForgeryToken()
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="filter-group">
+                            <label for="nombreFilter">
+                                <i class="fas fa-user" style="color: var(--accent-indigo);"></i>
+                                Nombre
+                            </label>
+                            <select id="nombreFilter" name="nombreFilter_display" class="form-control user-autocomplete" data-user-value="text" style="width:100%">
+                                <option value="">-- Filtrar por nombre --</option>
+                            </select>
+                            <input type="hidden" id="nombreFilterHidden" name="nombreFilter" value="@ViewBag.NombreFilter" />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="filter-group">
+                            <label for="correoFilter">
+                                <i class="fas fa-envelope" style="color: var(--accent-slate);"></i>
+                                Correo
+                            </label>
+                            <input id="correoFilter" name="correoFilter" class="form-control" type="text"
+                                   value="@ViewBag.CorreoFilter" placeholder="Filtrar por correo" aria-label="Filtro de correo" />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="filter-group">
+                            <label for="departamentoFilter">
+                                <i class="fas fa-building" style="color: var(--accent-indigo);"></i>
+                                Departamento
+                            </label>
+                            <select id="departamentoFilter" name="departamentoFilter" class="form-control" aria-label="Filtro de departamento">
+                                <option value="">Todos los departamentos</option>
+                                @foreach (var departamento in Model.Departamentos)
+                                {
+                                    <option value="@departamento.Id" selected="@(ViewBag.DepartamentoFilter?.ToString() == departamento.Id.ToString() ? "selected" : null)">
+                                        @departamento.Descripcion
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="filter-group">
+                            <label for="estadoFilter">
+                                <i class="fas fa-info-circle" style="color: var(--accent-slate);"></i>
+                                Estado
+                            </label>
+                            <select id="estadoFilter" name="estadoFilter" class="form-control" aria-label="Filtro de estado">
+                                <option value="" selected="@(string.IsNullOrEmpty(ViewBag.EstadoFilter?.ToString()) ? "selected" : null)">Todos los estados</option>
+                                <option value="true" selected="@(ViewBag.EstadoFilter is true ? "selected" : null)">Activo</option>
+                                <option value="false" selected="@(ViewBag.EstadoFilter is false ? "selected" : null)">Inactivo</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-4">
+                        <div class="filter-group">
+                            <label>&nbsp;</label>
+                            <button type="submit" class="btn btn-search">
+                                <i class="fas fa-search"></i> Buscar
+                            </button>
+                            <a asp-action="Index" class="btn btn-clear">
+                                <i class="fas fa-refresh"></i> Limpiar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (Model.UsuariosPaginados != null && Model.UsuariosPaginados.Any())
+    {
+        <div class="table-container fade-in mb-5">
+            <div class="card">
+                <div class="table-inner">
+                    <div class="overflow-x-auto">
+                        <table class="data-table" style="width:100%" aria-label="Tabla de usuarios">
+                            <thead>
+                                <tr>
+                                    <th class ="text-center">Nombre</th>
+                                    <th class="text-center">Correo</th>
+                                    <th class="text-center">Departamento</th>
+                                    <th class="text-center">Estado</th>
+                                    <th class="text-center">Fecha Creación</th>
+                                    <th class="text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.UsuariosPaginados)
+                                {
+                                    <tr>
+                                        <td>@(item.Nombre ?? "-")</td>
+                                        <td>@(item.Correo ?? "-")</td>
+                                        <td>@(item.IdDepartamentoNavigation?.Descripcion ?? "-")</td>
+                                        <td class="@(item.Estatus ? "status-cell-active" : "status-cell-inactive")">
+                                            @(item.Estatus ? "Activo" : "Inactivo")
+                                        </td>
+                                        <td>
+                                            @if (item.FechaCreacion != default)
+                                            {
+                                                <div style="color: var(--text-medium); font-weight: 500;">
+                                                    <div style="font-size: 0.875rem;">@item.FechaCreacion.ToString("dd/MM/yyyy")</div>
+                                                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.125rem;">@item.FechaCreacion.ToString("h:mm tt")</div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div style="font-style: italic; color: var(--text-muted);">Sin crear</div>
+                                            }
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="flex justify-center gap-2">
+                                                <a asp-controller="Usuarios" asp-action="Edit" asp-route-id="@item.Id" class="action-btn btn-edit" title="Editar" aria-label="Editar usuario">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a href="#" class="action-btn btn-delete" title="Eliminar" aria-label="Eliminar usuario" data-action="ChangeStatus" data-controller="Usuarios" data-id="@item.Id">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                                <a asp-action="Details" asp-route-id="@item.Id" class="action-btn btn-view" title="Ver detalles" aria-label="Ver detalles del usuario">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th class ="text-center">Nombre</th>
+                                    <th class="text-center">Correo</th>
+                                    <th class="text-center">Departamento</th>
+                                    <th class="text-center">Estado</th>
+                                    <th class="text-center">Fecha Creación</th>
+                                    <th class="text-center">Acciones</th>
+                                </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Paginación -->
+                <div class="pagination-container">
+                    <div class="pagination-info">
+                        Mostrando @Model.UsuariosPaginados.FirstItemOnPage - @Model.UsuariosPaginados.LastItemOnPage de @Model.UsuariosPaginados.TotalItemCount usuarios
+                    </div>
+
+                    @Html.PagedListPager(
+                    Model.UsuariosPaginados,
+                                page => Url.Action("Index", new
+                                {
+                                    page,
+                                    sortOrder = ViewBag.CurrentSort,
+                                    nombreFilter = ViewBag.NombreFilter,
+                                    correoFilter = ViewBag.CorreoFilter,
+                                    departamentoFilter = ViewBag.DepartamentoFilter,
+                                    estadoFilter = ViewBag.EstadoFilter
+                                }),
+                                new PagedListRenderOptions
+                                {
+                                    DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+                                    DisplayLinkToLastPage = PagedListDisplayMode.Always,
+                                    DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+                                    DisplayLinkToNextPage = PagedListDisplayMode.Always,
+                                    DisplayLinkToIndividualPages = true,
+                                    MaximumPageNumbersToDisplay = 5,
+                                    DisplayEllipsesWhenNotShowingAllPageNumbers = true,
+                                    UlElementClasses = new[] { "pagination" },
+                                    LiElementClasses = new[] { "page-item" },
+                                    PageClasses = new[] { "page-link" }
+                                })
+            </div>
+        </div>
+    </div>
+        }
+    else
+    {
+        <div class="empty-state fade-in">
+            <div class="empty-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <h3>No hay usuarios registrados</h3>
+            <p class="text-muted">Intenta ajustar los filtros de búsqueda</p>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        (function(){
+            $(document).ready(function(){
+                (function(){
+                    var $select = $('#nombreFilter');
+                    var valueMode = $select.data('user-value') || 'text';
+                    $select.select2({
+                        placeholder: 'Filtrar por nombre...',
+                        minimumInputLength: 2,
+                        allowClear: true,
+                        ajax: {
+                            url: '/Usuarios/SearchUsers',
+                            dataType: 'json',
+                            delay: 250,
+                            data: function (params) { return { term: params.term }; },
+                            processResults: function (data) {
+                                var results = data.map(function(item){
+                                    return {
+                                        id: valueMode === 'text' ? item.text : item.id,
+                                        text: item.text,
+                                        areaId: item.areaId
+                                    };
+                                });
+                                return { results: results };
+                            },
+                            cache: true
+                        }
+                    });
+
+                    // Ensure hidden field exists
+                    if ($('#nombreFilterHidden').length === 0) {
+                        $('<input>').attr({ type: 'hidden', id: 'nombreFilterHidden', name: 'nombreFilter', value: '@ViewBag.NombreFilter' }).appendTo('#searchForm');
+                    }
+                    $select.on('select2:select', function(e) {
+                        var data = e.params.data;
+                        if (valueMode === 'text') $('#nombreFilterHidden').val(data.text);
+                        else $('#nombreFilterHidden').val(data.id);
+                    });
+                    $select.on('select2:clear', function() { $('#nombreFilterHidden').val(''); });
+                })();
+
+                $('#nombreFilter').on('focus', function () { $(this).select2('open'); });
+                $('#nombreFilter').on('select2:open', function () { const sf = document.querySelector('.select2-container--open .select2-search__field'); if (sf) sf.focus(); });
+            });
+        })();
+        document.addEventListener('DOMContentLoaded', function () {
+            const elements = document.querySelectorAll('.fade-in, .slide-in-left');
+            elements.forEach(element => {
+                element.style.opacity = '0';
+                element.style.transform = element.classList.contains('slide-in-left')
+                    ? 'translateX(-30px)'
+                    : 'translateY(20px)';
+            });
+
+            setTimeout(() => {
+                elements.forEach((element, index) => {
+                    setTimeout(() => {
+                        element.style.transition = 'all 0.6s ease-out';
+                        element.style.opacity = '1';
+                        element.style.transform = 'translate(0, 0)';
+                    }, index * 150);
+                });
+            }, 100);
+        });
+    </script>
+}

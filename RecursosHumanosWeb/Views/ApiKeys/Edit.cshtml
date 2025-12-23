@@ -1,0 +1,185 @@
+﻿@model RecursosHumanosWeb.Models.ViewModels.ApiKeyCreateViewModel
+@{
+    // 1. CAMBIAR TÍTULO DE LA VISTA
+    ViewData["Title"] = "Editar API Key";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    // Convertir el modelo de ApiKey para la cabecera (Asumiendo que lo pasaste desde el controlador)
+    var apiKeyModel = ViewData["ApiKeyModel"] as RecursosHumanosWeb.Models.ApiKey;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Permisos/create.css" asp-append-version="true" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+}
+
+<div class="permission-request-container">
+    <div class="permission-header">
+        <div class="header-content">
+            <h1 class="page-title">
+                <i class="fas fa-edit"></i>
+                Editar API Key **#@apiKeyModel?.Id**
+            </h1>
+            <p class="page-subtitle">Modifique los permisos y el titular de la llave de acceso a la API.</p>
+        </div>
+        <div class="header-decoration">
+            <div class="floating-icon">
+                <i class="fas fa-lock-open"></i>
+            </div>
+        </div>
+    </div>
+
+    <form asp-action="Edit" method="post" class="permission-form" id="apiKeyForm">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-4"></div>
+
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="Clave" />
+        <input type="hidden" asp-for="FechaCreacion" />
+        <input type="hidden" asp-for="IdUsuarioCrea" />
+
+        <div class="form-sections">
+            @{
+                bool isAdmin = ViewBag.IsAdministrador as bool? ?? false;
+            }
+
+            <div class="form-section" id="key-details-section">
+                <div class="section-header">
+                    <h3><i class="fas fa-info-circle"></i> Información de la Clave</h3>
+                    <span class="section-indicator">1</span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Clave" class="form-label">API Key</label>
+                    <input type="text" value="@apiKeyModel?.Clave" class="form-control" readonly />
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        <label class="form-label">Fecha Creación</label>
+                        <input type="text" value="@apiKeyModel?.FechaCreacion.ToString("yyyy-MM-dd HH:mm")" class="form-control" readonly />
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label class="form-label">Última Modificación</label>
+                        <input type="text" value="@apiKeyModel?.FechaModificacion?.ToString("yyyy-MM-dd HH:mm")" class="form-control" readonly />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section" id="user-section">
+                <div class="section-header">
+                    <h3><i class="fas fa-user-shield"></i> Titular de la API Key</h3>
+                    <span class="section-indicator">2</span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="IdUsuarioTitular" class="form-label">
+                        Usuario asociado a esta clave
+                        <span class="required">*</span>
+                    </label>
+                    <select asp-for="IdUsuarioTitular" class="form-control user-select" id="idUsuarioTitular"
+                            asp-items="@(ViewData["Usuarios"] as SelectList)">
+                        <option value="">Seleccione el usuario titular</option>
+                    </select>
+                    <span asp-validation-for="IdUsuarioTitular" class="text-danger validation-message"></span>
+                </div>
+            </div>
+
+            <div class="form-section" id="permissions-section">
+                <div class="section-header">
+                    <h3><i class="fas fa-database"></i> Permisos de Acceso a Tablas</h3>
+                    <span class="section-indicator">3</span>
+                </div>
+
+                @if (ViewBag.Tablas != null && ViewBag.ApiPermisos != null)
+                {
+                    var tablas = ViewBag.Tablas as List<RecursosHumanosWeb.Models.Tabla> ?? new List<RecursosHumanosWeb.Models.Tabla>();
+                    var apiPermisos = ViewBag.ApiPermisos as List<RecursosHumanosWeb.Models.ApiPermiso> ?? new List<RecursosHumanosWeb.Models.ApiPermiso>();
+                    // 6. Obtener los IDs de permisos YA ASIGNADOS
+                    var assignedPermissions = Model.Assignments?.SelectMany(a => a.IdsApiPermisosSeleccionados ?? new List<int>())
+                    .ToList() ?? new List<int>();
+
+                    <p class="page-subtitle">Seleccione los permisos (operaciones) que tendrá la clave sobre cada tabla.</p>
+
+                    int tableIndex = 0;
+                    @foreach (var tabla in tablas)
+                    {
+                        // 7. Determinar si esta tabla tiene permisos asignados en el ViewModel
+                        var currentAssignment = Model.Assignments?.FirstOrDefault(a => a.IdTabla == tabla.Id);
+                        var selectedPermisosIds = currentAssignment?.IdsApiPermisosSeleccionados ?? new List<int>();
+
+                        <div class="permission-card mb-4 p-3 border rounded shadow-sm">
+                            <div class="table-header d-flex justify-content-between align-items-center mb-3">
+                                <h4 class="mb-0 text-primary"><i class="fas fa-table"></i> @tabla.Nombre</h4>
+                                <span class="badge bg-secondary">Tabla #@tabla.Id</span>
+                            </div>
+                            <p class="text-muted small">@tabla.Descripcion</p>
+
+                            <input type="hidden" name="Assignments[@tableIndex].IdTabla" value="@tabla.Id" />
+
+                            <div class="row row-cols-2 row-cols-md-4 g-3 permission-options">
+                                @foreach (var permiso in apiPermisos)
+                                {
+                                    // 8. Marcar el checkbox si el permiso ya está seleccionado para esta tabla
+                                    bool isChecked = selectedPermisosIds.Contains(permiso.Id);
+
+                                    <div class="col">
+                                        <div class="form-check form-check-inline permission-checkbox-item">
+                                            <input class="form-check-input" type="checkbox"
+                                                   id="tabla_@tabla.Id@permiso.Id"
+                                                   name="Assignments[@tableIndex].IdsApiPermisosSeleccionados"
+                                                   value="@permiso.Id"
+                                                   @(isChecked ? "checked" : "")> <label class="form-check-label" for="tabla_@tabla.Id@permiso.Id">
+                                                <i class="fas fa-wrench me-1"></i>
+                                                **@permiso.Nombre** <span class="badge bg-info text-dark"
+                                                                          data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                          title="@permiso.Descripcion">?</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        tableIndex++;
+                    }
+                }
+                else
+                {
+                    <p class="alert alert-warning">No se encontraron tablas o permisos para configurar.</p>
+                }
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <div class="actions-content">
+                <button type="button" class="btn btn-secondary" onclick="history.back()">
+                    <i class="fas fa-arrow-left"></i>
+                    Cancelar
+                </button>
+                <button type="submit" class="btn btn-primary" id="submitBtn">
+                    <i class="fas fa-save"></i>
+                    Guardar Cambios
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Inicialización de Select2 y Tooltips (igual que en Create)
+            $('.user-select').select2({
+                placeholder: "Seleccione un usuario",
+                allowClear: true
+            });
+
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
+        });
+    </script>
+}

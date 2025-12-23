@@ -1,0 +1,374 @@
+﻿@model RecursosHumanosWeb.Models.ApiKey
+
+@{
+    ViewData["Title"] = "Detalles de Clave API";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Permisos/create.css" asp-append-version="true" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+}
+
+<div class="bg-gradient-to-br min-h-screen py-8 px-4 sm:px-6 lg:px-8 mb-5 pb-5">
+    <div class="max-w-7xl mx-auto">
+
+        <div class="relative mb-8 pt-4 content-page-header">
+            <!-- Breadcrumb o título adicional si es necesario -->
+        </div>
+
+        <!-- Main Card -->
+        <div class="bg-white rounded-2xl shadow-lg card-hover overflow-hidden mb-8">
+
+            <!-- Card Header -->
+            <div class="bg-gradient-to-r from-indigo-600 to-purple-700 px-8 py-6">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white text-2xl font-bold border-2 border-white/30">
+                            <i class="fas fa-key"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-semibold text-white mb-1">Clave API #@Model.Id</h2>
+                            <p class="text-indigo-100 flex items-center gap-2">
+                                <i class="fas fa-shield-alt text-sm"></i> 
+                                Credencial de Acceso al Sistema
+                            </p>
+                        </div>
+                    </div>
+                    <div class="status-badge @(Model.Estatus ? "bg-green-500" : "bg-red-500") text-white px-4 py-2 rounded-full text-sm font-medium flex items-center shadow-sm">
+                        <i class="@(Model.Estatus ? "fas fa-check-circle" : "fas fa-times-circle") mr-2"></i>
+                        @(Model.Estatus ? "Activa" : "Inactiva")
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Content -->
+            <div class="p-6 sm:p-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+                    <!-- Sección: Información de la Clave -->
+                    <div class="space-y-6">
+                        <h3 class="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2 mb-4 flex items-center gap-2">
+                            <i class="fas fa-fingerprint text-indigo-600"></i>
+                            Información de la Clave
+                        </h3>
+
+                        <!-- Clave API -->
+                        <div class="info-item bg-gradient-to-r from-indigo-50 to-purple-50 p-5 rounded-xl border border-indigo-200 shadow-sm">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-10 h-10 bg-indigo-500 rounded-full flex items-center justify-center shadow-md">
+                                    <i class="fas fa-code text-white text-sm"></i>
+                                </div>
+                                <span class="text-sm font-bold text-indigo-700 uppercase tracking-wide">Clave API</span>
+                            </div>
+                            <div class="ml-13 bg-white rounded-lg p-4 border-2 border-indigo-200">
+                                <code class="text-base font-mono text-gray-800 break-all select-all" id="apiKeyValue">
+                                    @Model.Clave
+                                </code>
+                            </div>
+                            <div class="mt-3 ml-13 flex gap-2">
+                                <button onclick="copyToClipboard()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center gap-2">
+                                    <i class="fas fa-copy"></i>
+                                    Copiar Clave
+                                </button>
+                                <button onclick="toggleKeyVisibility()" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center gap-2">
+                                    <i class="fas fa-eye" id="toggleIcon"></i>
+                                    <span id="toggleText">Ocultar</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- ID de la Clave -->
+                        <div class="info-item bg-gray-50 p-4 rounded-lg border border-gray-100">
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-hashtag text-blue-600 text-sm"></i>
+                                </div>
+                                <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">ID de Clave</span>
+                            </div>
+                            <p class="text-lg font-semibold text-gray-900 ml-11">
+                                #@Model.Id
+                            </p>
+                        </div>
+
+                        <!-- Estado -->
+                        <div class="info-item bg-gray-50 p-4 rounded-lg border border-gray-100">
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="w-8 h-8 @(Model.Estatus ? "bg-green-100" : "bg-red-100") rounded-full flex items-center justify-center">
+                                    <i class="fas @(Model.Estatus ? "fa-check-circle" : "fa-times-circle") @(Model.Estatus ? "text-green-600" : "text-red-600") text-sm"></i>
+                                </div>
+                                <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Estado</span>
+                            </div>
+                            <p class="text-lg font-semibold ml-11 @(Model.Estatus ? "text-green-700" : "text-red-700")">
+                                <i class="fas @(Model.Estatus ? "fa-lock-open" : "fa-lock") mr-2"></i>
+                                @(Model.Estatus ? "Activa - En Uso" : "Inactiva - Deshabilitada")
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Sección: Fechas y Auditoría -->
+                    <div class="space-y-6">
+                        <h3 class="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2 mb-4 flex items-center gap-2">
+                            <i class="fas fa-calendar-alt text-indigo-600"></i>
+                            Información Temporal
+                        </h3>
+
+                        <!-- Fecha de Creación -->
+                        <div class="info-item bg-gray-50 p-4 rounded-lg border border-gray-100">
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-calendar-plus text-green-600 text-sm"></i>
+                                </div>
+                                <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Fecha de Creación</span>
+                            </div>
+                            <p class="text-lg font-semibold text-gray-900 ml-11">
+                                @Model.FechaCreacion.ToString("dd MMMM yyyy")
+                            </p>
+                            <p class="text-sm text-gray-500 ml-11">
+                                @Model.FechaCreacion.ToString("hh:mm tt")
+                            </p>
+                        </div>
+
+                        <!-- Fecha de Modificación -->
+                        <div class="info-item bg-gray-50 p-4 rounded-lg border border-gray-100">
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-calendar-check text-orange-600 text-sm"></i>
+                                </div>
+                                <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Última Modificación</span>
+                            </div>
+                            @if (Model.FechaModificacion.HasValue)
+                            {
+                                <p class="text-lg font-semibold text-gray-900 ml-11">
+                                    @Model.FechaModificacion.Value.ToString("dd MMMM yyyy")
+                                </p>
+                                <p class="text-sm text-gray-500 ml-11">
+                                    @Model.FechaModificacion.Value.ToString("hh:mm tt")
+                                </p>
+                            }
+                            else
+                            {
+                                <p class="text-lg font-medium text-gray-400 ml-11 italic">
+                                    Sin modificaciones
+                                </p>
+                            }
+                        </div>
+
+                        <!-- Tiempo desde creación -->
+                        <div class="info-item bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-clock text-white text-sm"></i>
+                                </div>
+                                <span class="text-sm font-medium text-blue-700 uppercase tracking-wide">Antigüedad</span>
+                            </div>
+                            <p class="text-base font-semibold text-gray-900 ml-11">
+                                @{
+                                    var diasCreacion = (DateTime.Now - Model.FechaCreacion).Days;
+                                }
+                                @if (diasCreacion == 0)
+                                {
+                                    <span>Creada hoy</span>
+                                }
+                                else if (diasCreacion == 1)
+                                {
+                                    <span>Hace 1 día</span>
+                                }
+                                else if (diasCreacion < 30)
+                                {
+                                    <span>Hace @diasCreacion días</span>
+                                }
+                                else if (diasCreacion < 365)
+                                {
+                                    var meses = diasCreacion / 30;
+                                    <span>Hace @meses @(meses == 1 ? "mes" : "meses")</span>
+                                }
+                                else
+                                {
+                                    var años = diasCreacion / 365;
+                                    <span>Hace @años @(años == 1 ? "año" : "años")</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sección: Auditoría de Usuarios -->
+                <div class="mt-8 pt-8 border-t border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center gap-2">
+                        <i class="fas fa-users text-indigo-600"></i>
+                        Auditoría de Usuarios
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Usuario Creador -->
+                        <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-6 border-2 border-green-200">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
+                                    <i class="fas fa-user-plus text-white text-lg"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-green-700 uppercase">Creada por</p>
+                                    <p class="text-xl font-bold text-gray-900">
+                                        @(Model.IdUsuarioCreaNavigation?.Nombre ?? "Sistema")
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm text-gray-600 mt-2">
+                                <i class="fas fa-envelope text-green-500"></i>
+                                <span>@(Model.IdUsuarioCreaNavigation?.Correo ?? "N/A")</span>
+                            </div>
+                        </div>
+
+                        <!-- Usuario Modificador -->
+                        <div class="bg-gradient-to-r from-orange-50 to-amber-50 rounded-xl p-6 border-2 border-orange-200">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center shadow-lg">
+                                    <i class="fas fa-user-edit text-white text-lg"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-orange-700 uppercase">Modificada por</p>
+                                    <p class="text-xl font-bold text-gray-900">
+                                        @(Model.IdUsuarioModificaNavigation?.Nombre ?? "Sin modificaciones")
+                                    </p>
+                                </div>
+                            </div>
+                            @if (Model.IdUsuarioModificaNavigation != null)
+                            {
+                                <div class="flex items-center gap-2 text-sm text-gray-600 mt-2">
+                                    <i class="fas fa-envelope text-orange-500"></i>
+                                    <span>@Model.IdUsuarioModificaNavigation.Correo</span>
+                                </div>
+                            }
+                            else
+                            {
+                                <p class="text-sm text-gray-500 mt-2 italic">
+                                    <i class="fas fa-info-circle mr-1"></i>
+                                    La clave no ha sido modificada
+                                </p>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sección: Información de Seguridad -->
+                <div class="mt-8 pt-8 border-t border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center gap-2">
+                        <i class="fas fa-shield-alt text-indigo-600"></i>
+                        Información de Seguridad
+                    </h3>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-lg">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-info-circle text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-blue-900 mb-2">Recomendaciones de Seguridad</h4>
+                                <ul class="space-y-2 text-sm text-blue-800">
+                                    <li class="flex items-start gap-2">
+                                        <i class="fas fa-check-circle text-blue-600 mt-1"></i>
+                                        <span>Nunca compartas esta clave API con personas no autorizadas</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <i class="fas fa-check-circle text-blue-600 mt-1"></i>
+                                        <span>Guarda la clave en un lugar seguro (gestor de contraseñas)</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <i class="fas fa-check-circle text-blue-600 mt-1"></i>
+                                        <span>Si sospechas que la clave fue comprometida, desactívala inmediatamente</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <i class="fas fa-check-circle text-blue-600 mt-1"></i>
+                                        <span>Revisa periódicamente el uso de esta clave en los logs del sistema</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Footer - Action Buttons -->
+            <div class="bg-gray-50 px-8 py-6 border-t border-gray-200">
+                <div class="flex flex-col sm:flex-row gap-4 justify-between items-center">
+                    <a asp-action="Index" class="w-full sm:w-auto bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center gap-2 shadow-sm">
+                        <i class="fas fa-arrow-left"></i>
+                        Volver a la Lista
+                    </a>
+                    <div class="flex gap-3 w-full sm:w-auto">
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="flex-1 sm:flex-initial bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center gap-2 shadow-sm">
+                            <i class="fas fa-edit"></i>
+                            Editar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Función para copiar la clave al portapapeles
+        function copyToClipboard() {
+            const apiKey = '@Model.Clave';
+            navigator.clipboard.writeText(apiKey).then(() => {
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Copiado!',
+                    text: 'La clave API ha sido copiada al portapapeles',
+                    showConfirmButton: false,
+                    timer: 2000,
+                    toast: true,
+                    position: 'top-end'
+                });
+            }).catch(err => {
+                console.error('Error al copiar:', err);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se pudo copiar la clave al portapapeles',
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            });
+        }
+
+        // Función para ocultar/mostrar la clave
+        function toggleKeyVisibility() {
+            const keyElement = document.getElementById('apiKeyValue');
+            const toggleIcon = document.getElementById('toggleIcon');
+            const toggleText = document.getElementById('toggleText');
+            const originalKey = '@Model.Clave';
+            
+            if (keyElement.textContent === originalKey) {
+                // Ocultar
+                keyElement.textContent = '••••••••••••••••••••••••••••••••';
+                toggleIcon.className = 'fas fa-eye-slash';
+                toggleText.textContent = 'Mostrar';
+            } else {
+                // Mostrar
+                keyElement.textContent = originalKey;
+                toggleIcon.className = 'fas fa-eye';
+                toggleText.textContent = 'Ocultar';
+            }
+        }
+
+        // Animaciones de entrada
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.info-item');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.5s ease-out';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+}

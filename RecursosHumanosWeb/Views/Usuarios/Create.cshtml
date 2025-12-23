@@ -1,0 +1,162 @@
+﻿@model RecursosHumanosWeb.Models.ViewModels.Usuario.UsuarioCreateViewModel
+
+@{
+    ViewData["Title"] = "Crear Usuario";
+    var tiposUsuario = ViewData["IdTipoUsuario"] as SelectList;
+    var areas = ViewData["IdArea"] as SelectList;
+    var departamentos = ViewData["IdDepartamento"] as SelectList;
+    var puestos = ViewData["IdPuesto"] as SelectList;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Usuarios/create-users.css" asp-append-version="true" />
+}
+
+<div class="container fade-in">
+    <div class="page-header">
+        <h1 class="page-title text-gradient">
+            <i class="fas fa-user-plus"></i> Crear Nuevo Usuario
+        </h1>
+        <p class="page-subtitle">Complete los campos para agregar un nuevo usuario al sistema</p>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form asp-action="Create" method="post" class="create-usuario-form">
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3"></div>
+
+                <!-- Información Personal -->
+                <div class="section-card">
+                    <h4 class="section-title">
+                        <i class="fas fa-user"></i> Información Personal
+                    </h4>
+                    <div class="row">
+                        <div class="col-md-6 form-group mb-3">
+                            <label asp-for="Nombre" class="form-label">
+                                <i class="fas fa-id-card text-primary"></i> Nombre Completo
+                            </label>
+                            <input asp-for="Nombre" class="form-control" placeholder="Ingrese el nombre completo" />
+                            <span asp-validation-for="Nombre" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 form-group mb-3">
+                            <label asp-for="Correo" class="form-label">
+                                <i class="fas fa-envelope text-primary"></i> Correo Electrónico
+                            </label>
+                            <input asp-for="Correo" class="form-control" type="email" placeholder="ejemplo@dominio.com" />
+                            <span asp-validation-for="Correo" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 form-group mb-3">
+                            <label asp-for="Clave" class="form-label">
+                                <i class="fas fa-lock text-primary"></i> Contraseña
+                            </label>
+                            <div class="input-group">
+                                <input asp-for="Clave" class="form-control" type="password" id="passwordInput" placeholder="Ingrese una contraseña segura (mínimo 6 caracteres)" />
+                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                    <i class="fas fa-eye" id="toggleIcon"></i>
+                                </button>
+                            </div>
+                            <small class="form-text text-muted">
+                                <i class="fas fa-info-circle"></i> La contraseña será encriptada usando SHA-256 antes de almacenarse.
+                            </small>
+                            <span asp-validation-for="Clave" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Información Organizacional -->
+                <div class="section-card">
+                    <h4 class="section-title">
+                        <i class="fas fa-building"></i> Información Organizacional
+                    </h4>
+                    <div class="row">
+                        <div class="col-md-6 form-group mb-3">
+                            <label asp-for="IdTipoUsuario" class="form-label">
+                                <i class="fas fa-user-tag text-primary"></i> Tipo de Usuario
+                            </label>
+                            <select asp-for="IdTipoUsuario" class="form-select" asp-items="tiposUsuario">
+                                <option value="">-- Seleccione un tipo de usuario --</option>
+                            </select>
+                            <span asp-validation-for="IdTipoUsuario" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 form-group mb-3">
+                            <label asp-for="IdArea" class="form-label">
+                                <i class="fas fa-map-marker-alt text-primary"></i> Área
+                            </label>
+                            <select asp-for="IdArea" class="form-select" asp-items="areas">
+                                <option value="">-- Seleccione un área --</option>
+                            </select>
+                            <span asp-validation-for="IdArea" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group mb-3">
+                            <label asp-for="IdDepartamento" class="form-label">
+                                <i class="fas fa-sitemap text-primary"></i> Departamento
+                            </label>
+                            <select asp-for="IdDepartamento" class="form-select" asp-items="departamentos">
+                                <option value="">-- Seleccione un departamento --</option>
+                            </select>
+                            <span asp-validation-for="IdDepartamento" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 form-group mb-3">
+                            <label asp-for="IdPuesto" class="form-label">
+                                <i class="fas fa-briefcase text-primary"></i> Puesto
+                            </label>
+                            <select asp-for="IdPuesto" class="form-select" asp-items="puestos">
+                                <option value="">-- Seleccione un puesto --</option>
+                            </select>
+                            <span asp-validation-for="IdPuesto" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Información Adicional -->
+                <div class="alert alert-info">
+                    <h5 class="alert-heading">
+                        <i class="fas fa-key"></i> API Keys
+                    </h5>
+                    <p class="mb-0">
+                        Las claves API se asignan automáticamente después de crear el usuario. 
+                        Puede administrarlas desde la sección <a asp-controller="ApiKeys" asp-action="Index" class="alert-link">Gestión de API Keys</a>.
+                    </p>
+                </div>
+
+                <!-- Botones de Acción -->
+                <div class="form-group mt-4 d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left"></i> Volver
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Crear Usuario
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // Toggle password visibility
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            const passwordInput = document.getElementById('passwordInput');
+            const toggleIcon = document.getElementById('toggleIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        });
+    </script>
+}

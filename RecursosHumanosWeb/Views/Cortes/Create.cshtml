@@ -1,0 +1,95 @@
+﻿@model RecursosHumanosWeb.Models.ViewModels.CorteCreateViewModel
+@{
+    ViewData["Title"] = "Crear Corte";
+}
+
+<div class="index-container">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">
+                <i class="fas fa-calendar-plus"></i>
+                <span class="text-gradient">Crear Corte</span>
+            </h1>
+            <p class="page-subtitle">Registra un nuevo corte para la gestión de permisos</p>
+        </div>
+    </div>
+
+    <!-- Formulario -->
+    <div class="filters-section">
+        <div class="card">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                <!-- Campo Inicia -->
+                <div class="filter-group">
+                    <label asp-for="Inicia">
+                        <i class="fas fa-calendar-day"></i>
+                        Fecha y Hora de Inicio
+                    </label>
+                    <input asp-for="Inicia" class="form-control" type="datetime-local" required />
+                    <span asp-validation-for="Inicia" class="text-danger"></span>
+                </div>
+
+                <!-- Campo Termina -->
+                <div class="filter-group">
+                    <label asp-for="Termina">
+                        <i class="fas fa-calendar-check"></i>
+                        Fecha y Hora de Término
+                    </label>
+                    <input asp-for="Termina" class="form-control" type="datetime-local" required />
+                    <span asp-validation-for="Termina" class="text-danger"></span>
+                </div>
+
+                <!-- Botones de acción -->
+                <div class="filter-group" style="margin-top: 2rem; display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                    <button type="submit" class="btn btn-search">
+                        <i class="fas fa-save"></i>
+                        Crear Corte
+                    </button>
+                    <a asp-action="Index" class="btn btn-clear">
+                        <i class="fas fa-arrow-left"></i>
+                        Volver al Listado
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // Validación adicional en el cliente
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            const iniciaInput = document.querySelector('input[name="Inicia"]');
+            const terminaInput = document.querySelector('input[name="Termina"]');
+
+            form.addEventListener('submit', function(e) {
+                const inicia = new Date(iniciaInput.value);
+                const termina = new Date(terminaInput.value);
+
+                if (termina <= inicia) {
+                    e.preventDefault();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error de validación',
+                        text: 'La fecha de término debe ser posterior a la fecha de inicio',
+                        customClass: {
+                            popup: 'swal-popup-custom',
+                            title: 'swal-title-custom',
+                            confirmButton: 'swal-confirm-custom'
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Cortes/Index.css" asp-append-version="true" />
+}

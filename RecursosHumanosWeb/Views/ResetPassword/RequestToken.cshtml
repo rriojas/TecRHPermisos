@@ -1,0 +1,68 @@
+@model RecursosHumanosWeb.Models.ViewModels.ResetPassword.RequestTokenViewModel
+@{
+    ViewData["Title"] = "Solicitar Token";
+}
+
+<div class="index-container">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">
+                <i class="fas fa-key"></i>
+                <span class="text-gradient">Recuperar Contraseña</span>
+            </h1>
+            <p class="page-subtitle">Ingresa tu correo electrónico para recibir un token de restablecimiento</p>
+        </div>
+    </div>
+
+    <!-- Mensaje de respuesta -->
+    @if (ViewBag.Message != null)
+    {
+        <div class="filters-section">
+            <div class="alert alert-info">
+                @ViewBag.Message
+            </div>
+        </div>
+    }
+
+    <!-- Formulario -->
+    <div class="filters-section">
+        <div class="card">
+            <form asp-action="RequestToken" method="post" class="ajax-form" id="requestTokenForm">
+                @Html.AntiForgeryToken()
+
+                <!-- Campo Email -->
+                <div class="filter-group">
+                    <label asp-for="Email">
+                        <i class="fas fa-envelope"></i>
+                        Correo Electrónico
+                    </label>
+                    <input asp-for="Email"
+                           class="form-control"
+                           type="email"
+                           placeholder="ejemplo@correo.com"
+                           required
+                           autocomplete="email" />
+                    <span asp-validation-for="Email" class="text-danger" style="display: block; margin-top: 0.5rem; font-weight: 600; font-size: 0.875rem;"></span>
+                </div>
+
+                <!-- Botones de acción -->
+                <div class="filter-group" style="margin-top: 2rem; display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                    <button type="submit" class="btn btn-search">
+                        <i class="fas fa-paper-plane"></i>
+                        Enviar Token
+                    </button>
+                    <a asp-controller="Account" asp-action="Login" class="btn btn-clear">
+                        <i class="fas fa-arrow-left"></i>
+                        Volver al Login
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script src="~/js/site.js" asp-append-version="true"></script>
+}

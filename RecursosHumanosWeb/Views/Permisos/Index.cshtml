@@ -1,0 +1,349 @@
+﻿@using X.PagedList.Mvc.Core
+@model RecursosHumanosWeb.Models.ViewModels.SearchPermissionsViewModel
+
+@{
+    ViewData["Title"] = "Gestión de Permisos";
+    bool isAdministrador = ViewBag.IsAdministrador;
+    bool isRH = ViewBag.IsRH;
+    bool isAutorizador = ViewBag.IsAutorizador;
+    bool isEmpleado = ViewBag.IsEmpleado;
+    string currentUserId = ViewData["IdUsuario"]?.ToString();
+}
+
+@section Styles {
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/css/Cortes/Index.css" rel="stylesheet" asp-append-version="true" />
+    <link href="https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.min.css" rel="stylesheet" />
+}
+
+<div class="index-container">
+    @Html.AntiForgeryToken()
+    <div class="page-header fade-in">
+        <div class="header-content">
+            <h1 class="page-title text-gradient">
+                <i class="fas fa-file-alt"></i>
+                Gestión de Permisos
+            </h1>
+            <p class="page-subtitle">Administra los permisos solicitados</p>
+        </div>
+        <div class="header-actions">
+            <a asp-action="Create" class="btn btn-create" aria-label="Crear nuevo usuario">
+                <i class="fas fa-plus"></i>
+                Crear Permiso
+            </a>
+        </div>
+    </div>
+
+    <div class="filters-section slide-in-left">
+        <div class="card">
+            <form id="searchForm" method="get" asp-action="Index">
+                @Html.AntiForgeryToken()
+                <div class="row">
+                    @if (isAdministrador || isRH || isAutorizador)
+                    {
+                        <div class="col-md-3">
+                            <div class="filter-group">
+                                <label for="nombreUsuario">
+                                    <i class="fas fa-user" style="color: var(--accent-indigo);"></i>
+                                    Nombre de Usuario
+                                </label>
+                                <select id="nombreUsuario" name="nombreUsuario" class="form-control user-autocomplete" data-user-value="text" aria-label="Filtro de nombre de usuario" style="width:100%">
+                                    <option value="">Todos</option>
+                                </select>
+                            </div>
+                        </div>
+                    }
+                    @if (isAdministrador || isRH)
+                    {
+                        <div class="col-md-3">
+                            <div class="filter-group">
+                                <label for="idArea">
+                                    <i class="fas fa-building" style="color: var(--accent-slate);"></i>
+                                    Área
+                                </label>
+                                <select id="idArea" name="idArea" class="form-control" aria-label="Filtro de área">
+                                    <option value="">Todas</option>
+                                    @foreach (var area in Model.Areas)
+                                    {
+                                        <option value="@area.Id" selected="@(Model.SelectedArea == area.Id ? "selected" : null)">
+                                            @area.Descripcion
+                                        </option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    }
+                    <div class="col-md-3">
+                        <div class="filter-group">
+                            <label for="delDia">
+                                <i class="fas fa-calendar-alt" style="color: var(--success-color);"></i>
+                                Desde
+                            </label>
+                            <input type="date" id="delDia" name="delDia" class="form-control" value="@(ViewBag.DelDia?.ToString("yyyy-MM-dd"))" aria-label="Filtro de fecha desde" />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="filter-group">
+                            <label for="alDia">
+                                <i class="fas fa-calendar-alt" style="color: var(--danger-color);"></i>
+                                Hasta
+                            </label>
+                            <input type="date" id="alDia" name="alDia" class="form-control" value="@(ViewBag.AlDia?.ToString("yyyy-MM-dd"))" aria-label="Filtro de fecha hasta" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-4">
+                        <div class="filter-group">
+                            <label>&nbsp;</label>
+                            <button type="submit" class="btn btn-search">
+                                <i class="fas fa-search"></i> Buscar
+                            </button>
+                            <button type="button" onclick="clearAllFilters()" class="btn btn-clear">
+                                <i class="fas fa-refresh"></i> Limpiar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="table-container fade-in">
+        <div class="card">
+            <div class="table-inner">
+                <div class="overflow-x-auto">
+                    <table id="permisosTable" class="data-table" style="width:100%" aria-label="Tabla de permisos">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Solicitante</th>
+                                <th class="text-center">Revisado</th>
+                                <th class="text-center">Creación</th>
+                                <th class="text-center">Modificación</th>
+                                <th class="text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Permisos)
+                            {
+                                <tr>
+                                    <td>@(item.Nombre ?? "-")</td>
+                                    <td class="@(item.Revisado ? "status-cell-active" : "status-cell-inactive")">
+                                        @(item.Revisado ? "Sí" : "No")
+                                    </td>
+                                    <td>
+                                        @if (item.FechaCreacion != default)
+                                        {
+                                            <div style="color: var(--text-medium); font-weight: 500;">
+                                                <div style="font-size: 0.875rem;">@item.FechaCreacion.ToString("dd/MM/yyyy")</div>
+                                                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.125rem;">@item.FechaCreacion.ToString("h:mm tt")</div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div style="font-style: italic; color: var(--text-muted);">Sin crear</div>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.FechaModificacion != default)
+                                        {
+                                            <div style="color: var(--text-medium); font-weight: 500;">
+                                                <div style="font-size: 0.875rem;">@item.FechaModificacion?.ToString("dd/MM/yyyy")</div>
+                                                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.125rem;">@item.FechaModificacion?.ToString("h:mm tt")</div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div style="font-style: italic; color: var(--text-muted);">Sin modificar</div>
+                                        }
+                                    </td>
+                                    <!-- Dentro del <td> de Acciones -->
+                                    <td class="text-center">
+                                        <div class="flex justify-center gap-2">
+                                            @* LÓGICA DE BOTONES SEGÚN ROL Y ESTADO *@
+                                            
+                                            @* 1. AUTORIZADORES: Solo pueden REVISAR permisos NO revisados de su área *@
+                                            @if (isAutorizador)
+                                            {
+                                                @if (!item.Revisado)
+                                                {
+                                                    <a asp-action="Review" asp-route-id="@item.Id" class="action-btn btn-approve" title="Revisar y autorizar permiso" aria-label="Revisar permiso" style="background: linear-gradient(135deg, var(--success-color) 0%, #059669 100%);">
+                                                        <i class="fas fa-user-check"></i>
+                                                    </a>
+                                                }
+                                            }
+                                            @* 2. OTROS USUARIOS (Empleado, RH, Admin): Pueden EDITAR si NO está revisado *@
+                                            else
+                                            {
+                                                @if (!item.Revisado)
+                                                {
+                                                    <a asp-action="Edit" asp-route-id="@item.Id" class="action-btn btn-edit" title="Editar permiso" aria-label="Editar permiso">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                }
+                                            }
+
+                                            @* 3. ELIMINAR: Solo si NO está revisado (TODOS excepto Autorizadores) *@
+                                            @if (!item.Revisado && !isAutorizador)
+                                            {
+                                                <a href="#" class="action-btn btn-delete" data-action="Delete" data-controller="Permisos" data-id="@item.Id" title="Eliminar permiso" aria-label="Eliminar permiso">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            }
+
+                                            @* 4. VER DETALLES: Siempre visible para TODOS *@
+                                            <a asp-action="Details" asp-route-id="@item.Id" class="action-btn btn-view" title="Ver detalles" aria-label="Ver detalles del permiso">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th class="text-center">Solicitante</th>
+                                <th class="text-center">Revisado</th>
+                                <th class="text-center">Creación</th>
+                                <th class="text-center">Modificación</th>
+                                <th class="text-center">Acciones</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <!-- Control de paginación con PagedList -->
+                @if (Model.Permisos.Any())
+                {
+                    <div class="pagination-container">
+                        <div class="pagination-info">
+                            Mostrando @Model.Permisos.FirstItemOnPage - @Model.Permisos.LastItemOnPage de @Model.Permisos.TotalItemCount permisos
+                        </div>
+
+                        @Html.PagedListPager(
+                        Model.Permisos,
+                                        page => Url.Action("Index", new
+                                        {
+                                            page,
+                                            sortOrder = ViewBag.CurrentSort,
+                                            nombreFilter = ViewBag.NombreFilter,
+                                            correoFilter = ViewBag.CorreoFilter,
+                                            departamentoFilter = ViewBag.DepartamentoFilter,
+                                            estadoFilter = ViewBag.EstadoFilter
+                                        }),
+                                        new PagedListRenderOptions
+                                        {
+                                            DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+                                            DisplayLinkToLastPage = PagedListDisplayMode.Always,
+                                            DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+                                            DisplayLinkToNextPage = PagedListDisplayMode.Always,
+                                            DisplayLinkToIndividualPages = true,
+                                            MaximumPageNumbersToDisplay = 5,
+                                            DisplayEllipsesWhenNotShowingAllPageNumbers = true,
+                                            UlElementClasses = new[] { "pagination" },
+                                            LiElementClasses = new[] { "page-item" },
+                                            PageClasses = new[] { "page-link" }
+                                        })
+                </div>
+                                }
+            </div>
+        </div>
+    </div>
+
+    @if (!Model.Permisos.Any())
+    {
+        <div class="empty-state fade-in">
+            <div class="empty-icon">
+                <i class="fas fa-file-alt"></i>
+            </div>
+            <h3>No hay permisos registrados</h3>
+            <p class="text-muted">Intenta ajustar los filtros de búsqueda</p>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        (function(){
+            $(document).ready(function(){
+                // Inicializar select2 para filtro de usuarios en Permisos Index
+                (function(){
+                    var $select = $('#nombreUsuario');
+                    var valueMode = $select.data('user-value') || 'text';
+                    $select.select2({
+                        placeholder: '-- Seleccionar Usuario --',
+                        minimumInputLength: 2,
+                        allowClear: true,
+                        ajax: {
+                            url: '/Usuarios/SearchUsers',
+                            dataType: 'json',
+                            delay: 250,
+                            data: function (params) { return { term: params.term }; },
+                            processResults: function (data) {
+                                var results = data.map(function(item){
+                                    return {
+                                        id: valueMode === 'text' ? item.text : item.id,
+                                        text: item.text,
+                                        areaId: item.areaId
+                                    };
+                                });
+                                return { results: results };
+                            },
+                            cache: true
+                        }
+                    });
+
+                    // When a user is selected, store the appropriate value into a hidden input for submission
+                    if ($('#nombreUsuarioHidden').length === 0) {
+                        $('<input>').attr({ type: 'hidden', id: 'nombreUsuarioHidden', name: 'nombreUsuario', value: '' }).appendTo('#searchForm');
+                    }
+                    $select.on('select2:select', function(e) {
+                        var data = e.params.data;
+                        if (valueMode === 'text') $('#nombreUsuarioHidden').val(data.text);
+                        else $('#nombreUsuarioHidden').val(data.id);
+                    });
+                    $select.on('select2:clear', function() { $('#nombreUsuarioHidden').val(''); });
+                })();
+
+                $('#nombreUsuario').on('focus', function () { $(this).select2('open'); });
+                $('#nombreUsuario').on('select2:open', function () { const sf = document.querySelector('.select2-container--open .select2-search__field'); if (sf) sf.focus(); });
+
+                // bind clear function
+                window.clearAllFilters = function () {
+                    const nombreUsuario = document.getElementById('nombreUsuario');
+                    const idArea = document.getElementById('idArea');
+                    const delDia = document.getElementById('delDia');
+                    const alDia = document.getElementById('alDia');
+
+                    if (nombreUsuario) $(nombreUsuario).val(null).trigger('change');
+                    if (idArea) idArea.value = '';
+                    if (delDia) delDia.value = '';
+                    if (alDia) alDia.value = '';
+
+                    document.getElementById('searchForm').submit();
+                };
+            });
+        })();
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const elements = document.querySelectorAll('.fade-in, .slide-in-left');
+            elements.forEach(element => {
+                element.style.opacity = '0';
+                element.style.transform = element.classList.contains('slide-in-left')
+                    ? 'translateX(-30px)'
+                    : 'translateY(20px)';
+            });
+
+            setTimeout(() => {
+                elements.forEach((element, index) => {
+                    setTimeout(() => {
+                        element.style.transition = 'all 0.6s ease-out';
+                        element.style.opacity = '1';
+                        element.style.transform = 'translate(0, 0)';
+                    }, index * 150);
+                });
+            }, 100);
+        });
+    </script>
+}

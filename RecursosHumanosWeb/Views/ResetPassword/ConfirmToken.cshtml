@@ -1,0 +1,22 @@
+@model RecursosHumanosWeb.Models.ViewModels.ResetPassword.ConfirmTokenViewModel
+@{
+    ViewData["Title"] = "Confirmar token";
+}
+
+<h2>Confirmar token</h2>
+
+<form asp-action="ConfirmToken" method="post">
+    @Html.AntiForgeryToken()
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" value="@Model.Email" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Token" class="form-label">Token</label>
+        <input asp-for="Token" class="form-control" />
+        <span asp-validation-for="Token" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Confirmar</button>
+</form>

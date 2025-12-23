@@ -1,0 +1,406 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - RecursosHumanosWeb</title>
+    <!-- CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+
+    <!-- Preload crítico para mejor rendimiento -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+    <!-- Fonts optimizadas -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- CSS Framework y estilos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/RecursosHumanosWeb.styles.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+
+    <!-- Prefetch DNS para mejorar carga -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+</head>
+<body>
+    <!-- Contenedor de animación de fondo -->
+    <div class="modern-container">
+        <!-- Rejilla de fondo -->
+        <div class="grid-overlay"></div>
+
+        <!-- Efectos de aurora -->
+        <div class="aurora"></div>
+
+        <!-- Nebulosas flotantes -->
+        <div class="nebula nebula-1"></div>
+        <div class="nebula nebula-2"></div>
+        <div class="nebula nebula-3"></div>
+
+        <!-- Haces de luz dinámicos -->
+        <div class="light-ray ray-1"></div>
+        <div class="light-ray ray-2"></div>
+        <div class="light-ray ray-3"></div>
+
+        <!-- Destellos de luz -->
+        <div class="light-flash flash-1"></div>
+        <div class="light-flash flash-2"></div>
+        <div class="light-flash flash-3"></div>
+        <div class="light-flash flash-4"></div>
+
+        <!-- Rayos de luz verticales -->
+        <div class="light-beam beam-1"></div>
+        <div class="light-beam beam-2"></div>
+
+        <!-- Líneas de conexión -->
+        <div class="connection-lines">
+            <div class="line line-1"></div>
+            <div class="line line-2"></div>
+        </div>
+
+        <!-- Campo de estrellas -->
+        <div class="star-field" id="starField"></div>
+
+        <!-- Partículas flotantes -->
+        <div class="floating-particle" style="top: 10%; left: 30%; animation-delay: 0s;"></div>
+        <div class="floating-particle" style="top: 40%; left: 70%; animation-delay: -8s; background: rgba(6, 182, 212, 0.9); box-shadow: 0 0 12px rgba(6, 182, 212, 0.8);"></div>
+        <div class="floating-particle" style="top: 70%; left: 20%; animation-delay: -16s; background: rgba(139, 92, 246, 0.9); box-shadow: 0 0 12px rgba(139, 92, 246, 0.8);"></div>
+        <div class="floating-particle" style="top: 25%; left: 80%; animation-delay: -12s; background: rgba(168, 85, 247, 0.9); box-shadow: 0 0 12px rgba(168, 85, 247, 0.8);"></div>
+
+        <!-- Partículas que derivan -->
+        <div class="particle-drift" style="top: 35%; left: 15%; animation-delay: 0s;"></div>
+        <div class="particle-drift" style="top: 55%; left: 85%; animation-delay: -10s;"></div>
+        <div class="particle-drift" style="top: 75%; left: 45%; animation-delay: -20s;"></div>
+        <div class="particle-drift" style="top: 15%; left: 65%; animation-delay: -15s;"></div>
+        <div class="particle-drift" style="top: 85%; left: 25%; animation-delay: -5s;"></div>
+
+        <!-- Chispas de energía -->
+        <div class="energy-spark" style="top: 20%; left: 40%; animation-delay: 0s;"></div>
+        <div class="energy-spark" style="top: 60%; left: 10%; animation-delay: -5s; background: rgba(139, 92, 246, 0.9); box-shadow: 0 0 6px rgba(139, 92, 246, 0.8);"></div>
+        <div class="energy-spark" style="top: 80%; left: 75%; animation-delay: -10s; background: rgba(168, 85, 247, 0.9); box-shadow: 0 0 6px rgba(168, 85, 247, 0.8);"></div>
+        <div class="energy-spark" style="top: 30%; left: 90%; animation-delay: -7s; background: rgba(37, 99, 235, 0.9); box-shadow: 0 0 6px rgba(37, 99, 235, 0.8);"></div>
+        <div class="energy-spark" style="top: 50%; left: 55%; animation-delay: -12s;"></div>
+        <div class="energy-spark" style="top: 90%; left: 35%; animation-delay: -3s; background: rgba(59, 130, 246, 0.9); box-shadow: 0 0 6px rgba(59, 130, 246, 0.8);"></div>
+
+        <!-- Meteoros sutiles -->
+        <div class="meteor" style="top: 15%; animation-delay: 0s;"></div>
+        <div class="meteor" style="top: 70%; animation-delay: -10s;"></div>
+
+        <!-- Pulsos de energía -->
+        <div class="energy-pulse pulse-1"></div>
+        <div class="energy-pulse pulse-2"></div>
+        <div class="energy-pulse pulse-3"></div>
+    </div>
+
+    <header class="@(ViewData["IsAuthenticated"] != null && (bool)ViewData["IsAuthenticated"] ? "header-logged" : "header-not-logged")">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light">
+            <div class="container-fluid">
+                @if (ViewData["IsAuthenticated"] != null && (bool)ViewData["IsAuthenticated"])
+                {
+                    @Html.AntiForgeryToken()
+
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav flex-grow-1">
+                            @if ((bool)ViewData["IsAdministrador"] || (bool)ViewData["IsAutorizador"] || (bool)ViewData["IsRH"] || (bool)ViewData["IsEmpleado"])
+                            {
+                                <li class="nav-item" data-order="2">
+                                    <a class="nav-link" asp-area="" asp-controller="Permisos" asp-action="Index">Permisos</a>
+                                </li>
+                            }
+
+                            @if ((bool)ViewData["IsAdministrador"])
+                            { 
+                                <li class="nav-item" data-order="4">
+                                    <a class="nav-link" asp-area="" asp-controller="ApiKeys" asp-action="Index">ApiKeys</a>
+                                </li>
+                            }
+
+                            @if ((bool)ViewData["IsRH"] || (bool)ViewData["IsAdministrador"] || (bool)ViewData["IsAutorizador"])
+                            {
+                                <li class="nav-item" data-order="5">
+                                    <a class="nav-link" asp-area="" asp-controller="Cortes" asp-action="Index">Cortes</a>
+                                </li>
+                                <li class="nav-item" data-order="6">
+                                    <a class="nav-link" asp-area="" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
+                                </li>
+                            }
+
+                            @* Botón para generar 100K permisos de prueba (solo Admin) *@
+                            @if ((bool)ViewData["IsAdministrador"])
+                            {
+                                <li class="nav-item" data-order="7">
+                                    <button type="button" id="generateTestDataBtn" class="btn nav-link" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white; border-radius: 50px; padding: 0.5rem 1rem; font-weight: 600; border: 2px solid rgba(255,255,255,0.3); transition: all 0.3s ease;">
+                                        <i class="fas fa-database"></i> Generar 100K Permisos
+                                    </button>
+                                </li>
+                            }
+                        </ul>
+
+                        <!-- Menú desplegable del usuario -->
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-dark" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    @if (ViewData["UserName"] != null)
+                                    {
+                                        <i class="fas fa-user-circle me-2"></i>
+                                        @ViewData["UserName"]
+                                    }
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                    <li>
+                                        @{ var currentUserId = ViewData["IdUsuario"]?.ToString() ?? ""; }
+                                        <a class="dropdown-item" asp-area="" asp-controller="Usuarios" asp-action="Details" asp-route-id="@currentUserId">
+                                            <i class="fas fa-user me-2"></i>Perfil
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li>
+                                        <form asp-area="" asp-controller="Account" asp-action="Logout" method="post">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="dropdown-item text-danger">
+                                                <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                }
+                else
+                {
+                    <a class="navbar-brand mx-auto" asp-area="" asp-controller="Home" asp-action="Index">RHWeb</a>
+                }
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="main-content">
+            @* Soporte para alertas desde TempData *@
+            @if (TempData["ErrorAlert"] != null)
+            {
+                <div data-error-alert='@TempData["ErrorAlert"]' style="display:none;"></div>
+            }
+            @if (TempData["SuccessAlert"] != null)
+            {
+                <div data-success-alert='@TempData["SuccessAlert"]' style="display:none;"></div>
+            }
+            
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - RecursosHumanosWeb - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        // Inicializar AOS
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true
+        });
+
+        // Configuración personalizada de SweetAlert2
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true
+        });
+
+        // Crear campo de estrellas dinámico
+        function createStarField() {
+            const starField = document.getElementById('starField');
+            const starCount = 40;
+
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 4 + 's';
+                star.style.animationDuration = (3 + Math.random() * 3) + 's';
+
+                const size = 1 + Math.random() * 2;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+
+                const colors = [
+                    'rgba(240, 244, 255, 0.9)',
+                    'rgba(59, 130, 246, 0.8)',
+                    'rgba(6, 182, 212, 0.7)',
+                    'rgba(139, 92, 246, 0.8)',
+                    'rgba(168, 85, 247, 0.7)'
+                ];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                star.style.background = randomColor;
+
+                starField.appendChild(star);
+            }
+        }
+
+        // Inicializar cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', function() {
+            createStarField();
+
+            // Manejar el botón de generación de datos de prueba
+            const generateBtn = document.getElementById('generateTestDataBtn');
+            if (generateBtn) {
+                generateBtn.addEventListener('click', async function() {
+                    // Confirmar acción
+                    const result = await Swal.fire({
+                        title: '¿Generar 100,000 Permisos?',
+                        html: `
+                            <div style="text-align: left; padding: 1rem;">
+                                <p style="margin-bottom: 1rem;">Se generarán <strong>100,000 permisos de prueba</strong> con las siguientes características:</p>
+                                <ul style="list-style-type: disc; padding-left: 2rem; margin-bottom: 1rem;">
+                                    <li>Distribuidos entre los <strong>primeros 10 usuarios activos</strong></li>
+                                    <li>Fechas dentro del <strong>corte vigente actual</strong></li>
+                                    <li>Tipos aleatorios: Falta, Retardo, Cambio Horario, Turno por Turno</li>
+                                    <li>70% con goce de sueldo, 30% sin goce</li>
+                                    <li>Motivos y fechas aleatorias</li>
+                                </ul>
+                                <p style="color: #dc2626; font-weight: 600;">
+                                    <i class="fas fa-exclamation-triangle"></i> Esta operación puede tardar varios minutos.
+                                </p>
+                            </div>
+                        `,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#10B981',
+                        cancelButtonColor: '#6B7280',
+                        confirmButtonText: '<i class="fas fa-check"></i> Sí, Generar',
+                        cancelButtonText: '<i class="fas fa-times"></i> Cancelar',
+                        customClass: {
+                            popup: 'swal-popup-custom',
+                            title: 'swal-title-custom',
+                            confirmButton: 'swal-confirm-custom',
+                            cancelButton: 'swal-cancel-custom'
+                        }
+                    });
+
+                    if (!result.isConfirmed) {
+                        return;
+                    }
+
+                    // Mostrar loading
+                    Swal.fire({
+                        title: 'Generando Permisos...',
+                        html: `
+                            <div style="text-align: center; padding: 2rem;">
+                                <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                                    <span class="visually-hidden">Cargando...</span>
+                                </div>
+                                <p style="margin-top: 1.5rem; color: #6B7280;">
+                                    Por favor espere, esto puede tardar varios minutos...
+                                </p>
+                                <p style="margin-top: 0.5rem; font-size: 0.875rem; color: #9CA3AF;">
+                                    <i class="fas fa-database"></i> Insertando registros en la base de datos
+                                </p>
+                            </div>
+                        `,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        showConfirmButton: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    try {
+                        // Obtener token antiforgery
+                        const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+                        // Hacer la petición
+                        const response = await fetch('/Permisos/GenerateTestData', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'RequestVerificationToken': token
+                            }
+                        });
+
+                        const data = await response.json();
+
+                        // Cerrar loading
+                        Swal.close();
+
+                        // Mostrar resultado
+                        if (data.success) {
+                            await Swal.fire({
+                                icon: 'success',
+                                title: data.title || '¡Éxito!',
+                                html: data.message.replace(/\n/g, '<br>'),
+                                confirmButtonColor: '#10B981',
+                                customClass: {
+                                    popup: 'swal-popup-custom',
+                                    title: 'swal-title-custom',
+                                    confirmButton: 'swal-confirm-custom'
+                                }
+                            });
+
+                            // Redirigir si hay URL
+                            if (data.redirectUrl) {
+                                window.location.href = data.redirectUrl;
+                            }
+                        } else {
+                            Swal.fire({
+                                icon: data.icon || 'error',
+                                title: data.title || 'Error',
+                                html: data.message.replace(/\n/g, '<br>'),
+                                confirmButtonColor: '#EF4444',
+                                customClass: {
+                                    popup: 'swal-popup-custom',
+                                    title: 'swal-title-custom',
+                                    confirmButton: 'swal-confirm-custom'
+                                }
+                            });
+                        }
+                    } catch (error) {
+                        Swal.close();
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error de Conexión',
+                            text: 'No se pudo conectar con el servidor: ' + error.message,
+                            confirmButtonColor: '#EF4444',
+                            customClass: {
+                                popup: 'swal-popup-custom',
+                                title: 'swal-title-custom',
+                                confirmButton: 'swal-confirm-custom'
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

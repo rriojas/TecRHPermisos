@@ -1,0 +1,460 @@
+﻿@model RecursosHumanosWeb.Models.Permiso
+@using System.IO
+@using System.Globalization
+@{
+    ViewData["Title"] = "Detalles del Permiso";
+
+    var culture = new CultureInfo("es-MX");
+
+    string FormatHora12(DateTime fecha)
+    {
+        return fecha.ToString("hh:mm tt", culture).ToUpper();
+    }
+
+    string FormatFechaCompleta(DateTime fecha)
+    {
+        return fecha.ToString("dd 'de' MMMM 'del' yyyy", culture);
+    }
+
+    var typeConfigurations = new Dictionary<int, Dictionary<string, (bool show, string label)>>
+    {
+        [2] = new Dictionary<string, (bool, string)>
+        {
+            ["Fecha1"] = (true, "Del día"),
+            ["Fecha2"] = (true, "Al día"),
+            ["Hora1"] = (false, "Hora entrada"),
+            ["Hora2"] = (false, "Hora salida")
+        },
+        [3] = new Dictionary<string, (bool, string)>
+        {
+            ["Fecha1"] = (true, "En el día"),
+            ["Fecha2"] = (false, "Al día"),
+            ["Hora1"] = (true, "Hora de llegada"),
+            ["Hora2"] = (false, "Hora salida")
+        },
+        [4] = new Dictionary<string, (bool, string)>
+        {
+            ["Fecha1"] = (true, "Del día"),
+            ["Fecha2"] = (true, "Al día"),
+            ["Hora1"] = (true, "Hora entrada"),
+            ["Hora2"] = (true, "Hora salida")
+        },
+        [5] = new Dictionary<string, (bool, string)>
+        {
+            ["Fecha1"] = (true, "Del día"),
+            ["Fecha2"] = (true, "Por el día"),
+            ["Hora1"] = (true, "Hora entrada"),
+            ["Hora2"] = (true, "Hora salida")
+        }
+    };
+
+    var config = typeConfigurations.ContainsKey(Model.IdTipoPermiso) ? typeConfigurations[Model.IdTipoPermiso] : null;
+    bool showDias = config != null && config["Fecha2"].show && Model.Fecha2.HasValue && Model.Dias.HasValue && Model.Dias.Value > 1;
+
+    string hora1 = config != null && config["Hora1"].show && Model.Fecha1 != null ? FormatHora12(Model.Fecha1.Value) : null;
+    string hora2 = config != null && config["Hora2"].show && Model.Fecha2.HasValue ? FormatHora12(Model.Fecha2.Value) : null;
+
+    // Normalize evidence path: support filenames stored alone or web-relative paths like '/Evidences/xxx.pdf'
+    string evidenceUrl = null;
+    string evidencePath = null;
+    bool evidenceExists = false;
+    if (!string.IsNullOrEmpty(Model.Evidencia))
+    {
+        var raw = Model.Evidencia.Replace('\\', '/').Trim();
+        // If stored as bare filename, assume it's under /Evidences/
+        if (!raw.StartsWith("/") && !raw.Contains("/"))
+        {
+            raw = "/Evidences/" + raw;
+        }
+        evidenceUrl = raw;
+        // Build physical path carefully
+        var relativePath = raw.TrimStart('/');
+        evidencePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", relativePath);
+        evidenceExists = System.IO.File.Exists(evidencePath);
+    }
+}
+
+<div class="permission-request-container">
+    <!-- Header de la página -->
+    <div class="permission-header">
+        <div class="header-content">
+            <h1 class="page-title">
+                <i class="fas fa-file-alt"></i>
+                Detalles del Permiso #@Model.Id
+            </h1>
+            <p class="page-subtitle">Información completa del permiso laboral solicitado</p>
+        </div>
+        <div class="header-decoration">
+            <div class="floating-icon">
+                <i class="fas fa-clipboard-check"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="permission-form">
+        <div class="form-sections">
+            <!-- Información del Permiso -->
+            <div class="form-section">
+                <div class="section-header">
+                    <h3>
+                        <i class="fas fa-info-circle"></i>
+                        Información del Permiso
+                    </h3>
+                    <span class="section-indicator">1</span>
+                </div>
+
+                <div class="datetime-grid">
+                    @if (Model.IdTipoPermisoNavigation != null)
+                    {
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-tag"></i>
+                                Tipo de Permiso
+                            </label>
+                            <div class="input-wrapper">
+                                <input type="text" class="form-control" value="@Model.IdTipoPermisoNavigation.Descripcion" readonly style="background: var(--surface); font-weight: 600; color: var(--primary-strong);" />
+                            </div>
+                        </div>
+                    }
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-check-circle"></i>
+                            Estado
+                        </label>
+                        <div class="input-wrapper">
+                            @if (Model.Revisado)
+                            {
+                                <input type="text" class="form-control" value="✓ Aprobado" readonly style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.05) 100%); font-weight: 600; color: #059669; border-color: rgba(16, 185, 129, 0.3);" />
+                            }
+                            else
+                            {
+                                <input type="text" class="form-control" value="⏳ Pendiente de Aprobación" readonly style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(217, 119, 6, 0.05) 100%); font-weight: 600; color: #d97706; border-color: rgba(245, 158, 11, 0.3);" />
+                            }
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-money-bill-wave"></i>
+                            Goce de Sueldo
+                        </label>
+                        <div class="input-wrapper">
+                            @if (Model.Goce)
+                            {
+                                <input type="text" class="form-control" value="✓ Con Goce de Sueldo" readonly style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(22, 163, 74, 0.05) 100%); font-weight: 600; color: #16a34a; border-color: rgba(34, 197, 94, 0.3);" />
+                            }
+                            else
+                            {
+                                <input type="text" class="form-control" value="✗ Sin Goce de Sueldo" readonly style="background: linear-gradient(135deg, rgba(251, 146, 60, 0.1) 0%, rgba(234, 88, 12, 0.05) 100%); font-weight: 600; color: #ea580c; border-color: rgba(251, 146, 60, 0.3);" />
+                            }
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label class="form-label">
+                            <i class="fas fa-comment-dots"></i>
+                            Motivo
+                        </label>
+                        <div class="textarea-wrapper">
+                            <textarea class="form-control" readonly style="background: var(--surface); min-height: 100px; resize: none;">@Model.Motivo</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fechas y Horarios -->
+            <div class="form-section">
+                <div class="section-header">
+                    <h3>
+                        <i class="fas fa-calendar-alt"></i>
+                        Fechas y Horarios
+                    </h3>
+                    <span class="section-indicator">2</span>
+                </div>
+
+                <div class="datetime-grid">
+                    @if (config != null && config["Fecha1"].show && Model.Fecha1 != null)
+                    {
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-calendar-day"></i>
+                                @config["Fecha1"].label
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="input-icon fas fa-calendar"></i>
+                                <input type="text" class="form-control" value="@FormatFechaCompleta(Model.Fecha1.Value)" readonly style="background: var(--surface); font-weight: 600;" />
+                            </div>
+                        </div>
+                    }
+
+                    @if (config != null && config["Hora1"].show && !string.IsNullOrEmpty(hora1))
+                    {
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-clock"></i>
+                                @config["Hora1"].label
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="input-icon fas fa-clock"></i>
+                                <input type="text" class="form-control" value="@hora1" readonly style="background: var(--surface); font-weight: 600; color: var(--primary-strong);" />
+                            </div>
+                        </div>
+                    }
+
+                    @if (config != null && config["Fecha2"].show && Model.Fecha2.HasValue)
+                    {
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-calendar-check"></i>
+                                @config["Fecha2"].label
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="input-icon fas fa-calendar"></i>
+                                <input type="text" class="form-control" value="@FormatFechaCompleta(Model.Fecha2.Value)" readonly style="background: var(--surface); font-weight: 600;" />
+                            </div>
+                        </div>
+                    }
+
+                    @if (config != null && config["Hora2"].show && !string.IsNullOrEmpty(hora2))
+                    {
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-clock"></i>
+                                @config["Hora2"].label
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="input-icon fas fa-clock"></i>
+                                <input type="text" class="form-control" value="@hora2" readonly style="background: var(--surface); font-weight: 600; color: var(--primary-strong);" />
+                            </div>
+                        </div>
+                    }
+
+                    @if (showDias)
+                    {
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-calendar-day"></i>
+                                Días Solicitados
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="input-icon fas fa-calendar-day"></i>
+                                <input type="text" class="form-control" value="@Model.Dias @(Model.Dias == 1 ? "día" : "días")" readonly style="background: var(--surface); font-weight: 600; color: var(--primary-strong);" />
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Información de Usuarios -->
+            <div class="form-section">
+                <div class="section-header">
+                    <h3>
+                        <i class="fas fa-users"></i>
+                        Información de Usuarios
+                    </h3>
+                    <span class="section-indicator">3</span>
+                </div>
+
+                <div class="datetime-grid">
+                    @if (Model.IdUsuarioSolicitaNavigation != null)
+                    {
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-user"></i>
+                                Solicitante
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="input-icon fas fa-user"></i>
+                                <input type="text" class="form-control" value="@Model.IdUsuarioSolicitaNavigation.Nombre" readonly style="background: var(--surface); font-weight: 600;" />
+                            </div>
+                        </div>
+                    }
+
+                    @if (Model.IdUsuarioAutorizaNavigation != null)
+                    {
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-user-check"></i>
+                                Autorizado por
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="input-icon fas fa-user-check"></i>
+                                <input type="text" class="form-control" value="@Model.IdUsuarioAutorizaNavigation.Nombre" readonly style="background: var(--surface); font-weight: 600;" />
+                            </div>
+                        </div>
+                    }
+
+                    @if (Model.IdUsuarioCreaNavigation != null)
+                    {
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-user-plus"></i>
+                                Creado por
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="input-icon fas fa-user-plus"></i>
+                                <input type="text" class="form-control" value="@Model.IdUsuarioCreaNavigation.Nombre" readonly style="background: var(--surface); font-weight: 600;" />
+                            </div>
+                        </div>
+                    }
+
+                    @if (Model.IdUsuarioModificaNavigation != null)
+                    {
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-user-edit"></i>
+                                Modificado por
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="input-icon fas fa-user-edit"></i>
+                                <input type="text" class="form-control" value="@Model.IdUsuarioModificaNavigation.Nombre" readonly style="background: var(--surface); font-weight: 600;" />
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Información Adicional -->
+            <div class="form-section">
+                <div class="section-header">
+                    <h3>
+                        <i class="fas fa-info-circle"></i>
+                        Información Adicional
+                    </h3>
+                    <span class="section-indicator">4</span>
+                </div>
+
+                <div class="datetime-grid">
+                    @if (Model.FechaCreacion != null)
+                    {
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-calendar-plus"></i>
+                                Fecha de Creación
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="input-icon fas fa-calendar-plus"></i>
+                                <input type="text" class="form-control" value="@FormatFechaCompleta(Model.FechaCreacion)" readonly style="background: var(--surface); font-weight: 600;" />
+                            </div>
+                        </div>
+                    }
+
+                    @if (Model.FechaAutorizacion != null)
+                    {
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-check-circle"></i>
+                                Fecha de Autorización
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="input-icon fas fa-check-circle"></i>
+                                <input type="text" class="form-control" value="@FormatFechaCompleta(Model.FechaAutorizacion.Value)" readonly style="background: var(--surface); font-weight: 600; color: var(--success-color);" />
+                            </div>
+                        </div>
+                    }
+
+                    @if (Model.FechaModificacion != null)
+                    {
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-edit"></i>
+                                Última Modificación
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="input-icon fas fa-edit"></i>
+                                <input type="text" class="form-control" value="@FormatFechaCompleta(Model.FechaModificacion.Value)" readonly style="background: var(--surface); font-weight: 600;" />
+                            </div>
+                        </div>
+                    }
+
+                    @if (Model.IdCorteNavigation != null)
+                    {
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-hashtag"></i>
+                                ID de Corte
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="input-icon fas fa-hashtag"></i>
+                                <input type="text" class="form-control" value="#@Model.IdCorteNavigation.Id" readonly style="background: var(--surface); font-weight: 600;" />
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Vista previa de PDF -->
+            @if (!string.IsNullOrEmpty(Model.Evidencia))
+            {
+                <div class="form-section">
+                    <div class="section-header">
+                        <h3>
+                            <i class="fas fa-paperclip"></i>
+                            Evidencia Adjunta
+                        </h3>
+                        <span class="section-indicator">5</span>
+                    </div>
+
+                    @if (evidenceExists)
+                    {
+                        <div id="pdfPreview" style="margin-top: var(--spacing-md);">
+                            <div style="border: 2px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden; background: var(--surface); box-shadow: 0 4px 12px var(--shadow-color);">
+                                <div style="background: var(--gradient-primary); color: white; padding: var(--spacing-md) var(--spacing-lg); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--spacing-sm);">
+                                    <span style="font-weight: 600; display: flex; align-items: center; gap: var(--spacing-sm);">
+                                        <i class="fas fa-file-pdf"></i> @System.IO.Path.GetFileName(evidenceUrl)
+                                    </span>
+                                    <a href="@evidenceUrl" target="_blank" download style="background: rgba(255,255,255,0.2); color: white; padding: var(--spacing-xs) var(--spacing-md); border-radius: var(--radius-sm); text-decoration: none; transition: all var(--transition-fast); display: inline-flex; align-items: center; gap: var(--spacing-xs); font-weight: 500;">
+                                        <i class="fas fa-download"></i> Descargar
+                                    </a>
+                                </div>
+                                <iframe id="pdfFrame" src="@evidenceUrl" style="width: 100%; height: 600px; border: none; display: block;"></iframe>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div style="background: rgba(239, 68, 68, 0.1); border: 2px solid rgba(239, 68, 68, 0.3); border-radius: var(--radius-md); padding: var(--spacing-lg); text-align: center; color: var(--danger-color);">
+                            <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: var(--spacing-sm);"></i>
+                            <p style="margin: 0; font-weight: 600;">Archivo no encontrado</p>
+                            <p style="margin: var(--spacing-xs) 0 0 0; font-size: 0.9rem; color: var(--text-muted);">@System.IO.Path.GetFileName(Model.Evidencia)</p>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="form-actions">
+            <div class="actions-content" style="justify-content: center;">
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-list"></i>
+                    Volver a la Lista
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animación de entrada para las secciones
+            const sections = document.querySelectorAll('.form-section');
+            sections.forEach((section, index) => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px)';
+
+                setTimeout(() => {
+                    section.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                }, 100 * (index + 1));
+            });
+        });
+    </script>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Permisos/create.css" asp-append-version="true" />
+}

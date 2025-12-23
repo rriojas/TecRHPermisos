@@ -1,0 +1,136 @@
+﻿@model IEnumerable<RecursosHumanosWeb.Models.ApiKey>
+
+@{
+    ViewData["Title"] = "Gestión de Claves API";
+}
+
+@section Styles {
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <link href="~/css/Cortes/Index.css" rel="stylesheet" asp-append-version="true" />
+}
+
+<div class="index-container">
+    <div class="page-header fade-in">
+        <div class="header-content">
+            <h1 class="page-title text-gradient">
+                <i class="fas fa-key"></i>
+                Gestión de Claves API
+            </h1>
+            <p class="page-subtitle">Administra y visualiza todas las Claves API del sistema</p>
+        </div>
+        <div class="header-actions">
+            <a asp-action="Create" class="btn btn-create" aria-label="Crear nueva clave API">
+                <i class="fas fa-plus"></i>
+                Crear Clave
+            </a>
+        </div>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="table-container fade-in mb-5">
+            <div class="card">
+                <div class="table-inner">
+                    <div class="overflow-x-auto">
+                        <table class="data-table" style="width:100%" aria-label="Tabla de claves API">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Clave (Parcial)</th>
+                                    <th class="text-center">Fecha Creación</th>
+                                    <th class="text-center">Estado</th>
+                                    <th class="text-center">Creador</th>
+                                    <th class="text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@(item.Clave != null && item.Clave.Length > 8 ? item.Clave.Substring(0, 4) + "..." + item.Clave.Substring(item.Clave.Length - 4) : item.Clave ?? "-")</td>
+                                        <td>
+                                            @if (item.FechaCreacion != default)
+                                            {
+                                                <div style="color: var(--text-medium); font-weight: 500;">
+                                                    <div style="font-size: 0.875rem;">@item.FechaCreacion.ToString("dd/MM/yyyy")</div>
+                                                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.125rem;">@item.FechaCreacion.ToString("h:mm tt")</div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div style="font-style: italic; color: var(--text-muted);">Sin fecha</div>
+                                            }
+                                        </td>
+                                     
+                                        <td class="@(item.Estatus ? "status-cell-active" : "status-cell-inactive")">
+                                            @(item.Estatus ? "Activo" : "Inactivo")
+                                        </td>
+                                        <td>@(item.IdUsuarioCreaNavigation?.Nombre ?? "N/A")</td>
+                                        <td class="text-center">
+                                            <div class="flex justify-center gap-2">
+                                                <a asp-action="Edit" asp-route-id="@item.Id" class="action-btn btn-edit" title="Editar" aria-label="Editar clave API">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a href="#" class="action-btn btn-delete" title="Eliminar" aria-label="Eliminar clave API" data-action="Delete" data-controller="ApiKeys" data-id="@item.Id">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                                <a asp-action="Details" asp-route-id="@item.Id" class="action-btn btn-view" title="Ver detalles" aria-label="Ver detalles de la clave API">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th class="text-center">Clave (Parcial)</th>
+                                    <th class="text-center">Fecha Creación</th>
+                                    <th class="text-center">Estado</th>
+                                    <th class="text-center">Creador</th>
+                                    <th class="text-center">Acciones</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="empty-state fade-in">
+            <div class="empty-icon">
+                <i class="fas fa-key"></i>
+            </div>
+            <h3>No hay Claves API registradas</h3>
+            <p class="text-muted">Presiona "Crear Clave" para agregar una nueva</p>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Aplicar la animación de entrada
+            const elements = document.querySelectorAll('.fade-in, .slide-in-left');
+            elements.forEach(element => {
+                element.style.opacity = '0';
+                element.style.transform = element.classList.contains('slide-in-left')
+                    ? 'translateX(-30px)'
+                    : 'translateY(20px)';
+            });
+
+            setTimeout(() => {
+                elements.forEach((element, index) => {
+                    setTimeout(() => {
+                        element.style.transition = 'all 0.6s ease-out';
+                        element.style.opacity = '1';
+                        element.style.transform = 'translate(0, 0)';
+                    }, index * 150);
+                });
+            }, 100);
+        });
+    </script>
+}
