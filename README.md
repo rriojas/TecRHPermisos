@@ -200,7 +200,259 @@ Configurar el servicio de correo electrónico en `appsettings.json`:
 
 > **Para Gmail**: Se requiere [Contraseña de Aplicación](https://support.google.com/accounts/answer/185833) si se usa autenticación de dos factores.
 
-### 6. Ejecutar Aplicación
+### 6. Configurar User Secrets (Recomendado para Desarrollo)
+
+El proyecto utiliza **User Secrets** para almacenar configuraciones sensibles de forma segura durante el desarrollo, evitando que las credenciales se incluyan en el control de versiones.
+
+#### ¿Qué son User Secrets?
+
+User Secrets es una característica de ASP.NET Core que permite almacenar datos sensibles fuera del árbol del proyecto, en un archivo JSON en el perfil de usuario del sistema.
+
+#### Diagrama de Funcionamiento
+
+```mermaid
+flowchart TD
+    Start([Aplicación Inicia]) --> LoadConfig[ASP.NET Core Configuration System]
+    LoadConfig --> Load1[1. Cargar appsettings.json]
+    Load1 --> Load2[2. Cargar appsettings.Development.json]
+    Load2 --> Load3{Entorno de<br/>Desarrollo?}
+    
+    Load3 -->|Sí| Load4[3. Cargar User Secrets]
+    Load3 -->|No| Load5[3. Cargar Variables de Entorno]
+    
+    Load4 --> Merge[Combinar Configuraciones]
+    Load5 --> Merge
+    
+    Merge --> Priority[Última carga sobrescribe valores anteriores]
+    Priority --> Result[Configuración Final Disponible]
+    Result --> App[Aplicación utiliza configuración segura]
+    
+    style Start fill:#e1f5ff
+    style Load4 fill:#90EE90
+    style Result fill:#e1ffe1
+    style Priority fill:#fff4e6
+```
+
+#### Estructura de User Secrets
+
+**Archivo de Proyecto (.csproj)**
+```xml
+<PropertyGroup>
+  <UserSecretsId>98abdb59-f587-4c38-8800-52d0fd7cfe73</UserSecretsId>
+</PropertyGroup>
+```
+
+**Ubicación del Archivo Secrets**
+```
+Windows: %APPDATA%\Microsoft\UserSecrets\<UserSecretsId>\secrets.json
+Linux/Mac: ~/.microsoft/usersecrets/<UserSecretsId>/secrets.json
+```
+
+**Ejemplo de secrets.json**
+```json
+{
+  "SmtpSettings": {
+    "PasswordApp": "tu-contraseña-de-aplicacion-smtp"
+  },
+  "ConnectionStrings": {
+    "RecursosHumanosContext": "Server=localhost;Database=RRHH;User Id=sa;Password=tu-password"
+  }
+}
+```
+
+#### Comandos de User Secrets
+
+```bash
+# Navegar al proyecto
+cd RecursosHumanosWeb
+
+# Inicializar User Secrets (ya está configurado en este proyecto)
+dotnet user-secrets init
+
+# Listar todos los secrets configurados
+dotnet user-secrets list
+
+# Establecer un secret individual
+dotnet user-secrets set "SmtpSettings:PasswordApp" "tu-contraseña-smtp"
+dotnet user-secrets set "ConnectionStrings:RecursosHumanosContext" "tu-cadena-conexion"
+
+# Eliminar un secret específico
+dotnet user-secrets remove "SmtpSettings:PasswordApp"
+
+# Limpiar todos los secrets
+dotnet user-secrets clear
+```
+
+#### Flujo de Configuración en el Código
+
+```mermaid
+sequenceDiagram
+    participant PS as Program.cs
+    participant CS as Configuration System
+    participant US as User Secrets
+    participant AS as appsettings.json
+    participant SS as SmtpSettings
+    participant SVC as SmtpEmailSender
+
+    PS->>CS: builder.Configuration
+    CS->>AS: Cargar appsettings.json
+    AS-->>CS: EmailSender, SmtpServer, Port, EnableSsl
+    
+    CS->>US: Cargar User Secrets (Development)
+    US-->>CS: PasswordApp (sobrescribe si existe)
+    
+    CS-->>PS: Configuración combinada
+    PS->>SS: Configure<SmtpSettings>()
+    SS->>SVC: IOptions<SmtpSettings>
+    
+    Note over SVC: Accede a _settings.PasswordApp<br/>que viene de User Secrets
+```
+
+#### Integración en el Código
+
+**Program.cs**
+```csharp
+// ASP.NET Core carga automáticamente User Secrets en Development
+var builder = WebApplication.CreateBuilder(args);
+
+// La configuración se combina automáticamente
+builder.Services.Configure<SmtpSettings>(
+    builder.Configuration.GetSection("SmtpSettings")
+);
+```
+
+**SmtpEmailSender.cs**
+```csharp
+public class SmtpEmailSender : IEmailSender
+{
+    private readonly SmtpSettings _settings;
+
+    public SmtpEmailSender(IOptions<SmtpSettings> options)
+    {
+        // _settings contiene valores combinados de:
+        // appsettings.json + User Secrets
+        _settings = options.Value;
+    }
+
+    public Task<bool> SendEmailAsync(string to, string subject, string body)
+    {
+        using var client = new SmtpClient(_settings.SmtpServer, _settings.SmtpPort)
+        {
+            // PasswordApp viene de User Secrets
+            Credentials = new NetworkCredential(
+                _settings.EmailSender, 
+                _settings.PasswordApp
+            ),
+            EnableSsl = _settings.EnableSsl
+        };
+        // ...
+    }
+}
+```
+
+#### Orden de Prioridad de Configuración
+
+ASP.NET Core carga la configuración en este orden (último sobrescribe):
+
+1. **appsettings.json** (base)
+2. **appsettings.{Environment}.json** (ejemplo: appsettings.Development.json)
+3. **User Secrets** (solo en Development)
+4. **Variables de Entorno**
+5. **Argumentos de Línea de Comandos**
+
+**Ejemplo Práctico:**
+
+```json
+// appsettings.json
+{
+  "SmtpSettings": {
+    "EmailSender": "correo@empresa.com",
+    "SmtpServer": "smtp.office365.com",
+    "SmtpPort": 587,
+    "EnableSsl": true
+    // PasswordApp NO está aquí (seguro ?)
+  }
+}
+
+// User Secrets (secrets.json)
+{
+  "SmtpSettings": {
+    "PasswordApp": "contraseña-segura-aqui"
+  }
+}
+
+// Resultado Final en _settings:
+_settings.EmailSender = "correo@empresa.com"      // de appsettings.json
+_settings.SmtpServer = "smtp.office365.com"       // de appsettings.json
+_settings.SmtpPort = 587                          // de appsettings.json
+_settings.EnableSsl = true                        // de appsettings.json
+_settings.PasswordApp = "contraseña-segura-aqui" // de User Secrets ?
+```
+
+#### Ventajas de User Secrets
+
+? **Seguridad**: Credenciales no se incluyen en el repositorio Git
+? **Simplicidad**: Fácil de configurar y usar
+? **Desarrollo**: Cada desarrollador puede tener sus propias credenciales
+? **Compartir**: El proyecto se puede compartir sin exponer secretos
+? **Git-Friendly**: El archivo .gitignore ya excluye User Secrets
+
+#### Configuración para Otros Entornos
+
+**Desarrollo Local:**
+```bash
+dotnet user-secrets set "SmtpSettings:PasswordApp" "password-local"
+```
+
+**Testing/Staging:**
+```bash
+# Variables de entorno
+export SmtpSettings__PasswordApp="password-staging"
+```
+
+**Producción:**
+```bash
+# Azure App Service - Application Settings
+# AWS - Parameter Store
+# Docker - Secrets
+# Kubernetes - Secrets
+```
+
+#### Verificación de Configuración
+
+Para verificar que User Secrets está funcionando:
+
+```bash
+# Listar secrets configurados
+dotnet user-secrets list
+
+# Salida esperada:
+# SmtpSettings:PasswordApp = ********
+```
+
+#### Troubleshooting
+
+**Problema:** "User secret 'SmtpSettings:PasswordApp' not found"
+
+**Solución:**
+```bash
+cd RecursosHumanosWeb
+dotnet user-secrets set "SmtpSettings:PasswordApp" "tu-contraseña"
+```
+
+**Problema:** La aplicación no encuentra el secret
+
+**Verificar:**
+1. Que estés en modo Development: `ASPNETCORE_ENVIRONMENT=Development`
+2. Que el UserSecretsId esté en el .csproj
+3. Que el archivo secrets.json exista en la ruta correcta
+
+#### Referencias
+
+- [Documentación oficial de User Secrets](https://docs.microsoft.com/aspnet/core/security/app-secrets)
+- [Configuración en ASP.NET Core](https://docs.microsoft.com/aspnet/core/fundamentals/configuration)
+
+### 7. Ejecutar Aplicación
 
 ```bash
 dotnet run
