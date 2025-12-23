@@ -645,7 +645,6 @@ Este proyecto está bajo licencia MIT. Ver archivo LICENSE para más detalles.
 
 - **Versión**: 1.0.0
 - **Última Actualización**: 2024
-- **Mantenedor**: [rriojas](https://github.com/rriojas)
 - **Estado**: Activo
 
 ---
