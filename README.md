@@ -124,9 +124,9 @@ Usuario ? Controller ? ViewModel/DTO ? Service ? DbContext ? Database
 - Visual Studio 2022 o Visual Studio Code
 - Git (control de versiones)
 
-### Configuración SMTP (Opcional)
-- Servidor SMTP configurado para envío de correos electrónicos
-- Credenciales de autenticación SMTP
+### Configuración Requerida
+- Servidor SMTP para envío de correos electrónicos (opcional)
+- Certificado SSL para HTTPS en producción
 
 ### Verificación de Requisitos
 
@@ -155,15 +155,17 @@ dotnet restore
 
 ### 3. Configurar Cadena de Conexión
 
-Editar `appsettings.json`:
+Crear o editar el archivo `appsettings.json` con la configuración de base de datos:
 
 ```json
 {
   "ConnectionStrings": {
-    "RecursosHumanosContext": "Server=localhost;Database=RecursosHumanosDB;Integrated Security=True;TrustServerCertificate=True"
+    "RecursosHumanosContext": "Server=TU_SERVIDOR;Database=TU_BASE_DATOS;User Id=TU_USUARIO;Password=TU_CONTRASEÑA;TrustServerCertificate=True"
   }
 }
 ```
+
+> **Nota de Seguridad**: No incluir credenciales reales en el repositorio. Utilizar variables de entorno o User Secrets para desarrollo.
 
 ### 4. Aplicar Migraciones de Base de Datos
 
@@ -180,19 +182,23 @@ dotnet ef database update
 
 ### 5. Configurar SMTP (Opcional)
 
-Editar `appsettings.json`:
+Configurar el servicio de correo electrónico en `appsettings.json`:
 
 ```json
 {
   "SmtpSettings": {
-    "Host": "smtp.gmail.com",
+    "Host": "TU_SERVIDOR_SMTP",
     "Port": 587,
     "EnableSsl": true,
-    "Username": "correo@dominio.com",
-    "Password": "contraseña_aplicacion"
+    "Username": "TU_USUARIO_EMAIL",
+    "Password": "TU_CONTRASEÑA_SMTP"
   }
 }
 ```
+
+> **Nota de Seguridad**: Nunca incluir contraseñas reales en el código fuente. Usar User Secrets para desarrollo y variables de entorno en producción.
+
+> **Para Gmail**: Se requiere [Contraseña de Aplicación](https://support.google.com/accounts/answer/185833) si se usa autenticación de dos factores.
 
 ### 6. Ejecutar Aplicación
 
@@ -200,9 +206,7 @@ Editar `appsettings.json`:
 dotnet run
 ```
 
-La aplicación estará disponible en:
-- HTTPS: `https://localhost:5001`
-- HTTP: `http://localhost:5000`
+La aplicación estará disponible en los puertos configurados en `launchSettings.json`.
 
 ## Estructura del Proyecto
 
@@ -517,12 +521,19 @@ GET /api/usuarios/{id}
 
 ### Variables de Entorno Recomendadas
 
+Para despliegue en producción, configurar variables de entorno:
+
 ```bash
 ASPNETCORE_ENVIRONMENT=Production
 ASPNETCORE_URLS=https://+:443;http://+:80
-ConnectionStrings__RecursosHumanosContext="Server=prod-server;Database=RRHH;..."
-SmtpSettings__Password="secure-smtp-password"
+ConnectionStrings__RecursosHumanosContext="[CADENA_DE_CONEXION_PRODUCCION]"
+SmtpSettings__Host="[SERVIDOR_SMTP]"
+SmtpSettings__Port="[PUERTO_SMTP]"
+SmtpSettings__Username="[USUARIO_SMTP]"
+SmtpSettings__Password="[CONTRASEÑA_SMTP]"
 ```
+
+> **Importante**: Usar Azure Key Vault, AWS Secrets Manager o similar para almacenar credenciales en producción.
 
 ### Configuración de IIS
 
