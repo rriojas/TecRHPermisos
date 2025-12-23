@@ -419,3 +419,10 @@ secrets.json
 
 # Mac files
 .DS_Store
+
+# SQL Scripts and database files (use migrations instead)
+sql/
+*.sql
+
+# PowerShell scripts (project-specific, not for version control)
+*.ps1
