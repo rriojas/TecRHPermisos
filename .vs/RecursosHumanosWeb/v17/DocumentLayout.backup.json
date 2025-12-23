@@ -1,0 +1,573 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\views\\usuarios\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\views\\usuarios\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\controllers\\usuarioscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\controllers\\usuarioscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\models\\viewmodels\\searchusuarioviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\models\\viewmodels\\searchusuarioviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\views\\permisos\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\views\\permisos\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\wwwroot\\css\\cortes\\index.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\wwwroot\\css\\cortes\\index.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\views\\cortes\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\views\\cortes\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\wwwroot\\css\\permisos\\index.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\wwwroot\\css\\permisos\\index.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\views\\permisos\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\views\\permisos\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\views\\permisos\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\views\\permisos\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\wwwroot\\css\\usuarios\\index.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\wwwroot\\css\\usuarios\\index.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\controllers\\cortescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\controllers\\cortescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\views\\cortes\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\views\\cortes\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\models\\viewmodels\\cortecreateviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\models\\viewmodels\\cortecreateviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\controllers\\permisoscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\controllers\\permisoscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\models\\permiso.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\models\\permiso.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\models\\viewmodels\\permissionscreateviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\models\\viewmodels\\permissionscreateviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\wwwroot\\js\\cortes\\index.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\wwwroot\\js\\cortes\\index.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\models\\viewmodels\\searchpermissionsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\models\\viewmodels\\searchpermissionsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\models\\corte.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\models\\corte.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\wwwroot\\js\\site.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\wwwroot\\js\\site.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\views\\cortes\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\views\\cortes\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\wwwroot\\js\\permisos\\index.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\wwwroot\\js\\permisos\\index.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\wwwroot\\js\\usuarios\\index.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\wwwroot\\js\\usuarios\\index.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\models\\viewmodels\\searchcorteviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\models\\viewmodels\\searchcorteviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\views\\permisos\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\views\\permisos\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\wwwroot\\css\\permisos\\create.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\wwwroot\\css\\permisos\\create.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\views\\usuarios\\view.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\views\\usuarios\\view.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\views\\cortes\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\views\\cortes\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\wwwroot\\js\\cortes\\details.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\wwwroot\\js\\cortes\\details.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\wwwroot\\css\\cortes\\details.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\wwwroot\\css\\cortes\\details.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|c:\\users\\axelc\\source\\repos\\recursoshumanosweb\\recursoshumanosweb\\models\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C7CBCF06-6281-4CCD-A6F0-2AE2295FF785}|RecursosHumanosWeb\\RecursosHumanosWeb.csproj|solutionrelative:recursoshumanosweb\\models\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 23,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "site.css",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\wwwroot\\css\\site.css",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\wwwroot\\css\\site.css",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\wwwroot\\css\\site.css",
+              "RelativeToolTip": "RecursosHumanosWeb\\wwwroot\\css\\site.css",
+              "ViewState": "AgIAAP8BAAAAAAAAAAAuwBECAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-08-04T18:53:37.532Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "index.js",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\wwwroot\\js\\Usuarios\\index.js",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\wwwroot\\js\\Usuarios\\index.js",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\wwwroot\\js\\Usuarios\\index.js",
+              "RelativeToolTip": "RecursosHumanosWeb\\wwwroot\\js\\Usuarios\\index.js",
+              "ViewState": "AgIAADoAAAAAAAAAAAAqwEsAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-10-01T05:03:00.779Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Edit.cshtml",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Views\\Permisos\\Edit.cshtml",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\Views\\Permisos\\Edit.cshtml",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Views\\Permisos\\Edit.cshtml",
+              "RelativeToolTip": "RecursosHumanosWeb\\Views\\Permisos\\Edit.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-10-10T17:28:59.19Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UsuariosController.cs",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Controllers\\UsuariosController.cs",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\Controllers\\UsuariosController.cs",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Controllers\\UsuariosController.cs",
+              "RelativeToolTip": "RecursosHumanosWeb\\Controllers\\UsuariosController.cs",
+              "ViewState": "AgIAAGUAAAAAAAAAAAAAwHIAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-03T10:09:44.644Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "SearchUsuarioViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Models\\ViewModels\\SearchUsuarioViewModel.cs",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\Models\\ViewModels\\SearchUsuarioViewModel.cs",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Models\\ViewModels\\SearchUsuarioViewModel.cs",
+              "RelativeToolTip": "RecursosHumanosWeb\\Models\\ViewModels\\SearchUsuarioViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAABDAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-03T10:06:09.951Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "CorteCreateViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Models\\ViewModels\\CorteCreateViewModel.cs",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\Models\\ViewModels\\CorteCreateViewModel.cs",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Models\\ViewModels\\CorteCreateViewModel.cs",
+              "RelativeToolTip": "RecursosHumanosWeb\\Models\\ViewModels\\CorteCreateViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-03T09:59:49.938Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "Create.cshtml",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Views\\Cortes\\Create.cshtml",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\Views\\Cortes\\Create.cshtml",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Views\\Cortes\\Create.cshtml",
+              "RelativeToolTip": "RecursosHumanosWeb\\Views\\Cortes\\Create.cshtml",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAgwDMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-10-03T09:31:42.594Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "PermissionsCreateViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Models\\ViewModels\\PermissionsCreateViewModel.cs",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\Models\\ViewModels\\PermissionsCreateViewModel.cs",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Models\\ViewModels\\PermissionsCreateViewModel.cs",
+              "RelativeToolTip": "RecursosHumanosWeb\\Models\\ViewModels\\PermissionsCreateViewModel.cs",
+              "ViewState": "AgIAABcAAAAAAAAAAAAuwDkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-03T09:01:26.919Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Index.css",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\wwwroot\\css\\Cortes\\Index.css",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\wwwroot\\css\\Cortes\\Index.css",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\wwwroot\\css\\Cortes\\Index.css",
+              "RelativeToolTip": "RecursosHumanosWeb\\wwwroot\\css\\Cortes\\Index.css",
+              "ViewState": "AgIAAFYBAAAAAAAAAAAAAAgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-10-03T08:16:37.233Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\Views\\Home\\Index.cshtml",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "RecursosHumanosWeb\\Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAAGsBAAAAAAAAAAAAAHoBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-10-03T07:25:57.851Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "index.css",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\wwwroot\\css\\Permisos\\index.css",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\wwwroot\\css\\Permisos\\index.css",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\wwwroot\\css\\Permisos\\index.css",
+              "RelativeToolTip": "RecursosHumanosWeb\\wwwroot\\css\\Permisos\\index.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAABTAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-10-03T07:02:02.831Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Views\\Cortes\\Index.cshtml",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\Views\\Cortes\\Index.cshtml",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Views\\Cortes\\Index.cshtml",
+              "RelativeToolTip": "RecursosHumanosWeb\\Views\\Cortes\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-10-01T10:32:30.266Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "Edit.cshtml",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Views\\Cortes\\Edit.cshtml",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\Views\\Cortes\\Edit.cshtml",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Views\\Cortes\\Edit.cshtml",
+              "RelativeToolTip": "RecursosHumanosWeb\\Views\\Cortes\\Edit.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-10-01T10:32:29.531Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "index.js",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\wwwroot\\js\\Permisos\\index.js",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\wwwroot\\js\\Permisos\\index.js",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\wwwroot\\js\\Permisos\\index.js",
+              "RelativeToolTip": "RecursosHumanosWeb\\wwwroot\\js\\Permisos\\index.js",
+              "ViewState": "AgIAADwAAAAAAAAAAAAQwEgAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-10-01T10:30:40.724Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "Index.js",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\wwwroot\\js\\Cortes\\Index.js",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\wwwroot\\js\\Cortes\\Index.js",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\wwwroot\\js\\Cortes\\Index.js",
+              "RelativeToolTip": "RecursosHumanosWeb\\wwwroot\\js\\Cortes\\Index.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-10-01T10:27:47.894Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "SearchCorteViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Models\\ViewModels\\SearchCorteViewModel.cs",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\Models\\ViewModels\\SearchCorteViewModel.cs",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Models\\ViewModels\\SearchCorteViewModel.cs",
+              "RelativeToolTip": "RecursosHumanosWeb\\Models\\ViewModels\\SearchCorteViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-01T09:53:56.306Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "PermisosController.cs",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Controllers\\PermisosController.cs",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\Controllers\\PermisosController.cs",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Controllers\\PermisosController.cs",
+              "RelativeToolTip": "RecursosHumanosWeb\\Controllers\\PermisosController.cs",
+              "ViewState": "AgIAAAACAAAAAAAAAAAQwCkCAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-01T09:51:38.532Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "SearchPermissionsViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Models\\ViewModels\\SearchPermissionsViewModel.cs",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\Models\\ViewModels\\SearchPermissionsViewModel.cs",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Models\\ViewModels\\SearchPermissionsViewModel.cs",
+              "RelativeToolTip": "RecursosHumanosWeb\\Models\\ViewModels\\SearchPermissionsViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-01T09:50:23.292Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Views\\Permisos\\Index.cshtml",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\Views\\Permisos\\Index.cshtml",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Views\\Permisos\\Index.cshtml",
+              "RelativeToolTip": "RecursosHumanosWeb\\Views\\Permisos\\Index.cshtml",
+              "ViewState": "AgIAABIAAAAAAAAAAAAAABoAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-10-01T09:37:05.947Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "create.css",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\wwwroot\\css\\Permisos\\create.css",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\wwwroot\\css\\Permisos\\create.css",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\wwwroot\\css\\Permisos\\create.css",
+              "RelativeToolTip": "RecursosHumanosWeb\\wwwroot\\css\\Permisos\\create.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-10-01T08:57:36.306Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "site.js",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\wwwroot\\js\\site.js",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\wwwroot\\js\\site.js",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\wwwroot\\js\\site.js",
+              "RelativeToolTip": "RecursosHumanosWeb\\wwwroot\\js\\site.js",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAA0AAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-10-01T05:37:53.172Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "RecursosHumanosWeb\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAABsAAAAAAAAAAAAAACgAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-10-01T05:18:08.385Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "View.cshtml",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Views\\Usuarios\\View.cshtml",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\Views\\Usuarios\\View.cshtml",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Views\\Usuarios\\View.cshtml",
+              "RelativeToolTip": "RecursosHumanosWeb\\Views\\Usuarios\\View.cshtml",
+              "ViewState": "AgIAAFcAAAAAAAAAAAAAAAwAAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-10-01T04:38:37.556Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Views\\Usuarios\\Index.cshtml",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\Views\\Usuarios\\Index.cshtml",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Views\\Usuarios\\Index.cshtml",
+              "RelativeToolTip": "RecursosHumanosWeb\\Views\\Usuarios\\Index.cshtml",
+              "ViewState": "AgIAAOUAAAAAAAAAAAAQwPgAAABEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-10-01T03:41:37.674Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Index.css",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\wwwroot\\css\\Usuarios\\Index.css",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\wwwroot\\css\\Usuarios\\Index.css",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\wwwroot\\css\\Usuarios\\Index.css",
+              "RelativeToolTip": "RecursosHumanosWeb\\wwwroot\\css\\Usuarios\\Index.css",
+              "ViewState": "AgIAADABAAAAAAAAAAAcwEYBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-10-01T03:41:28.594Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "details.js",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\wwwroot\\js\\Cortes\\details.js",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\wwwroot\\js\\Cortes\\details.js",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\wwwroot\\js\\Cortes\\details.js",
+              "RelativeToolTip": "RecursosHumanosWeb\\wwwroot\\js\\Cortes\\details.js",
+              "ViewState": "AgIAAJQBAAAAAAAAAAAkwJkBAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-09-22T10:26:22.886Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "Corte.cs",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Models\\Corte.cs",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\Models\\Corte.cs",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Models\\Corte.cs",
+              "RelativeToolTip": "RecursosHumanosWeb\\Models\\Corte.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAlwBsAAABVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-22T10:22:30.227Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "Permiso.cs",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Models\\Permiso.cs",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\Models\\Permiso.cs",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Models\\Permiso.cs",
+              "RelativeToolTip": "RecursosHumanosWeb\\Models\\Permiso.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAA9wDcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-22T10:22:22.991Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "Usuario.cs",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Models\\Usuario.cs",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\Models\\Usuario.cs",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Models\\Usuario.cs",
+              "RelativeToolTip": "RecursosHumanosWeb\\Models\\Usuario.cs",
+              "ViewState": "AgIAAFIAAAAAAAAAAAAQwGcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-22T10:22:14.372Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "CortesController.cs",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Controllers\\CortesController.cs",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\Controllers\\CortesController.cs",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Controllers\\CortesController.cs",
+              "RelativeToolTip": "RecursosHumanosWeb\\Controllers\\CortesController.cs",
+              "ViewState": "AgIAAIQAAAAAAAAAAAAYwJEAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-22T10:19:00.234Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "Create.cshtml",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Views\\Permisos\\Create.cshtml",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\Views\\Permisos\\Create.cshtml",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Views\\Permisos\\Create.cshtml",
+              "RelativeToolTip": "RecursosHumanosWeb\\Views\\Permisos\\Create.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-09-22T10:00:36.775Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "details.css",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\wwwroot\\css\\Cortes\\details.css",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\wwwroot\\css\\Cortes\\details.css",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\wwwroot\\css\\Cortes\\details.css",
+              "RelativeToolTip": "RecursosHumanosWeb\\wwwroot\\css\\Cortes\\details.css",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAABoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-09-22T09:59:59.949Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "Details.cshtml",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Views\\Cortes\\Details.cshtml",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\Views\\Cortes\\Details.cshtml",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Views\\Cortes\\Details.cshtml",
+              "RelativeToolTip": "RecursosHumanosWeb\\Views\\Cortes\\Details.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-09-22T09:54:44.778Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Details.cshtml",
+              "DocumentMoniker": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Views\\Permisos\\Details.cshtml",
+              "RelativeDocumentMoniker": "RecursosHumanosWeb\\Views\\Permisos\\Details.cshtml",
+              "ToolTip": "C:\\Users\\axelc\\source\\repos\\RecursosHumanosWeb\\RecursosHumanosWeb\\Views\\Permisos\\Details.cshtml",
+              "RelativeToolTip": "RecursosHumanosWeb\\Views\\Permisos\\Details.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-09-22T09:43:58.291Z"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

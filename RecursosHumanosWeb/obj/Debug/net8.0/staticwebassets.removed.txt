@@ -1,0 +1,2 @@
+C:\Users\axelc\source\repos\RecursosHumanosWeb\RecursosHumanosWeb\wwwroot\js\permiso-form.js
+C:\Users\axelc\source\repos\RecursosHumanosWeb\RecursosHumanosWeb\wwwroot\js\permisos.js
