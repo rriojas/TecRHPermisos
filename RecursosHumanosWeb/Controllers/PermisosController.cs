@@ -413,7 +413,7 @@ namespace RecursosHumanosWeb.Controllers
         // POST: Permisos/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(PermissionsCreateViewModel model)
+        public async Task<IActionResult> Create(PermissionsCreateViewModel model, bool? confirmed)
         {
             string? evidenciaPath = null;
 
@@ -489,7 +489,7 @@ namespace RecursosHumanosWeb.Controllers
                 }
 
 
-                // 5. Obtener cortes activos
+                // 5. Obtener corte activo
                 var corteActivo = await _context.Cortes
                     .Where(c => c.Estatus ?? false)
                     .OrderByDescending(c => c.Id)
@@ -499,11 +499,6 @@ namespace RecursosHumanosWeb.Controllers
                 {
                     return Json(new AlertResponseDTO { Success = false, Title = "Error de Corte", Message = "No se encontró un corte activo." });
                 }
-
-                var corteFuturo = await _context.Cortes
-                    .Where(c => c.Id > corteActivo.Id)
-                    .OrderBy(c => c.Id)
-                    .FirstOrDefaultAsync();
 
                 // 6. Procesar archivo de evidencia
                 if (model.EvidenceFile != null)
@@ -541,116 +536,68 @@ namespace RecursosHumanosWeb.Controllers
                 var permisosCreados = new List<int>();
                 var currentDateTime = DateTime.Now;
 
-                // 7. Lógica de división de permisos (CORTE)
-
-                // Caso 1: Permiso de un día o dentro del corte activo
-                if (model.IdTipoPermiso == 3 || (model.Fecha2.HasValue && corteActivo.Termina.HasValue && model.Fecha2.Value.Date <= corteActivo.Termina.Value.Date))
+                // 7. Validación: Fecha1 debe estar dentro del periodo del corte activo (hora, minuto, segundo)
+                if (model.Fecha1.HasValue && corteActivo.Inicia.HasValue && model.Fecha1.Value < corteActivo.Inicia.Value)
                 {
-                    // Calcular días automáticamente entre Fecha1 y Fecha2
-                    int? diasCalculados = null;
-                    if (model.IdTipoPermiso != 3 && model.Fecha1.HasValue && model.Fecha2.HasValue)
-                    {
-                        diasCalculados = (int)((model.Fecha2.Value.Date - model.Fecha1.Value.Date).TotalDays + 1);
-                    }
-                    
-                    var permiso = new Permiso
-                    {
-                        Motivo = model.Motivo,
-                        Fecha1 = model.Fecha1!.Value.Date,
-                        Fecha2 = model.IdTipoPermiso != 3 ? model.Fecha2.Value.Date : (DateTime?)null,
-                        Dias = diasCalculados, // Asignar días calculados
-                        IdCorte = corteActivo.Id,
-                        IdTipoPermiso = model.IdTipoPermiso,
-                        IdUsuarioSolicita = model.IdUsuarioSolicita!.Value,
-                        IdUsuarioCrea = idUsuarioCrea,
-                        IdUsuarioModifica = idUsuarioCrea,
-                        Evidencia = evidenciaPath,
-                        FechaCreacion = currentDateTime,
-                        FechaModificacion = currentDateTime,
-                        Estatus = true, // Siempre activo al crear
-                        Revisado = false, // Pendiente de revisión
-                        Goce = model.Goce ?? false // Se toma de la vista
-                    };
+                    ModelState.AddModelError("Fecha1", "La fecha y hora de inicio debe estar dentro del periodo del corte vigente.");
+                    var errors = ModelState.Where(x => x.Value!.Errors.Any())
+                        .ToDictionary(
+                            kvp => kvp.Key,
+                            kvp => kvp.Value!.Errors.Select(e => string.IsNullOrEmpty(e.ErrorMessage) ? e.Exception?.Message : e.ErrorMessage).ToArray()
+                        );
 
-                    _context.Permisos.Add(permiso);
-                    await _context.SaveChangesAsync();
-                    permisosCreados.Add(permiso.Id);
+                    return Json(new AlertResponseDTO
+                    {
+                        Success = false,
+                        Title = "Error de Validación",
+                        Message = "Por favor, corrija los campos marcados.",
+                        Errors = errors
+                    });
                 }
-                // Caso 2: Permiso cruza el corte activo y existe un corte futuro
-                else if (model.IdTipoPermiso is 2 or 4 or 5 && model.Fecha2.HasValue && corteActivo.Termina.HasValue && model.Fecha2.Value.Date > corteActivo.Termina.Value.Date && corteFuturo != null)
+
+                // 8. Validación: Si Fecha2 está fuera del corte activo (mayor al término) pedir confirmación
+                if (model.Fecha2.HasValue && corteActivo.Termina.HasValue && model.Fecha2.Value > corteActivo.Termina.Value && !(confirmed ?? false))
                 {
-                    // Calcular días para el primer permiso (hasta el final del corte activo)
-                    int? diasPermiso1 = null;
-                    if (model.Fecha1.HasValue && corteActivo.Termina.HasValue)
+                    return Json(new AlertResponseDTO
                     {
-                        diasPermiso1 = (int)((corteActivo.Termina.Value.Date - model.Fecha1.Value.Date).TotalDays + 1);
-                    }
-                    
-                    // Primer permiso (hasta el final del corte activo)
-                    var permiso1 = new Permiso
-                    {
-                        Motivo = model.Motivo,
-                        Fecha1 = model.Fecha1!.Value.Date,
-                        Fecha2 = corteActivo.Termina.HasValue ? corteActivo.Termina.Value.Date : (DateTime?)null,
-                        Dias = diasPermiso1, // Asignar días calculados
-                        IdCorte = corteActivo.Id,
-                        IdTipoPermiso = model.IdTipoPermiso,
-                        IdUsuarioSolicita = model.IdUsuarioSolicita!.Value,
-                        IdUsuarioCrea = idUsuarioCrea,
-                        IdUsuarioModifica = idUsuarioCrea,
-                        Evidencia = evidenciaPath,
-                        FechaCreacion = currentDateTime,
-                        FechaModificacion = currentDateTime,
-                        Estatus = true,
-                        Revisado = false,
-                        Goce = model.Goce ?? false
-                    };
-
-                    // Calcular días para el segundo permiso (desde inicio del corte futuro hasta fecha final)
-                    var fechaSiguiente = corteActivo.Termina.HasValue ? corteActivo.Termina.Value.Date.AddDays(1) : DateTime.MinValue;
-                    int? diasPermiso2 = null;
-                    if (model.Fecha2.HasValue)
-                    {
-                        diasPermiso2 = (int)((model.Fecha2.Value.Date - fechaSiguiente).TotalDays + 1);
-                    }
-                    
-                    // Segundo permiso (desde el inicio del corte futuro hasta la fecha final original)
-                    var permiso2 = new Permiso
-                    {
-                        Motivo = model.Motivo,
-                        Fecha1 = fechaSiguiente,
-                        Fecha2 = model.Fecha2.Value.Date,
-                        Dias = diasPermiso2, // Asignar días calculados
-                        IdCorte = corteFuturo.Id,
-                        IdTipoPermiso = model.IdTipoPermiso,
-                        IdUsuarioSolicita = model.IdUsuarioSolicita!.Value,
-                        IdUsuarioCrea = idUsuarioCrea,
-                        IdUsuarioModifica = idUsuarioCrea,
-                        Evidencia = evidenciaPath,
-                        FechaCreacion = currentDateTime,
-                        FechaModificacion = currentDateTime,
-                        Estatus = true,
-                        Revisado = false,
-                        Goce = model.Goce ?? false
-                    };
-
-                    _context.Permisos.AddRange(permiso1, permiso2);
-                    await _context.SaveChangesAsync();
-                    permisosCreados.Add(permiso1.Id);
-                    permisosCreados.Add(permiso2.Id);
+                        Success = false,
+                        ShowConfirmation = true,
+                        Title = "Fechas fuera del corte",
+                        Message = "Las fechas proporcionadas exceden el periodo del corte vigente. Se recomienda crear un permiso para fechas futuras. ¿Desea crear el permiso de todas formas?",
+                        Icon = "warning",
+                        ConfirmButtonText = "Sí, crear permiso"
+                    });
                 }
-                // Caso 3: Permiso de múltiples días cruza el corte activo, pero NO hay corte futuro
-                else if (model.IdTipoPermiso is 2 or 4 or 5 && model.Fecha2.HasValue && corteActivo.Termina.HasValue && model.Fecha2.Value.Date > corteActivo.Termina.Value.Date && corteFuturo == null)
-                {           
-                    if (evidenciaPath != null) DeleteFile(evidenciaPath);
-                    return Json(new AlertResponseDTO { Success = false, Title = "Error de Corte", Message = "El permiso de múltiples días cruza el corte actual y requiere un corte futuro que no fue encontrado en la base de datos." });
-                }
-                // Caso 4: Lógica de corte faltante o mal configurada
-                else
+
+                // 9. Crear un único permiso que englobe las fechas proporcionadas (no se parten en varios cortes)
+                int? diasCalculados = null;
+                if (model.IdTipoPermiso != 3 && model.Fecha1.HasValue && model.Fecha2.HasValue)
                 {
-                    if (evidenciaPath != null) DeleteFile(evidenciaPath);
-                    return Json(new AlertResponseDTO { Success = false, Title = "Error de Corte", Message = "La lógica de asignación del corte falló para las fechas seleccionadas." });
+                    diasCalculados = (int)((model.Fecha2.Value - model.Fecha1.Value).TotalDays + 1);
                 }
+
+                var permiso = new Permiso
+                {
+                    Motivo = model.Motivo,
+                    Fecha1 = model.Fecha1!.Value,
+                    Fecha2 = model.IdTipoPermiso != 3 && model.Fecha2.HasValue ? model.Fecha2.Value : (DateTime?)null,
+                    Dias = diasCalculados,
+                    IdCorte = corteActivo.Id,
+                    IdTipoPermiso = model.IdTipoPermiso,
+                    IdUsuarioSolicita = model.IdUsuarioSolicita!.Value,
+                    IdUsuarioCrea = idUsuarioCrea,
+                    IdUsuarioModifica = idUsuarioCrea,
+                    Evidencia = evidenciaPath,
+                    FechaCreacion = currentDateTime,
+                    FechaModificacion = currentDateTime,
+                    Estatus = true,
+                    Revisado = false,
+                    Goce = model.Goce ?? false
+                };
+
+                _context.Permisos.Add(permiso);
+                await _context.SaveChangesAsync();
+                permisosCreados.Add(permiso.Id);
 
 
                 if (!permisosCreados.Any())
