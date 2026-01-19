@@ -292,7 +292,39 @@ $(document).ready(function () {
                 return response.json();
             })
             .then(function(json){
-                // Delegate to central handler
+                // If server asks for confirmation, show SweetAlert and optionally resubmit
+                if (json && json.showConfirmation) {
+                    return Swal.fire({
+                        title: json.title || '¿Confirmar?',
+                        text: json.message || '',
+                        icon: json.icon || 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: json.confirmButtonText || 'Sí, continuar',
+                        cancelButtonText: json.cancelButtonText || 'Cancelar'
+                    }).then(function(swalResult){
+                        if (swalResult.isConfirmed) {
+                            // Mark confirmed and resend the same FormData
+                            formData.set('confirmed', 'true');
+                            return fetch(form.action, {
+                                method: (form.method || 'POST').toUpperCase(),
+                                headers: headers,
+                                body: formData
+                            })
+                            .then(function(response){
+                                if (!response.ok) throw new Error('Error HTTP: ' + response.status);
+                                return response.json();
+                            })
+                            .then(function(finalJson){
+                                return handleAlertResponse(finalJson);
+                            });
+                        }
+                        // If cancelled, show an info toast and keep the form intact for editing
+                        showToast('Acción cancelada', 'info');
+                        return Promise.resolve();
+                    });
+                }
+
+                // Delegate to central handler for normal responses
                 return handleAlertResponse(json);
             })
             .catch(function(err){

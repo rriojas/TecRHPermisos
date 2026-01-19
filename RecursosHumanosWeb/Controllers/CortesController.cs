@@ -597,73 +597,8 @@ namespace RecursosHumanosWeb.Controllers
                 return Unauthorized();
             }
 
-            // Obtener el ID del usuario autenticado y la fecha actual
             int idUsuario = int.Parse((string)ViewData["IdUsuario"]);
             DateTime ahora = DateTime.Now;
-
-            // --- Inicio de la Lógica de Cortes ---
-
-            // 1. Obtener los últimos dos cortes
-            // El 'ultimoCorte' DEBE ser el marcador de futuro (Inicia/Termina NULL)
-            // El 'penultimoCorte' DEBE ser el corte activo actual (con fechas)
-            var ultimosDosCortes = await _context.Cortes
-                .OrderByDescending(c => c.Id)
-                .Take(2)
-                .ToListAsync();
-
-            var ultimoCorte = ultimosDosCortes.FirstOrDefault(); // El marcador de futuro (para actualizar)
-            var penultimoCorte = ultimosDosCortes.Skip(1).FirstOrDefault(); // El corte actual (para desactivar)
-
-            // --- Caso 1: Estado Inicial (No hay cortes en la BD) ---
-            if (ultimoCorte == null)
-            {
-                // Validaciones para el primer corte
-                if (!viewModel.Inicia.HasValue || !viewModel.Termina.HasValue)
-                    ModelState.AddModelError(string.Empty, "Debe proporcionar fechas de inicio y fin.");
-                if (viewModel.Termina < viewModel.Inicia)
-                    ModelState.AddModelError("Termina", "La fecha de fin no puede ser anterior a la fecha de inicio.");
-
-                if (ModelState.IsValid)
-                {
-                    // Crear el primer corte *activo*
-                    var primerCorte = new Corte
-                    {
-                        Inicia = viewModel.Inicia,
-                        Termina = viewModel.Termina,
-                        IdUsuarioCrea = idUsuario,
-                        IdUsuarioModifica = idUsuario,
-                        FechaCreacion = ahora,
-                        FechaModificacion = ahora,
-                        Estatus = true // Activo
-                    };
-                    _context.Add(primerCorte);
-
-                    // Crear el primer marcador de futuro *inactivo*
-                    var marcadorFuturo = new Corte
-                    {
-                        Inicia = null,
-                        Termina = null,
-                        IdUsuarioCrea = idUsuario,
-                        IdUsuarioModifica = idUsuario,
-                        FechaCreacion = ahora,
-                        FechaModificacion = ahora,
-                        Estatus = false // Inactivo
-                    };
-                    _context.Add(marcadorFuturo);
-
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
-                return View(viewModel); // Retorna si el modelo no es válido en estado inicial
-            }
-
-            // --- Caso 2: Operación Normal (Ya existen cortes) ---
-
-            // Validar que el 'ultimoCorte' sea realmente un marcador de futuro
-            if (ultimoCorte.Inicia.HasValue || ultimoCorte.Termina.HasValue)
-            {
-                ModelState.AddModelError(string.Empty, "Error de lógica: El último corte en la base de datos no es un marcador de futuro (fechas nulas). No se puede crear un nuevo corte. Contacte al administrador.");
-            }
 
             // Validaciones estándar
             if (!viewModel.Inicia.HasValue || !viewModel.Termina.HasValue)
@@ -671,52 +606,35 @@ namespace RecursosHumanosWeb.Controllers
             if (viewModel.Termina < viewModel.Inicia)
                 ModelState.AddModelError("Termina", "La fecha de fin no puede ser anterior a la fecha de inicio.");
 
-            // Validar que Inicia sea posterior al Termina del corte anterior (penultimoCorte)
-            if (penultimoCorte != null && penultimoCorte.Termina.HasValue && viewModel.Inicia <= penultimoCorte.Termina.Value)
-            {
-                ModelState.AddModelError("Inicia", "La fecha de inicio debe ser posterior a la fecha de fin del corte anterior.");
-            }
-
             if (ModelState.IsValid)
             {
-                // 1. Desactivar el corte actual (penultimoCorte)
-                // (Solo si existe y no es el primer corte que se crea)
-                if (penultimoCorte != null)
+                // Desactivar corte activo actual (si existe)
+                var corteActivo = await _context.Cortes.Where(c => c.Estatus ?? false).OrderByDescending(c => c.Id).FirstOrDefaultAsync();
+                if (corteActivo != null)
                 {
-                    penultimoCorte.Estatus = false; // Desactivar
-                    penultimoCorte.FechaModificacion = ahora;
-                    penultimoCorte.IdUsuarioModifica = idUsuario;
-                    _context.Update(penultimoCorte);
+                    corteActivo.Estatus = false;
+                    corteActivo.FechaModificacion = ahora;
+                    corteActivo.IdUsuarioModifica = idUsuario;
+                    _context.Update(corteActivo);
                 }
 
-                // 2. Actualizar el marcador (ultimoCorte) para convertirlo en el NUEVO corte activo
-                ultimoCorte.Inicia = viewModel.Inicia;
-                ultimoCorte.Termina = viewModel.Termina;
-                ultimoCorte.Estatus = true; // Activar
-                ultimoCorte.FechaModificacion = ahora;
-                ultimoCorte.IdUsuarioModifica = idUsuario;
-                // No se actualiza IdUsuarioCrea, pues el registro ya existía. IdUsuarioModifica indica quién lo activó.
-                _context.Update(ultimoCorte);
-
-                // 3. Crear el NUEVO marcador de futuro (inactivo)
-                var nuevoMarcadorFuturo = new Corte
+                // Crear el nuevo corte activo (sin crear marcadores de futuro)
+                var nuevoCorte = new Corte
                 {
-                    Inicia = null,
-                    Termina = null,
-                    IdUsuarioCrea = idUsuario, // Creado por el usuario actual
+                    Inicia = viewModel.Inicia,
+                    Termina = viewModel.Termina,
+                    IdUsuarioCrea = idUsuario,
                     IdUsuarioModifica = idUsuario,
                     FechaCreacion = ahora,
                     FechaModificacion = ahora,
-                    Estatus = false // Siempre inactivo
+                    Estatus = true
                 };
-                _context.Add(nuevoMarcadorFuturo);
+                _context.Add(nuevoCorte);
 
-                // Guardar todos los cambios
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
-            // Si el modelo no es válido, devolver la vista con los errores
             return View(viewModel);
         }
 
