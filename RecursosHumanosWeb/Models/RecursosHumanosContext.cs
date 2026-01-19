@@ -206,22 +206,20 @@ public partial class RecursosHumanosContext : DbContext
             entity.Property(e => e.Clave)
                 .HasMaxLength(64)
                 .IsUnicode(false);
-            entity.Property(e => e.Estatus).HasDefaultValue(true);
+            entity.Property(e => e.Estatus);
             entity.Property(e => e.FechaCreacion)
-                .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.FechaModificacion)
-                .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
 
             entity.HasOne(d => d.IdUsuarioCreaNavigation).WithMany(p => p.ApiKeyIdUsuarioCreaNavigations)
                 .HasForeignKey(d => d.IdUsuarioCrea)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("FK_ApiKeys_Usuario_Crea");
 
             entity.HasOne(d => d.IdUsuarioModificaNavigation).WithMany(p => p.ApiKeyIdUsuarioModificaNavigations)
                 .HasForeignKey(d => d.IdUsuarioModifica)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("FK_ApiKeys_Usuario_Modifica");
         });
 
@@ -234,25 +232,20 @@ public partial class RecursosHumanosContext : DbContext
             entity.Property(e => e.Descripcion)
                 .HasMaxLength(255)
                 .IsUnicode(false);
-            entity.Property(e => e.Estatus).HasDefaultValue(true);
+            entity.Property(e => e.Estatus);
             entity.Property(e => e.FechaCreacion)
-                .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.FechaModificacion)
-                .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
-            entity.Property(e => e.Nombre)
-                .HasMaxLength(50)
-                .IsUnicode(false);
 
             entity.HasOne(d => d.IdUsuarioCreaNavigation).WithMany(p => p.ApiPermisoIdUsuarioCreaNavigations)
                 .HasForeignKey(d => d.IdUsuarioCrea)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("FK_ApiPermisos_Usuario_Crea");
 
             entity.HasOne(d => d.IdUsuarioModificaNavigation).WithMany(p => p.ApiPermisoIdUsuarioModificaNavigations)
                 .HasForeignKey(d => d.IdUsuarioModifica)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("FK_ApiPermisos_Usuario_Modifica");
         });
 
@@ -301,22 +294,20 @@ public partial class RecursosHumanosContext : DbContext
             entity.Property(e => e.Descripcion)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            entity.Property(e => e.Estatus).HasDefaultValue(true);
+            entity.Property(e => e.Estatus);
             entity.Property(e => e.FechaCreacion)
-                .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.FechaModificacion)
-                .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
 
             entity.HasOne(d => d.IdUsuarioCreaNavigation).WithMany(p => p.AreaIdUsuarioCreaNavigations)
                 .HasForeignKey(d => d.IdUsuarioCrea)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("FK__Area__IdUsuarioC__6B24EA82");
 
             entity.HasOne(d => d.IdUsuarioModificaNavigation).WithMany(p => p.AreaIdUsuarioModificaNavigations)
                 .HasForeignKey(d => d.IdUsuarioModifica)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("FK__Area__IdUsuarioM__6C190EBB");
         });
 
@@ -326,18 +317,18 @@ public partial class RecursosHumanosContext : DbContext
             entity.ToTable("Corte");
             entity.Property(e => e.Inicia).HasColumnType("DATETIME");
             entity.Property(e => e.Termina).HasColumnType("DATETIME");
-            entity.Property(e => e.Estatus).HasDefaultValue(true);
-            entity.Property(e => e.FechaCreacion).HasDefaultValueSql("(getdate())").HasColumnType("DATETIME").ValueGeneratedNever();
-            entity.Property(e => e.FechaModificacion).HasDefaultValueSql("(getdate())").HasColumnType("DATETIME").ValueGeneratedNever();
+            entity.Property(e => e.Estatus);
+            entity.Property(e => e.FechaCreacion).HasColumnType("DATETIME");
+            entity.Property(e => e.FechaModificacion).HasColumnType("DATETIME");
 
             entity.HasOne(d => d.IdUsuarioCreaNavigation).WithMany(p => p.CorteIdUsuarioCreaNavigations)
                 .HasForeignKey(d => d.IdUsuarioCrea)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("FK__Corte__IdUsuario__74AE54BC");
 
             entity.HasOne(d => d.IdUsuarioModificaNavigation).WithMany(p => p.CorteIdUsuarioModificaNavigations)
                 .HasForeignKey(d => d.IdUsuarioModifica)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("FK__Corte__IdUsuario__75A278F5");
         });
 
@@ -351,22 +342,20 @@ public partial class RecursosHumanosContext : DbContext
             entity.Property(e => e.Descripcion)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            entity.Property(e => e.Estatus).HasDefaultValue(true);
+            entity.Property(e => e.Estatus);
             entity.Property(e => e.FechaCreacion)
-                .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.FechaModificacion)
-                .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
 
             entity.HasOne(d => d.IdUsuarioCreaNavigation).WithMany(p => p.DepartamentoIdUsuarioCreaNavigations)
                 .HasForeignKey(d => d.IdUsuarioCrea)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("FK__Departame__IdUsu__6D0D32F4");
 
             entity.HasOne(d => d.IdUsuarioModificaNavigation).WithMany(p => p.DepartamentoIdUsuarioModificaNavigations)
                 .HasForeignKey(d => d.IdUsuarioModifica)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("FK__Departame__IdUsu__6E01572D");
         });
 
@@ -379,41 +368,42 @@ public partial class RecursosHumanosContext : DbContext
             entity.Property(e => e.Estatus).HasDefaultValue(true);
             entity.Property(e => e.Evidencia).HasMaxLength(255).IsUnicode(false);
             entity.Property(e => e.FechaAutorizacion).HasColumnType("DATETIME");
-            entity.Property(e => e.FechaCreacion).HasDefaultValueSql("(getdate())").HasColumnType("DATETIME").ValueGeneratedNever();
-            entity.Property(e => e.FechaModificacion).HasDefaultValueSql("(getdate())").HasColumnType("DATETIME").ValueGeneratedNever();
+            entity.Property(e => e.FechaCreacion).HasColumnType("DATETIME");
+            entity.Property(e => e.FechaModificacion).HasColumnType("DATETIME");
             entity.Property(e => e.Motivo).HasMaxLength(255).IsUnicode(false);
             entity.Property(e => e.Fecha1).HasColumnType("DATETIME");
             entity.Property(e => e.Fecha2).HasColumnType("DATETIME");
-            entity.Property(e => e.Dias).ValueGeneratedNever();
-            entity.Property(e => e.Goce).HasDefaultValue(0);
+            entity.Property(e => e.Dias);
+            entity.Property(e => e.Goce);
 
             entity.HasOne(d => d.IdCorteNavigation).WithMany(p => p.Permisos)
                 .HasForeignKey(d => d.IdCorte)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("FK__Permiso__IdCorte__2A6B46EF");
 
             entity.HasOne(d => d.IdTipoPermisoNavigation).WithMany(p => p.Permisos)
                 .HasForeignKey(d => d.IdTipoPermiso)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("FK__Permiso__IdTipoP__2B5F6B28");
 
             entity.HasOne(d => d.IdUsuarioAutorizaNavigation).WithMany(p => p.PermisoIdUsuarioAutorizaNavigations)
                 .HasForeignKey(d => d.IdUsuarioAutoriza)
+                .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("FK__Permiso__IdUsuar__2F2FFC0C");
 
             entity.HasOne(d => d.IdUsuarioCreaNavigation).WithMany(p => p.PermisoIdUsuarioCreaNavigations)
                 .HasForeignKey(d => d.IdUsuarioCrea)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("FK__Permiso__IdUsuar__2D47B39A");
 
             entity.HasOne(d => d.IdUsuarioModificaNavigation).WithMany(p => p.PermisoIdUsuarioModificaNavigations)
                 .HasForeignKey(d => d.IdUsuarioModifica)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("FK__Permiso__IdUsuar__2E3BD7D3");
 
             entity.HasOne(d => d.IdUsuarioSolicitaNavigation).WithMany(p => p.PermisoIdUsuarioSolicitaNavigations)
                 .HasForeignKey(d => d.IdUsuarioSolicita)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("FK__Permiso__IdUsuar__2C538F61");
         });
 
@@ -429,13 +419,13 @@ public partial class RecursosHumanosContext : DbContext
             entity.Property(e => e.Descripcion)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            entity.Property(e => e.Estatus).HasDefaultValue(true);
+            entity.Property(e => e.Estatus);
             entity.Property(e => e.FechaCreacion).HasColumnType("datetime");
             entity.Property(e => e.FechaModificacion).HasColumnType("datetime");
 
             entity.HasOne(d => d.IdUsuarioCreaNavigation).WithMany(p => p.PuestoIdUsuarioCreaNavigations)
                 .HasForeignKey(d => d.IdUsuarioCrea)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("FK__Puesto__IdUsuari__6EF57B66");
 
             entity.HasOne(d => d.IdUsuarioModificaNavigation).WithMany(p => p.PuestoIdUsuarioModificaNavigations)
@@ -453,16 +443,11 @@ public partial class RecursosHumanosContext : DbContext
             entity.Property(e => e.Descripcion)
                 .HasMaxLength(255)
                 .IsUnicode(false);
-            entity.Property(e => e.Estatus).HasDefaultValue(true);
+            entity.Property(e => e.Estatus);
             entity.Property(e => e.FechaCreacion)
-                .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.FechaModificacion)
-                .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
-            entity.Property(e => e.Nombre)
-                .HasMaxLength(50)
-                .IsUnicode(false);
 
             entity.HasOne(d => d.IdUsuarioCreaNavigation).WithMany(p => p.TablaIdUsuarioCreaNavigations)
                 .HasForeignKey(d => d.IdUsuarioCrea)
@@ -482,22 +467,20 @@ public partial class RecursosHumanosContext : DbContext
             entity.Property(e => e.Descripcion)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            entity.Property(e => e.Estatus).HasDefaultValue(true);
+            entity.Property(e => e.Estatus);
             entity.Property(e => e.FechaCreacion)
-                .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.FechaModificacion)
-                .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
 
             entity.HasOne(d => d.IdUsuarioCreaNavigation).WithMany(p => p.TipoPermisoIdUsuarioCreaNavigations)
                 .HasForeignKey(d => d.IdUsuarioCrea)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("FK__Tipo_Perm__IdUsu__70DDC3D8");
 
             entity.HasOne(d => d.IdUsuarioModificaNavigation).WithMany(p => p.TipoPermisoIdUsuarioModificaNavigations)
                 .HasForeignKey(d => d.IdUsuarioModifica)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("FK__Tipo_Perm__IdUsu__71D1E811");
         });
 
@@ -510,23 +493,19 @@ public partial class RecursosHumanosContext : DbContext
             entity.Property(e => e.Descripcion)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            entity.Property(e => e.Estatus).HasDefaultValue(true);
+            entity.Property(e => e.Estatus);
             entity.Property(e => e.FechaCreacion)
-                .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.FechaModificacion).HasColumnType("datetime");
-            entity.Property(e => e.Nombre)
-                .HasMaxLength(50)
-                .IsUnicode(false);
 
             entity.HasOne(d => d.IdUsuarioCreaNavigation).WithMany(p => p.TipoUsuarioIdUsuarioCreaNavigations)
                 .HasForeignKey(d => d.IdUsuarioCrea)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("FK__Tipo_Usua__IdUsu__72C60C4A");
 
             entity.HasOne(d => d.IdUsuarioModificaNavigation).WithMany(p => p.TipoUsuarioIdUsuarioModificaNavigations)
                 .HasForeignKey(d => d.IdUsuarioModifica)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("FK__Tipo_Usua__IdUsu__73BA3083");
         });
 

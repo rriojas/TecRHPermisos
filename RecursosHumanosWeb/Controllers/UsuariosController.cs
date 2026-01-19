@@ -94,14 +94,14 @@ namespace RecursosHumanosWeb.Controllers
             // Aplicar ordenamiento
             query = sortOrder switch
             {
-                "nombre_desc" => query.OrderByDescending(u => u.Nombre),
-                "correo" => query.OrderBy(u => u.Correo),
-                "correo_desc" => query.OrderByDescending(u => u.Correo),
-                "departamento" => query.OrderBy(u => u.IdDepartamentoNavigation.Descripcion),
-                "departamento_desc" => query.OrderByDescending(u => u.IdDepartamentoNavigation.Descripcion),
-                "fecha" => query.OrderBy(u => u.FechaCreacion),
-                "fecha_desc" => query.OrderByDescending(u => u.FechaCreacion),
-                _ => query.OrderBy(u => u.Nombre) // Orden por defecto
+                "nombre_desc" => query.OrderByDescending(u => u.Nombre ?? ""),
+                "correo" => query.OrderBy(u => u.Correo ?? ""),
+                "correo_desc" => query.OrderByDescending(u => u.Correo ?? ""),
+                "departamento" => query.OrderBy(u => u.IdDepartamentoNavigation == null ? "" : (u.IdDepartamentoNavigation.Descripcion ?? "")),
+                "departamento_desc" => query.OrderByDescending(u => u.IdDepartamentoNavigation == null ? "" : (u.IdDepartamentoNavigation.Descripcion ?? "")),
+                "fecha" => query.OrderBy(u => u.FechaCreacion ?? DateTime.MinValue),
+                "fecha_desc" => query.OrderByDescending(u => u.FechaCreacion ?? DateTime.MinValue),
+                _ => query.OrderBy(u => u.Nombre ?? "") // Orden por defecto
             };
 
             // Configuración de paginación
@@ -389,13 +389,13 @@ namespace RecursosHumanosWeb.Controllers
             var areas = _context.Areas.Select(a => new { a.Id, a.Descripcion }).ToList();
             var departamentos = _context.Departamentos.Select(d => new { d.Id, d.Descripcion }).ToList();
             var puestos = _context.Puestos.Select(p => new { p.Id, p.Descripcion }).ToList();
-            var tipos = _context.TipoUsuarios.Select(t => new { t.Id, t.Nombre }).ToList();
+            var tipos = _context.TipoUsuarios.Select(t => new { t.Id, t.Descripcion }).ToList();
             var usuarios = _context.Usuarios.Select(u => new { u.Id, u.Nombre }).ToList();
 
             ViewData["IdArea"] = new SelectList(areas, "Id", "Descripcion");
             ViewData["IdDepartamento"] = new SelectList(departamentos, "Id", "Descripcion");
             ViewData["IdPuesto"] = new SelectList(puestos, "Id", "Descripcion");
-            ViewData["IdTipoUsuario"] = new SelectList(tipos, "Id", "Nombre");
+            ViewData["IdTipoUsuario"] = new SelectList(tipos, "Id", "Descripcion");
             ViewData["IdUsuarioCrea"] = new SelectList(usuarios, "Id", "Nombre", selectedUsuarioCrea);
             ViewData["IdUsuarioModifica"] = new SelectList(usuarios, "Id", "Nombre", selectedUsuarioModifica);
         }
@@ -415,8 +415,8 @@ namespace RecursosHumanosWeb.Controllers
                 .Select(u => new
                 {
                     id = u.Id,
-                    text = u.Nombre,
-                    areaId = u.IdArea
+                    text = u.Nombre ?? "",
+                    areaId = u.IdArea ?? 0
                 })
                 .Take(10)
                 .ToListAsync();

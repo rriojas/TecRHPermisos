@@ -42,8 +42,8 @@ namespace RecursosHumanosWeb.Controllers
                 .Select(u => new
                 {
                     id = u.Id,
-                    text = u.Nombre,
-                    areaId = u.IdArea
+                    text = u.Nombre ?? "",
+                    areaId = u.IdArea ?? 0
                 })
                 .Take(10)
                 .ToListAsync();
@@ -67,7 +67,7 @@ namespace RecursosHumanosWeb.Controllers
 
             // Exponer datos al View para condicionar links (Details)
             ViewBag.CurrentUserId = idUsuario;
-            int userArea = 0; // will be populated below if needed
+            int? userArea = null; // will be populated below if needed
 
             if (isAutorizador)
             {
@@ -76,7 +76,7 @@ namespace RecursosHumanosWeb.Controllers
                     .Select(u => u.IdArea)
                     .FirstOrDefaultAsync();
             }
-            ViewBag.UserArea = userArea;
+            ViewBag.UserArea = userArea ?? 0;
 
             if (idUsuario == 0)
             {
@@ -86,7 +86,7 @@ namespace RecursosHumanosWeb.Controllers
 
             // Obtener el corte actual
             var currentCourtId = await _context.Cortes
-                .Where(c => c.Estatus)
+                .Where(c => c.Estatus ?? false)
                 .OrderByDescending(c => c.Id)
                 .Select(c => c.Id)
                 .FirstOrDefaultAsync();
@@ -146,7 +146,7 @@ namespace RecursosHumanosWeb.Controllers
             // Áreas para el filtro (solo para RH/Admin)
             var areas = (isRH || isAdministrador)
                 ? await _context.Areas
-                    .Where(a => a.Estatus)
+                    .Where(a => a.Estatus ?? false)
                     .Select(a => new AreasDTO { Id = a.Id, Descripcion = a.Descripcion })
                     .OrderBy(a => a.Descripcion)
                     .ToListAsync()
@@ -224,8 +224,8 @@ namespace RecursosHumanosWeb.Controllers
                   Aprobados = g.Count(p => p.Revisado == true && p.Estatus == true),
                   ConGoce = g.Count(p => p.Goce == true),
                   SinGoce = g.Count(p => p.Goce == false),
-                  EsteMes = g.Count(p => p.FechaCreacion.Month == DateTime.Now.Month &&
-                                          p.FechaCreacion.Year == DateTime.Now.Year) // <-- ¡CORREGIDO!
+                  EsteMes = g.Count(p => p.FechaCreacion.Value.Month == DateTime.Now.Month &&
+                                          p.FechaCreacion.Value.Year == DateTime.Now.Year) // <-- ¡CORREGIDO!
               })
               .FirstOrDefaultAsync();
 
@@ -366,7 +366,7 @@ namespace RecursosHumanosWeb.Controllers
             }
 
             // Validaciones de negocio antes de editar
-            if (permiso.IdCorteNavigation != null && !permiso.IdCorteNavigation.Estatus)
+            if (permiso.IdCorteNavigation != null && !(permiso.IdCorteNavigation.Estatus ?? false))
             {
                 TempData["ErrorAlert"] = System.Text.Json.JsonSerializer.Serialize(new
                 {
@@ -491,7 +491,7 @@ namespace RecursosHumanosWeb.Controllers
 
                 // 5. Obtener cortes activos
                 var corteActivo = await _context.Cortes
-                    .Where(c => c.Estatus)
+                    .Where(c => c.Estatus ?? false)
                     .OrderByDescending(c => c.Id)
                     .FirstOrDefaultAsync();
 
@@ -837,13 +837,13 @@ namespace RecursosHumanosWeb.Controllers
             return new PermissionsCreateViewModel
             {
                 Id = permiso.Id,
-                IdUsuarioSolicita = permiso.IdUsuarioSolicita,
-                IdTipoPermiso = permiso.IdTipoPermiso,
+                IdUsuarioSolicita = permiso.IdUsuarioSolicita.Value,
+                IdTipoPermiso = permiso.IdTipoPermiso.Value,
                 Fecha1 = permiso.Fecha1,
                 Fecha2 = permiso.Fecha2,
                 Motivo = permiso.Motivo,
                 Evidencia = permiso.Evidencia,
-                Goce = permiso.Goce
+                Goce = permiso.Goce ?? false
             };
         }
 
@@ -955,7 +955,7 @@ namespace RecursosHumanosWeb.Controllers
             }
 
             // Validar que el permiso no haya sido revisado previamente
-            if (permiso.Revisado)
+            if (permiso.Revisado ?? false)
             {
                 TempData["ErrorAlert"] = System.Text.Json.JsonSerializer.Serialize(new
                 {
@@ -967,7 +967,7 @@ namespace RecursosHumanosWeb.Controllers
             }
 
             // Validar que el corte esté vigente
-            if (permiso.IdCorteNavigation != null && !permiso.IdCorteNavigation.Estatus)
+            if (permiso.IdCorteNavigation != null && !(permiso.IdCorteNavigation.Estatus ?? false))
             {
                 TempData["ErrorAlert"] = System.Text.Json.JsonSerializer.Serialize(new
                 {
@@ -985,17 +985,17 @@ namespace RecursosHumanosWeb.Controllers
                 NombreSolicitante = permiso.IdUsuarioSolicitaNavigation?.Nombre ?? "Desconocido",
                 CorreoSolicitante = permiso.IdUsuarioSolicitaNavigation?.Correo ?? "Sin correo",
                 AreaSolicitante = permiso.IdUsuarioSolicitaNavigation?.IdAreaNavigation?.Descripcion ?? "Sin área",
-                IdTipoPermiso = permiso.IdTipoPermiso,
+                IdTipoPermiso = permiso.IdTipoPermiso.Value,
                 TipoPermisoDescripcion = permiso.IdTipoPermisoNavigation?.Descripcion ?? "Sin tipo",
                 Fecha1 = permiso.Fecha1,
                 Fecha2 = permiso.Fecha2,
-                Dias = permiso.Dias,
+                Dias = permiso.Dias ?? 0,
                 Motivo = permiso.Motivo,
                 Evidencia = permiso.Evidencia,
-                Goce = permiso.Goce, // Valor actual
-                FechaCreacion = permiso.FechaCreacion,
+                Goce = permiso.Goce ?? false, // Valor actual
+                FechaCreacion = permiso.FechaCreacion.Value,
                 CreadoPor = permiso.IdUsuarioCreaNavigation?.Nombre,
-                IdCorte = permiso.IdCorte,
+                IdCorte = permiso.IdCorte.Value,
                 CorteInicia = permiso.IdCorteNavigation?.Inicia,
                 CorteTermina = permiso.IdCorteNavigation?.Termina
             };
@@ -1067,7 +1067,7 @@ namespace RecursosHumanosWeb.Controllers
                 }
 
                 // Validar que no haya sido revisado
-                if (permiso.Revisado)
+                if (permiso.Revisado ?? false)
                 {
                     return Json(new AlertResponseDTO 
                     { 
@@ -1078,7 +1078,7 @@ namespace RecursosHumanosWeb.Controllers
                 }
 
                 // Validar que el corte esté vigente
-                if (permiso.IdCorteNavigation != null && !permiso.IdCorteNavigation.Estatus)
+                if (permiso.IdCorteNavigation != null && !(permiso.IdCorteNavigation.Estatus ?? false))
                 {
                     return Json(new AlertResponseDTO 
                     { 
@@ -1236,8 +1236,8 @@ namespace RecursosHumanosWeb.Controllers
                 // 3. Obtener los autorizadores (jefes de área) por cada área
                 // Autorizadores son usuarios con IdTipoUsuario = 1 (Autorizador)
                 var autorizadoresPorArea = await _context.Usuarios
-                    .Where(u => u.Estatus == true && u.IdTipoUsuario == 1)
-                    .GroupBy(u => u.IdArea)
+                    .Where(u => u.Estatus == true && u.IdTipoUsuario == 1 && u.IdArea.HasValue)
+                    .GroupBy(u => u.IdArea.Value)
                     .Select(g => new
                     {
                         IdArea = g.Key,
@@ -1278,7 +1278,7 @@ namespace RecursosHumanosWeb.Controllers
                     // Seleccionar usuario aleatorio de los 10
                     var usuarioSeleccionado = usuarios[random.Next(usuarios.Count)];
                     int idUsuarioSolicita = usuarioSeleccionado.Id;
-                    int idAreaUsuario = usuarioSeleccionado.IdArea;
+                    int idAreaUsuario = usuarioSeleccionado.IdArea ?? 0;
 
                     // Obtener el autorizador (jefe) del área del usuario
                     // Si no existe autorizador para esa área, usar el primer autorizador disponible

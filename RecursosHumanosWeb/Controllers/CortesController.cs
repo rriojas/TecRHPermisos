@@ -150,7 +150,7 @@ namespace RecursosHumanosWeb.Controllers
                                 DÍAS_SOLICITADOS = p.Fecha1.HasValue && p.Fecha2.HasValue 
                                     ? (int)((p.Fecha2.Value - p.Fecha1.Value).TotalDays + 1)
                                     : (p.Dias ?? 0),
-                                CON_GOCE = p.Goce ? "Sí" : "No",
+                                CON_GOCE = (p.Goce ?? false) ? "Sí" : "No",
                                 EVIDENCIA = p.Evidencia ?? "",
                                 DESDE_EL_DÍA = p.Fecha1,
                                 HASTA_EL_DÍA = p.Fecha2,
@@ -224,7 +224,7 @@ namespace RecursosHumanosWeb.Controllers
                                 TIPO_PERMISO = p.IdTipoPermisoNavigation.Descripcion,
                                 DESCRIPCIÓN = p.Motivo ?? "",
                                 DÍAS_SOLICITADOS = p.Dias ?? 0,
-                                CON_GOCE = p.Goce ? "Sí" : "No",
+                                CON_GOCE = (p.Goce ?? false) ? "Sí" : "No",
                                 EVIDENCIA = p.Evidencia ?? "",
                                 DEL_DÍA = p.Fecha1,
                                 POR_EL_DÍA = p.Fecha2,
@@ -393,12 +393,12 @@ namespace RecursosHumanosWeb.Controllers
                         $"\"{p.IdTipoPermisoNavigation?.Descripcion}\"," +
                         $"\"{p.Motivo?.Replace("\"", "\"\"")}\"," +
                         $"{p.Dias ?? 0}," +
-                        $"{(p.Goce ? "Sí" : "No")}," +
+                        $"{(p.Goce ?? false ? "Sí" : "No")}," +
                         $"{p.Fecha1?.ToString("yyyy-MM-dd")}," +
                         $"{p.Fecha2?.ToString("yyyy-MM-dd")}," +
-                        $"{(p.Revisado ? "Sí" : "No")}," +
+                        $"{(p.Revisado ?? false ? "Sí" : "No")}," +
                         $"\"{p.IdUsuarioAutorizaNavigation?.Nombre}\"," +
-                        $"{p.FechaCreacion.ToString("yyyy-MM-dd HH:mm")}");
+                        $"{p.FechaCreacion?.ToString("yyyy-MM-dd HH:mm")}");
                 }
 
                 var bytes = System.Text.Encoding.UTF8.GetBytes(csv.ToString());
@@ -435,9 +435,9 @@ namespace RecursosHumanosWeb.Controllers
                     .Select(p => new
                     {
                         Id = p.Id,
-                        Solicitante = p.IdUsuarioSolicitaNavigation.Nombre,
-                        Area = p.IdUsuarioSolicitaNavigation.IdAreaNavigation.Descripcion,
-                        TipoPermiso = p.IdTipoPermisoNavigation.Descripcion,
+                        Solicitante = p.IdUsuarioSolicitaNavigation != null ? (p.IdUsuarioSolicitaNavigation.Nombre ?? "") : "",
+                        Area = p.IdUsuarioSolicitaNavigation != null && p.IdUsuarioSolicitaNavigation.IdAreaNavigation != null ? (p.IdUsuarioSolicitaNavigation.IdAreaNavigation.Descripcion ?? "") : "",
+                        TipoPermiso = p.IdTipoPermisoNavigation != null ? (p.IdTipoPermisoNavigation.Descripcion ?? "") : "",
                         Motivo = p.Motivo,
                         Dias = p.Dias,
                         ConGoce = p.Goce,
@@ -462,8 +462,8 @@ namespace RecursosHumanosWeb.Controllers
                     Estadisticas = new
                     {
                         Total = permisos.Count,
-                        Aprobados = permisos.Count(p => p.Revisado),
-                        Pendientes = permisos.Count(p => !p.Revisado),
+                        Aprobados = permisos.Count(p => p.Revisado ?? false),
+                        Pendientes = permisos.Count(p => !(p.Revisado ?? false)),
                         DiasPromedio = permisos.Any() ? permisos.Average(p => p.Dias ?? 0) : 0
                     }
                 };
@@ -515,8 +515,8 @@ namespace RecursosHumanosWeb.Controllers
 
                     xmlWriter.WriteStartElement("Estadisticas");
                     xmlWriter.WriteElementString("Total", permisos.Count.ToString());
-                    xmlWriter.WriteElementString("Aprobados", permisos.Count(p => p.Revisado).ToString());
-                    xmlWriter.WriteElementString("Pendientes", permisos.Count(p => !p.Revisado).ToString());
+                    xmlWriter.WriteElementString("Aprobados", permisos.Count(p => p.Revisado ?? false).ToString());
+                    xmlWriter.WriteElementString("Pendientes", permisos.Count(p => !(p.Revisado ?? false)).ToString());
                     xmlWriter.WriteElementString("DiasPromedio", (permisos.Any() ? permisos.Average(p => p.Dias ?? 0) : 0).ToString("F2"));
                     xmlWriter.WriteEndElement(); // Estadisticas
 
@@ -530,12 +530,12 @@ namespace RecursosHumanosWeb.Controllers
                         xmlWriter.WriteElementString("TipoPermiso", p.IdTipoPermisoNavigation?.Descripcion ?? "");
                         xmlWriter.WriteElementString("Motivo", p.Motivo ?? "");
                         xmlWriter.WriteElementString("Dias", (p.Dias ?? 0).ToString());
-                        xmlWriter.WriteElementString("ConGoce", p.Goce ? "Sí" : "No");
+                        xmlWriter.WriteElementString("ConGoce", (p.Goce ?? false) ? "Sí" : "No");
                         xmlWriter.WriteElementString("DelDia", p.Fecha1?.ToString("yyyy-MM-dd") ?? "");
                         xmlWriter.WriteElementString("AlDia", p.Fecha2?.ToString("yyyy-MM-dd") ?? "");
-                        xmlWriter.WriteElementString("Revisado", p.Revisado ? "Sí" : "No");
+                        xmlWriter.WriteElementString("Revisado", (p.Revisado ?? false) ? "Sí" : "No");
                         xmlWriter.WriteElementString("AutorizadoPor", p.IdUsuarioAutorizaNavigation?.Nombre ?? "");
-                        xmlWriter.WriteElementString("FechaCreacion", p.FechaCreacion.ToString("yyyy-MM-dd HH:mm"));
+                        xmlWriter.WriteElementString("FechaCreacion", p.FechaCreacion?.ToString("yyyy-MM-dd HH:mm") ?? "");
                         xmlWriter.WriteEndElement(); // Permiso
                     }
                     xmlWriter.WriteEndElement(); // Permisos
@@ -598,7 +598,7 @@ namespace RecursosHumanosWeb.Controllers
             }
 
             // Obtener el ID del usuario autenticado y la fecha actual
-            int idUsuario = int.Parse(ViewData["IdUsuario"].ToString());
+            int idUsuario = int.Parse((string)ViewData["IdUsuario"]);
             DateTime ahora = DateTime.Now;
 
             // --- Inicio de la Lógica de Cortes ---
@@ -911,24 +911,24 @@ namespace RecursosHumanosWeb.Controllers
                     Motivo = p.Motivo,
                     Evidencia = p.Evidencia,
                     FechaAutorizacion = p.FechaAutorizacion,
-                    FechaCreacion = p.FechaCreacion,
+                    FechaCreacion = p.FechaCreacion.Value,
                     FechaModificacion = p.FechaModificacion,
-                    Revisado = p.Revisado,
-                    Goce = p.Goce,
-                    Estatus = p.Estatus,
-                    IdCorte = p.IdCorte,
-                    IdTipoPermiso = p.IdTipoPermiso,
-                    IdUsuarioSolicita = p.IdUsuarioSolicita,
+                    Revisado = p.Revisado ?? false,
+                    Goce = p.Goce ?? false,
+                    Estatus = p.Estatus ?? false,
+                    IdCorte = p.IdCorte.Value,
+                    IdTipoPermiso = p.IdTipoPermiso.Value,
+                    IdUsuarioSolicita = p.IdUsuarioSolicita.Value,
                     IdUsuarioAutoriza = p.IdUsuarioAutoriza,
-                    IdUsuarioCrea = p.IdUsuarioCrea,
-                    IdUsuarioModifica = p.IdUsuarioModifica,
-                    Nombre = p.IdUsuarioSolicitaNavigation.Nombre,
-                    Correo = p.IdUsuarioSolicitaNavigation.Correo,
-                    TipoPermiso = p.IdTipoPermisoNavigation.Descripcion,
-                    Area = p.IdUsuarioSolicitaNavigation.IdAreaNavigation.Descripcion,
-                    AutorizadoPor = p.IdUsuarioAutorizaNavigation != null ? p.IdUsuarioAutorizaNavigation.Nombre : null,
-                    CreadoPor = p.IdUsuarioCreaNavigation != null ? p.IdUsuarioCreaNavigation.Nombre : null,
-                    ModificadoPor = p.IdUsuarioModificaNavigation != null ? p.IdUsuarioModificaNavigation.Nombre : null
+                    IdUsuarioCrea = p.IdUsuarioCrea.Value,
+                    IdUsuarioModifica = p.IdUsuarioModifica.Value,
+                    Nombre = p.IdUsuarioSolicitaNavigation != null ? (p.IdUsuarioSolicitaNavigation.Nombre ?? "") : "",
+                    Correo = p.IdUsuarioSolicitaNavigation != null ? (p.IdUsuarioSolicitaNavigation.Correo ?? "") : "",
+                    TipoPermiso = p.IdTipoPermisoNavigation != null ? (p.IdTipoPermisoNavigation.Descripcion ?? "") : "",
+                    Area = p.IdUsuarioSolicitaNavigation != null && p.IdUsuarioSolicitaNavigation.IdAreaNavigation != null ? (p.IdUsuarioSolicitaNavigation.IdAreaNavigation.Descripcion ?? "") : "",
+                    AutorizadoPor = p.IdUsuarioAutorizaNavigation != null ? (p.IdUsuarioAutorizaNavigation.Nombre ?? "") : "",
+                    CreadoPor = p.IdUsuarioCreaNavigation != null ? (p.IdUsuarioCreaNavigation.Nombre ?? "") : "",
+                    ModificadoPor = p.IdUsuarioModificaNavigation != null ? (p.IdUsuarioModificaNavigation.Nombre ?? "") : ""
                 })
                 .ToListAsync();
 
@@ -1023,8 +1023,8 @@ namespace RecursosHumanosWeb.Controllers
                 Id = corte.Id,
                 Inicia = corte.Inicia,
                 Termina = corte.Termina,
-                Estatus = corte.Estatus,
-                FechaCreacion = corte.FechaCreacion,
+                Estatus = corte.Estatus ?? false,
+                FechaCreacion = corte.FechaCreacion.Value,
                 FechaModificacion = corte.FechaModificacion,
                 UsuarioCrea = corte.IdUsuarioCreaNavigation?.Nombre,
                 UsuarioModifica = corte.IdUsuarioModificaNavigation?.Nombre,

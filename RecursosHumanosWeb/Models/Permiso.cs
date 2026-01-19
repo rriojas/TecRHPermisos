@@ -21,27 +21,27 @@ public partial class Permiso
     public DateTime? FechaAutorizacion { get; set; }
 
     // FechaCreacion no puede ser nula en la BD
-    public DateTime FechaCreacion { get; set; }
+    public DateTime? FechaCreacion { get; set; }
 
     // FechaModificacion puede ser nula si no ha habido cambios
     public DateTime? FechaModificacion { get; set; }
-    public bool Revisado { get; set; } = false;
+    public bool? Revisado { get; set; } = false;
 
-    public bool Goce { get; set; } = false;
+    public bool? Goce { get; set; } = false;
 
-    public bool Estatus { get; set; } = true;
+    public bool? Estatus { get; set; } = true;
 
-    public int IdCorte { get; set; }
+    public int? IdCorte { get; set; }
 
-    public int IdTipoPermiso { get; set; }
+    public int? IdTipoPermiso { get; set; }
 
-    public int IdUsuarioSolicita { get; set; }
+    public int? IdUsuarioSolicita { get; set; }
 
     public int? IdUsuarioAutoriza { get; set; }
 
-    public int IdUsuarioCrea { get; set; }
+    public int? IdUsuarioCrea { get; set; }
 
-    public int IdUsuarioModifica { get; set; }
+    public int? IdUsuarioModifica { get; set; }
 
     public virtual Corte IdCorteNavigation { get; set; } = null!;
 

@@ -9,13 +9,13 @@ public partial class ApiKey
 
     public string Clave { get; set; } = null!;
 
-    public DateTime FechaCreacion { get; set; }
+    public DateTime? FechaCreacion { get; set; }
 
     public DateTime? FechaModificacion { get; set; }
 
-    public bool Estatus { get; set; }
+    public bool? Estatus { get; set; }
 
-    public int IdUsuarioCrea { get; set; }
+    public int? IdUsuarioCrea { get; set; }
 
     public int? IdUsuarioModifica { get; set; }
 

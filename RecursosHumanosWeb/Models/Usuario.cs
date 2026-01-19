@@ -7,29 +7,29 @@ public partial class Usuario
 {
     public int Id { get; set; }
 
-    public string Nombre { get; set; } = null!;
+    public string? Nombre { get; set; }
 
-    public string Correo { get; set; } = null!;
+    public string? Correo { get; set; }
 
-    public string Clave { get; set; } = null!;
+    public string? Clave { get; set; }
 
-    public DateTime FechaCreacion { get; set; }
+    public DateTime? FechaCreacion { get; set; }
 
     public DateTime? FechaModificacion { get; set; }
 
     public bool Estatus { get; set; }
 
-    public int IdTipoUsuario { get; set; }
+    public int? IdTipoUsuario { get; set; }
 
-    public int IdArea { get; set; }
+    public int? IdArea { get; set; }
 
-    public int IdDepartamento { get; set; }
+    public int? IdDepartamento { get; set; }
 
-    public int IdPuesto { get; set; }
+    public int? IdPuesto { get; set; }
 
-    public int IdUsuarioCrea { get; set; }
+    public int? IdUsuarioCrea { get; set; }
 
-    public int IdUsuarioModifica { get; set; }
+    public int? IdUsuarioModifica { get; set; }
 
     public int? IdApiKey { get; set; }
 
@@ -61,17 +61,17 @@ public partial class Usuario
 
     public virtual ICollection<Departamento> DepartamentoIdUsuarioModificaNavigations { get; set; } = new List<Departamento>();
 
-    public virtual Area IdAreaNavigation { get; set; } = null!;
+    public virtual Area? IdAreaNavigation { get; set; }
 
-    public virtual Departamento IdDepartamentoNavigation { get; set; } = null!;
+    public virtual Departamento? IdDepartamentoNavigation { get; set; }
 
-    public virtual Puesto IdPuestoNavigation { get; set; } = null!;
+    public virtual Puesto? IdPuestoNavigation { get; set; }
 
-    public virtual TipoUsuario IdTipoUsuarioNavigation { get; set; } = null!;
+    public virtual TipoUsuario? IdTipoUsuarioNavigation { get; set; }
 
-    public virtual Usuario IdUsuarioCreaNavigation { get; set; } = null!;
+    public virtual Usuario? IdUsuarioCreaNavigation { get; set; }
 
-    public virtual Usuario IdUsuarioModificaNavigation { get; set; } = null!;
+    public virtual Usuario? IdUsuarioModificaNavigation { get; set; }
 
     public virtual ICollection<Usuario> InverseIdUsuarioCreaNavigation { get; set; } = new List<Usuario>();
 

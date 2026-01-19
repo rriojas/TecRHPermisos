@@ -132,11 +132,11 @@
                                             @(item.Estatus ? "Activo" : "Inactivo")
                                         </td>
                                         <td>
-                                            @if (item.FechaCreacion != default)
+                                            @if (item.FechaCreacion.HasValue)
                                             {
                                                 <div style="color: var(--text-medium); font-weight: 500;">
-                                                    <div style="font-size: 0.875rem;">@item.FechaCreacion.ToString("dd/MM/yyyy")</div>
-                                                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.125rem;">@item.FechaCreacion.ToString("h:mm tt")</div>
+                                                    <div style="font-size: 0.875rem;">@item.FechaCreacion.Value.ToString("dd/MM/yyyy")</div>
+                                                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.125rem;">@item.FechaCreacion.Value.ToString("h:mm tt")</div>
                                                 </div>
                                             }
                                             else

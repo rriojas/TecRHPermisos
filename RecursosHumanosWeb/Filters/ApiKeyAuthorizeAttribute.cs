@@ -65,8 +65,8 @@ namespace RecursosHumanosWeb.Filters
             {
                 bool tienePermiso = apiKeyEntity.ApiPermisosApiKeysTablas.Any(pkt =>
                     pkt.Estatus == true &&
-                    pkt.IdTablaNavigation.Nombre.Equals(TablaObjetivo, StringComparison.OrdinalIgnoreCase) &&
-                    pkt.IdApiPermisoNavigation.Nombre.Equals(PermisoRequerido, StringComparison.OrdinalIgnoreCase)
+                    pkt.IdTablaNavigation.Descripcion.Equals(TablaObjetivo, StringComparison.OrdinalIgnoreCase) &&
+                    pkt.IdApiPermisoNavigation.Descripcion.Equals(PermisoRequerido, StringComparison.OrdinalIgnoreCase)
                 );
 
                 if (!tienePermiso)

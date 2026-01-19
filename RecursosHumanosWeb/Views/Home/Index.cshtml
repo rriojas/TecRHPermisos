@@ -70,11 +70,11 @@
                                     {
                                         if (usuario.Nombre == Model.SelectedUser)
                                         {
-                                            <option value="@usuario.Nombre" data-area-id="@usuario.IdArea" selected>@usuario.Nombre</option>
+                                            <option value="@(usuario.Nombre ?? "")" data-area-id="@usuario.IdArea" selected>@(usuario.Nombre ?? "")</option>
                                         }
                                         else
                                         {
-                                            <option value="@usuario.Nombre" data-area-id="@usuario.IdArea">@usuario.Nombre</option>
+                                            <option value="@(usuario.Nombre ?? "")" data-area-id="@usuario.IdArea">@(usuario.Nombre ?? "")</option>
                                         }
                                     }
                                 </select>

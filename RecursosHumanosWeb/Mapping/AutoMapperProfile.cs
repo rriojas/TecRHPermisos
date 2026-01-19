@@ -10,7 +10,7 @@ namespace RecursosHumanosWeb.Mapping
         {
             // Usuario mappings
             CreateMap<Usuario, UsuarioDetailsViewModel>()
-                .ForMember(dest => dest.TipoUsuarioNombre, opt => opt.MapFrom(src => src.IdTipoUsuarioNavigation != null ? src.IdTipoUsuarioNavigation.Nombre : string.Empty))
+                .ForMember(dest => dest.TipoUsuarioNombre, opt => opt.MapFrom(src => src.IdTipoUsuarioNavigation != null ? src.IdTipoUsuarioNavigation.Descripcion : string.Empty))
                 .ForMember(dest => dest.AreaDescripcion, opt => opt.MapFrom(src => src.IdAreaNavigation != null ? src.IdAreaNavigation.Descripcion : string.Empty))
                 .ForMember(dest => dest.DepartamentoDescripcion, opt => opt.MapFrom(src => src.IdDepartamentoNavigation != null ? src.IdDepartamentoNavigation.Descripcion : string.Empty))
                 .ForMember(dest => dest.PuestoDescripcion, opt => opt.MapFrom(src => src.IdPuestoNavigation != null ? src.IdPuestoNavigation.Descripcion : string.Empty))
@@ -18,7 +18,7 @@ namespace RecursosHumanosWeb.Mapping
                 .ForMember(dest => dest.UsuarioModificaNombre, opt => opt.MapFrom(src => src.IdUsuarioModificaNavigation != null ? src.IdUsuarioModificaNavigation.Nombre : string.Empty));
             // Ensure ProjectTo can resolve navigation mappings
             CreateMap<Usuario, UsuarioDetailsViewModel>()
-                .ForMember(dest => dest.TipoUsuarioNombre, opt => opt.MapFrom(src => src.IdTipoUsuarioNavigation != null ? src.IdTipoUsuarioNavigation.Nombre : string.Empty))
+                .ForMember(dest => dest.TipoUsuarioNombre, opt => opt.MapFrom(src => src.IdTipoUsuarioNavigation != null ? src.IdTipoUsuarioNavigation.Descripcion : string.Empty))
                 .ForMember(dest => dest.AreaDescripcion, opt => opt.MapFrom(src => src.IdAreaNavigation != null ? src.IdAreaNavigation.Descripcion : string.Empty))
                 .ForMember(dest => dest.DepartamentoDescripcion, opt => opt.MapFrom(src => src.IdDepartamentoNavigation != null ? src.IdDepartamentoNavigation.Descripcion : string.Empty))
                 .ForMember(dest => dest.PuestoDescripcion, opt => opt.MapFrom(src => src.IdPuestoNavigation != null ? src.IdPuestoNavigation.Descripcion : string.Empty))

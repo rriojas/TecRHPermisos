@@ -79,13 +79,13 @@
                 @Html.DisplayFor(modelItem => item.IdApiKey)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IdAreaNavigation.Id)
+                @(item.IdAreaNavigation?.Id ?? 0)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IdDepartamentoNavigation.Id)
+                @(item.IdDepartamentoNavigation?.Id ?? 0)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IdPuestoNavigation.Id)
+                @(item.IdPuestoNavigation?.Id ?? 0)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IdTipoUsuarioNavigation.Id)

@@ -32,7 +32,6 @@ namespace RecursosHumanosWeb.Controllers.Api
                 .Select(t => new
                 {
                     t.Id,
-                    t.Nombre,
                     t.Descripcion,
                     t.FechaCreacion
                 })
@@ -59,7 +58,6 @@ namespace RecursosHumanosWeb.Controllers.Api
                 .Select(t => new
                 {
                     t.Id,
-                    t.Nombre,
                     t.Descripcion,
                     t.FechaCreacion,
                     t.FechaModificacion,

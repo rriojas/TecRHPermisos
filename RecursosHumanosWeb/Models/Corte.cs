@@ -12,16 +12,16 @@ public partial class Corte
     public DateTime? Termina { get; set; }
 
     // FechaCreacion no puede ser nula en la BD
-    public DateTime FechaCreacion { get; set; }
+    public DateTime? FechaCreacion { get; set; }
 
     // FechaModificacion puede ser nula
     public DateTime? FechaModificacion { get; set; }
 
-    public bool Estatus { get; set; }
+    public bool? Estatus { get; set; }
 
-    public int IdUsuarioCrea { get; set; }
+    public int? IdUsuarioCrea { get; set; }
 
-    public int IdUsuarioModifica { get; set; }
+    public int? IdUsuarioModifica { get; set; }
 
     public virtual Usuario IdUsuarioCreaNavigation { get; set; } = null!;
 

@@ -1,3 +1,0 @@
-C:\Users\axelc\source\repos\RecursosHumanosWeb\RecursosHumanosWeb\wwwroot\css\Permisos\search.css
-C:\Users\axelc\source\repos\RecursosHumanosWeb\RecursosHumanosWeb\wwwroot\js\Permisos\search.js
-C:\Users\axelc\source\repos\RecursosHumanosWeb\RecursosHumanosWeb\wwwroot\js\Usuarios\usuarioIndex.js

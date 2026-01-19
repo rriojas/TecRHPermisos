@@ -9,15 +9,15 @@ public partial class Area
 
     public string Descripcion { get; set; } = null!;
 
-    public DateTime FechaCreacion { get; set; }
+    public DateTime? FechaCreacion { get; set; }
 
-    public DateTime FechaModificacion { get; set; }
+    public DateTime? FechaModificacion { get; set; }
 
-    public bool Estatus { get; set; }
+    public bool? Estatus { get; set; }
 
-    public int IdUsuarioCrea { get; set; }
+    public int? IdUsuarioCrea { get; set; }
 
-    public int IdUsuarioModifica { get; set; }
+    public int? IdUsuarioModifica { get; set; }
 
     public virtual Usuario IdUsuarioCreaNavigation { get; set; } = null!;
 

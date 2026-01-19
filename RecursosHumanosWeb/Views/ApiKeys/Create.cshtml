@@ -71,7 +71,7 @@
                     {
                         <div class="permission-card mb-4 p-3 border rounded shadow-sm">
                             <div class="table-header d-flex justify-content-between align-items-center mb-3">
-                                <h4 class="mb-0 text-primary"><i class="fas fa-table"></i> @tabla.Nombre</h4>
+                                <h4 class="mb-0 text-primary"><i class="fas fa-table"></i> @tabla.Descripcion</h4>
                                 <span class="badge bg-secondary">Tabla #@tabla.Id</span>
                             </div>
                             <p class="text-muted small">@tabla.Descripcion</p>
@@ -89,7 +89,7 @@
                                                    value="@permiso.Id">
                                             <label class="form-check-label" for="tabla_@tabla.Id@permiso.Id">
                                                 <i class="fas fa-wrench me-1"></i>
-                                                **@permiso.Nombre** <span class="badge bg-info text-dark"
+                                                **@permiso.Descripcion** <span class="badge bg-info text-dark"
                                                                           data-bs-toggle="tooltip" data-bs-placement="top"
                                                                           title="@permiso.Descripcion">?</span>
                                             </label>
