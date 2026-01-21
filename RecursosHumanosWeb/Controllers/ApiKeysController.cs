@@ -65,8 +65,8 @@ namespace RecursosHumanosWeb.Controllers
             // Usamos "Nombre" que es la propiedad anónima definida arriba
             ViewData["Usuarios"] = new SelectList(usuariosActivos, "Id", "Nombre");
 
-            ViewBag.Tablas = _context.Tablas.Where(t => t.Estatus ?? false).ToList();
-            ViewBag.ApiPermisos = _context.ApiPermisos.Where(p => p.Estatus ?? false).ToList();
+            ViewBag.Tablas = _context.Tablas.Where(t => t.Estatus).ToList();
+            ViewBag.ApiPermisos = _context.ApiPermisos.Where(p => p.Estatus).ToList();
 
             // Lógica de roles (ajusta según tus necesidades reales)
             ViewBag.IsAdministrador = User.HasClaim("TipoUsuario", "4");
@@ -107,8 +107,8 @@ namespace RecursosHumanosWeb.Controllers
                                         .ToList();
 
                 ViewData["Usuarios"] = new SelectList(usuariosList, "Id", "Nombre", viewModel.IdUsuarioTitular);
-                ViewBag.Tablas = _context.Tablas.Where(t => t.Estatus ?? false).ToList();
-                ViewBag.ApiPermisos = _context.ApiPermisos.Where(p => p.Estatus ?? false).ToList();
+                ViewBag.Tablas = _context.Tablas.Where(t => t.Estatus).ToList();
+                ViewBag.ApiPermisos = _context.ApiPermisos.Where(p => p.Estatus).ToList();
                 ViewBag.IsAdministrador = User.HasClaim("TipoUsuario", "4");
 
                 return View(viewModel);
@@ -190,8 +190,8 @@ namespace RecursosHumanosWeb.Controllers
                                             .OrderBy(u => u.Nombre)
                                             .ToList();
                     ViewData["Usuarios"] = new SelectList(usuariosList, "Id", "Nombre", viewModel.IdUsuarioTitular);
-                    ViewBag.Tablas = _context.Tablas.Where(t => t.Estatus ?? false).ToList();
-                    ViewBag.ApiPermisos = _context.ApiPermisos.Where(p => p.Estatus ?? false).ToList();
+                    ViewBag.Tablas = _context.Tablas.Where(t => t.Estatus).ToList();
+                    ViewBag.ApiPermisos = _context.ApiPermisos.Where(p => p.Estatus).ToList();
                     ViewBag.IsAdministrador = User.HasClaim("TipoUsuario", "4");
 
                     return View(viewModel);

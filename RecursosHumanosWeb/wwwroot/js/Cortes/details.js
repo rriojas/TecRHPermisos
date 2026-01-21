@@ -193,18 +193,38 @@ function changeChartType(type) {
 }
 
 // Crear barras horizontales con D3.js
+// Función auxiliar para determinar si el texto debe ser blanco o negro
+// Basado en la luminosidad del color de fondo (YIQ)
+function getContrastColor(hexcolor) {
+    // Si no hay color, regresar negro por defecto
+    if (!hexcolor) return "#000000";
+    
+    // Convertir hex a RGB
+    var r = parseInt(hexcolor.substr(1, 2), 16);
+    var g = parseInt(hexcolor.substr(3, 2), 16);
+    var b = parseInt(hexcolor.substr(5, 2), 16);
+    
+    // Calcular luminosidad
+    var yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+    
+    // Si es oscuro devuelve blanco, si es claro devuelve gris oscuro
+    return (yiq >= 128) ? '#1f2937' : '#ffffff';
+}
+
 function createHorizontalBars() {
     if (!permisosPorArea.length) {
-        document.getElementById('horizontal-bars').innerHTML = '<p class="text-gray-500 text-center py-8">No hay datos disponibles</p>';
+        document.getElementById('horizontal-bars').innerHTML = '<div class="flex-center h-full text-muted">No hay datos disponibles</div>';
         return;
     }
     
-    const margin = { top: 20, right: 40, bottom: 40, left: 200 };
-    const containerWidth = document.getElementById('horizontal-bars').offsetWidth;
+    // 1. Reducimos el margen izquierdo drásticamente (ya no hay nombres largos, solo IDs)
+    const margin = { top: 20, right: 60, bottom: 20, left: 50 };
+    const container = document.getElementById('horizontal-bars');
+    const containerWidth = container.offsetWidth;
     const width = containerWidth - margin.left - margin.right;
-    const height = Math.max(300, permisosPorArea.length * 50);
+    // Altura dinámica: mínimo 300px, o crece si hay muchas áreas
+    const height = Math.max(300, permisosPorArea.length * 40);
 
-    // Limpiar contenedor
     d3.select("#horizontal-bars").html("");
 
     const svg = d3.select("#horizontal-bars")
@@ -214,58 +234,93 @@ function createHorizontalBars() {
         .append("g")
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
+    // Escala X (Valores)
     const x = d3.scaleLinear()
-        .domain([0, d3.max(permisosPorArea, d => d.Value) * 1.1])
+        .domain([0, d3.max(permisosPorArea, d => d.Value) * 1.1]) // 10% extra para espacio
         .range([0, width]);
 
+    // Escala Y (IDs de Área)
     const y = d3.scaleBand()
-        .domain(permisosPorArea.map(d => d.Name))
+        .domain(permisosPorArea.map(d => d.Id)) // Usamos ID en lugar de Name
         .range([0, height])
-        .padding(0.2);
+        .padding(0.25); // Un poco más de espacio entre barras
 
-    // Barras
-    svg.selectAll(".bar")
+    // Eje Y (Solo muestra IDs con estilo)
+    const yAxis = svg.append("g")
+        .call(d3.axisLeft(y).tickFormat(d => "#" + d));
+        
+    yAxis.selectAll("text")
+        .style("font-size", "12px")
+        .style("font-weight", "bold")
+        .style("fill", "#9ca3af"); // Color gris suave para los IDs
+    
+    yAxis.selectAll(".domain, line").remove(); // Quitar líneas feas del eje
+
+    // GRUPO DE BARRAS
+    const bars = svg.selectAll(".bar-group")
         .data(permisosPorArea)
-        .enter().append("rect")
-        .attr("class", "bar")
+        .enter().append("g")
+        .attr("class", "bar-group");
+
+    // 1. Dibujar la Barra
+    bars.append("rect")
         .attr("x", 0)
-        .attr("y", d => y(d.Name))
-        .attr("width", 0)
+        .attr("y", d => y(d.Id))
         .attr("height", y.bandwidth())
+        .attr("width", 0) // Animación inicial desde 0
         .attr("fill", d => d.Color)
-        .attr("rx", 8)
-        .style("filter", "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))")
-        .transition()
+        .attr("rx", 6) // Bordes redondeados
+        .transition() // Animación de entrada
         .duration(1000)
         .delay((d, i) => i * 100)
         .attr("width", d => x(d.Value));
 
-    // Etiquetas de área
-    svg.selectAll(".label")
-        .data(permisosPorArea)
-        .enter().append("text")
-        .attr("class", "label")
-        .attr("x", -10)
-        .attr("y", d => y(d.Name) + y.bandwidth() / 2)
-        .attr("text-anchor", "end")
-        .attr("alignment-baseline", "middle")
-        .style("font-size", "11px")
-        .style("font-weight", "600")
-        .style("fill", "#374151")
-        .text(d => d.Name.length > 30 ? d.Name.substring(0, 27) + '...' : d.Name);
-
-    // Valores
-    svg.selectAll(".value")
-        .data(permisosPorArea)
-        .enter().append("text")
-        .attr("class", "value")
-        .attr("x", d => x(d.Value) + 5)
-        .attr("y", d => y(d.Name) + y.bandwidth() / 2)
-        .attr("alignment-baseline", "middle")
-        .style("font-size", "12px")
-        .style("font-weight", "bold")
-        .style("fill", "#374151")
-        .text(d => d.Value);
+    // 2. Dibujar el Texto (Nombre del Área)
+    bars.append("text")
+        .attr("y", d => y(d.Id) + y.bandwidth() / 2) // Centrado verticalmente
+        .attr("dy", ".35em") // Ajuste fino vertical
+        .style("font-size", "11px") 
+        .style("font-weight", "700")
+        .style("pointer-events", "none") // Para que el mouse pase a través del texto al tooltip
+        .text(d => `${d.Name} (${d.Value})`) // Texto: "Recursos Humanos (5)"
+        .attr("x", 0) // Posición inicial para animación
+        .style("opacity", 0)
+        .transition()
+        .duration(1000)
+        .delay((d, i) => i * 100)
+        .style("opacity", 1)
+        .attr("x", function(d) {
+            // LÓGICA DE AJUSTE DINÁMICO
+            const barWidth = x(d.Value);
+            const textWidth = this.getComputedTextLength(); // D3 mide el texto real
+            
+            // Guardamos el ancho del texto en el dato para usarlo en el siguiente paso (color)
+            d.textFits = barWidth > (textWidth + 20); 
+            
+            if (d.textFits) {
+                // Si cabe: ponerlo en medio de la barra (o alineado a la izquierda con padding)
+                return (barWidth / 2); // Opción A: Centrado en la barra
+                // return 10; // Opción B: A la izquierda dentro de la barra
+            } else {
+                // Si NO cabe: ponerlo afuera a la derecha
+                return barWidth + 8; 
+            }
+        })
+        .attr("text-anchor", function(d) {
+             // Si cabe adentro -> "middle" (si usaste Opción A arriba) o "start" (si usaste Opción B)
+             // Si no cabe -> "start" (a la izquierda del punto x, que está fuera de la barra)
+             return d.textFits ? "middle" : "start";
+        })
+        .style("fill", function(d) {
+            // COLOR INTELIGENTE
+            if (d.textFits) {
+                // Si está dentro, calcular contraste contra el color de la barra
+                return getContrastColor(d.Color);
+            } else {
+                // Si está fuera, usar gris oscuro estándar
+                return "#4b5563"; 
+            }
+        });
 }
 
 function animateBars() {

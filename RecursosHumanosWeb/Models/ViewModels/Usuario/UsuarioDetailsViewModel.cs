@@ -11,7 +11,6 @@ namespace RecursosHumanosWeb.Models.ViewModels.Usuario
         public DateTime FechaCreacion { get; set; }
         public DateTime? FechaModificacion { get; set; }
 
-        // Relational denormalized fields for the view
         public int IdTipoUsuario { get; set; }
         public string TipoUsuarioNombre { get; set; } = string.Empty;
 
@@ -24,11 +23,11 @@ namespace RecursosHumanosWeb.Models.ViewModels.Usuario
         public int IdPuesto { get; set; }
         public string PuestoDescripcion { get; set; } = string.Empty;
 
-        public int IdUsuarioCrea { get; set; }
-        public string UsuarioCreaNombre { get; set; } = string.Empty;
+        public int? IdUsuarioCrea { get; set; }
+        public string? UsuarioCreaNombre { get; set; } // Permitir nulo
 
         public int? IdUsuarioModifica { get; set; }
-        public string UsuarioModificaNombre { get; set; } = string.Empty;
+        public string? UsuarioModificaNombre { get; set; } // Permitir nulo
 
         public int? IdApiKey { get; set; }
     }

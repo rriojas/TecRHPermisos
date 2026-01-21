@@ -42,8 +42,8 @@ namespace RecursosHumanosWeb.Controllers
                 .Select(u => new
                 {
                     id = u.Id,
-                    text = u.Nombre ?? "",
-                    areaId = u.IdArea ?? 0
+                    text = u.Nombre,
+                    areaId = u.IdArea
                 })
                 .Take(10)
                 .ToListAsync();
@@ -86,7 +86,7 @@ namespace RecursosHumanosWeb.Controllers
 
             // Obtener el corte actual
             var currentCourtId = await _context.Cortes
-                .Where(c => c.Estatus ?? false)
+                .Where(c => c.Estatus)
                 .OrderByDescending(c => c.Id)
                 .Select(c => c.Id)
                 .FirstOrDefaultAsync();
@@ -146,7 +146,7 @@ namespace RecursosHumanosWeb.Controllers
             // Áreas para el filtro (solo para RH/Admin)
             var areas = (isRH || isAdministrador)
                 ? await _context.Areas
-                    .Where(a => a.Estatus ?? false)
+                    .Where(a => a.Estatus)
                     .Select(a => new AreasDTO { Id = a.Id, Descripcion = a.Descripcion })
                     .OrderBy(a => a.Descripcion)
                     .ToListAsync()
@@ -224,8 +224,8 @@ namespace RecursosHumanosWeb.Controllers
                   Aprobados = g.Count(p => p.Revisado == true && p.Estatus == true),
                   ConGoce = g.Count(p => p.Goce == true),
                   SinGoce = g.Count(p => p.Goce == false),
-                  EsteMes = g.Count(p => p.FechaCreacion.Value.Month == DateTime.Now.Month &&
-                                          p.FechaCreacion.Value.Year == DateTime.Now.Year) // <-- ¡CORREGIDO!
+                  EsteMes = g.Count(p => p.FechaCreacion.Month == DateTime.Now.Month &&
+                                          p.FechaCreacion.Year == DateTime.Now.Year) // <-- ¡CORREGIDO!
               })
               .FirstOrDefaultAsync();
 
@@ -366,7 +366,7 @@ namespace RecursosHumanosWeb.Controllers
             }
 
             // Validaciones de negocio antes de editar
-            if (permiso.IdCorteNavigation != null && !(permiso.IdCorteNavigation.Estatus ?? false))
+            if (permiso.IdCorteNavigation != null && !(permiso.IdCorteNavigation.Estatus))
             {
                 TempData["ErrorAlert"] = System.Text.Json.JsonSerializer.Serialize(new
                 {
@@ -491,7 +491,7 @@ namespace RecursosHumanosWeb.Controllers
 
                 // 5. Obtener corte activo
                 var corteActivo = await _context.Cortes
-                    .Where(c => c.Estatus ?? false)
+                    .Where(c => c.Estatus)
                     .OrderByDescending(c => c.Id)
                     .FirstOrDefaultAsync();
 
@@ -537,7 +537,7 @@ namespace RecursosHumanosWeb.Controllers
                 var currentDateTime = DateTime.Now;
 
                 // 7. Validación: Fecha1 debe estar dentro del periodo del corte activo (hora, minuto, segundo)
-                if (model.Fecha1.HasValue && corteActivo.Inicia.HasValue && model.Fecha1.Value < corteActivo.Inicia.Value)
+                if (model.Fecha1!.Value < corteActivo.Inicia)
                 {
                     ModelState.AddModelError("Fecha1", "La fecha y hora de inicio debe estar dentro del periodo del corte vigente.");
                     var errors = ModelState.Where(x => x.Value!.Errors.Any())
@@ -551,12 +551,12 @@ namespace RecursosHumanosWeb.Controllers
                         Success = false,
                         Title = "Error de Validación",
                         Message = "Por favor, corrija los campos marcados.",
-                        Errors = errors
+                        Errors = errors!
                     });
                 }
 
                 // 8. Validación: Si Fecha2 está fuera del corte activo (mayor al término) pedir confirmación
-                if (model.Fecha2.HasValue && corteActivo.Termina.HasValue && model.Fecha2.Value > corteActivo.Termina.Value && !(confirmed ?? false))
+                if (model.Fecha2 != null && model.Fecha2.Value > corteActivo.Termina && !(confirmed ?? false))
                 {
                     return Json(new AlertResponseDTO
                     {
@@ -700,7 +700,7 @@ namespace RecursosHumanosWeb.Controllers
                     Success = false,
                     Title = "Error de Validación",
                     Message = "Por favor, corrija los campos marcados.",
-                    Errors = errors
+                    Errors = errors!
                 });
             }
 
@@ -784,8 +784,8 @@ namespace RecursosHumanosWeb.Controllers
             return new PermissionsCreateViewModel
             {
                 Id = permiso.Id,
-                IdUsuarioSolicita = permiso.IdUsuarioSolicita.Value,
-                IdTipoPermiso = permiso.IdTipoPermiso.Value,
+                IdUsuarioSolicita = permiso.IdUsuarioSolicita,
+                IdTipoPermiso = permiso.IdTipoPermiso,
                 Fecha1 = permiso.Fecha1,
                 Fecha2 = permiso.Fecha2,
                 Motivo = permiso.Motivo,
@@ -914,7 +914,7 @@ namespace RecursosHumanosWeb.Controllers
             }
 
             // Validar que el corte esté vigente
-            if (permiso.IdCorteNavigation != null && !(permiso.IdCorteNavigation.Estatus ?? false))
+            if (!permiso.IdCorteNavigation.Estatus)
             {
                 TempData["ErrorAlert"] = System.Text.Json.JsonSerializer.Serialize(new
                 {
@@ -932,7 +932,7 @@ namespace RecursosHumanosWeb.Controllers
                 NombreSolicitante = permiso.IdUsuarioSolicitaNavigation?.Nombre ?? "Desconocido",
                 CorreoSolicitante = permiso.IdUsuarioSolicitaNavigation?.Correo ?? "Sin correo",
                 AreaSolicitante = permiso.IdUsuarioSolicitaNavigation?.IdAreaNavigation?.Descripcion ?? "Sin área",
-                IdTipoPermiso = permiso.IdTipoPermiso.Value,
+                IdTipoPermiso = permiso.IdTipoPermiso,
                 TipoPermisoDescripcion = permiso.IdTipoPermisoNavigation?.Descripcion ?? "Sin tipo",
                 Fecha1 = permiso.Fecha1,
                 Fecha2 = permiso.Fecha2,
@@ -940,9 +940,9 @@ namespace RecursosHumanosWeb.Controllers
                 Motivo = permiso.Motivo,
                 Evidencia = permiso.Evidencia,
                 Goce = permiso.Goce ?? false, // Valor actual
-                FechaCreacion = permiso.FechaCreacion.Value,
+                FechaCreacion = permiso.FechaCreacion,
                 CreadoPor = permiso.IdUsuarioCreaNavigation?.Nombre,
-                IdCorte = permiso.IdCorte.Value,
+                IdCorte = permiso.IdCorte,
                 CorteInicia = permiso.IdCorteNavigation?.Inicia,
                 CorteTermina = permiso.IdCorteNavigation?.Termina
             };
@@ -1025,7 +1025,7 @@ namespace RecursosHumanosWeb.Controllers
                 }
 
                 // Validar que el corte esté vigente
-                if (permiso.IdCorteNavigation != null && !(permiso.IdCorteNavigation.Estatus ?? false))
+                if (permiso.IdCorteNavigation != null && !(permiso.IdCorteNavigation.Estatus))
                 {
                     return Json(new AlertResponseDTO 
                     { 
@@ -1052,7 +1052,7 @@ namespace RecursosHumanosWeb.Controllers
                     Title = "¡Permiso Revisado!",
                     Message = $"El permiso ha sido revisado exitosamente. Goce de sueldo: {(model.Goce ? "Con goce" : "Sin goce")}",
                     Icon = "success",
-                    RedirectUrl = Url.Action("Index", "Permisos")
+                    RedirectUrl = Url.Action("Index", "Permisos")!
                 });
             }
             catch (Exception ex)
@@ -1152,7 +1152,7 @@ namespace RecursosHumanosWeb.Controllers
                     .OrderByDescending(c => c.Id)
                     .FirstOrDefaultAsync();
 
-                if (corteVigente == null || !corteVigente.Inicia.HasValue || !corteVigente.Termina.HasValue)
+                if (corteVigente == null)
                 {
                     return Json(new AlertResponseDTO 
                     { 
@@ -1183,8 +1183,8 @@ namespace RecursosHumanosWeb.Controllers
                 // 3. Obtener los autorizadores (jefes de área) por cada área
                 // Autorizadores son usuarios con IdTipoUsuario = 1 (Autorizador)
                 var autorizadoresPorArea = await _context.Usuarios
-                    .Where(u => u.Estatus == true && u.IdTipoUsuario == 1 && u.IdArea.HasValue)
-                    .GroupBy(u => u.IdArea.Value)
+                    .Where(u => u.Estatus == true && u.IdTipoUsuario == 1)
+                    .GroupBy(u => u.IdArea)
                     .Select(g => new
                     {
                         IdArea = g.Key,
@@ -1210,8 +1210,8 @@ namespace RecursosHumanosWeb.Controllers
                 int idUsuarioCreador = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
 
                 // 6. Configurar fechas del rango del corte
-                DateTime fechaInicio = corteVigente.Inicia.Value.Date;
-                DateTime fechaFin = corteVigente.Termina.Value.Date;
+                DateTime fechaInicio = corteVigente.Inicia;
+                DateTime fechaFin = corteVigente.Termina;
                 int diasEnRango = (int)(fechaFin - fechaInicio).TotalDays + 1;
 
                 // 7. Preparar lista de permisos
@@ -1225,7 +1225,7 @@ namespace RecursosHumanosWeb.Controllers
                     // Seleccionar usuario aleatorio de los 10
                     var usuarioSeleccionado = usuarios[random.Next(usuarios.Count)];
                     int idUsuarioSolicita = usuarioSeleccionado.Id;
-                    int idAreaUsuario = usuarioSeleccionado.IdArea ?? 0;
+                    int idAreaUsuario = usuarioSeleccionado.IdArea;
 
                     // Obtener el autorizador (jefe) del área del usuario
                     // Si no existe autorizador para esa área, usar el primer autorizador disponible
@@ -1354,7 +1354,7 @@ namespace RecursosHumanosWeb.Controllers
                               $"👔 Autorizadores (Jefes de Área): {autorizadoresPorArea.Count}\n\n" +
                               $"✅ Cada permiso fue asignado al jefe de área correspondiente como revisor.",
                     Icon = "success",
-                    RedirectUrl = Url.Action("Index", "Permisos")
+                    RedirectUrl = Url.Action("Index", "Permisos")!
                 });
             }
             catch (Exception ex)

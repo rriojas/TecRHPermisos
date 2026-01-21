@@ -48,15 +48,15 @@
         }
     };
 
-    var config = typeConfigurations.ContainsKey(Model.IdTipoPermiso.Value) ? typeConfigurations[Model.IdTipoPermiso.Value] : null;
+    var config = typeConfigurations.ContainsKey(Model.IdTipoPermiso) ? typeConfigurations[Model.IdTipoPermiso] : null;
     bool showDias = config != null && config["Fecha2"].show && Model.Fecha2.HasValue && Model.Dias.HasValue && Model.Dias.Value > 1;
 
-    string hora1 = config != null && config["Hora1"].show && Model.Fecha1 != null ? FormatHora12(Model.Fecha1.Value) : null;
-    string hora2 = config != null && config["Hora2"].show && Model.Fecha2.HasValue ? FormatHora12(Model.Fecha2.Value) : null;
+    string hora1 = config != null && config["Hora1"].show && Model.Fecha1 != null ? FormatHora12(Model.Fecha1.Value) : null!;
+    string hora2 = config != null && config["Hora2"].show && Model.Fecha2.HasValue ? FormatHora12(Model.Fecha2.Value) : null!;
 
     // Normalize evidence path: support filenames stored alone or web-relative paths like '/Evidences/xxx.pdf'
-    string evidenceUrl = null;
-    string evidencePath = null;
+    string? evidenceUrl = null;
+    string? evidencePath = null;
     bool evidenceExists = false;
     if (!string.IsNullOrEmpty(Model.Evidencia))
     {
@@ -326,19 +326,16 @@
                 </div>
 
                 <div class="datetime-grid">
-                    @if (Model.FechaCreacion != null)
-                    {
-                        <div class="form-group">
+                    <div class="form-group">
                             <label class="form-label">
                                 <i class="fas fa-calendar-plus"></i>
                                 Fecha de Creación
                             </label>
                             <div class="input-wrapper">
                                 <i class="input-icon fas fa-calendar-plus"></i>
-                                <input type="text" class="form-control" value="@FormatFechaCompleta(Model.FechaCreacion.Value)" readonly style="background: var(--surface); font-weight: 600;" />
+                                <input type="text" class="form-control" value="@FormatFechaCompleta(Model.FechaCreacion)" readonly style="background: var(--surface); font-weight: 600;" />
                             </div>
                         </div>
-                    }
 
                     @if (Model.FechaAutorizacion != null)
                     {

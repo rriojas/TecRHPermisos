@@ -10,7 +10,7 @@
 
         public int? Dias { get; set; }
 
-        public string? Motivo { get; set; }
+        public string Motivo { get; set; }
 
         public string? Evidencia { get; set; }
 
@@ -46,11 +46,11 @@
         // Datos adicionales para visualización
         public string TipoPermiso { get; set; }
 
-        public string? Area { get; set; }
+        public string Area { get; set; }
 
         public string? AutorizadoPor { get; set; }
 
-        public string? CreadoPor { get; set; }
+        public string CreadoPor { get; set; }
 
         public string? ModificadoPor { get; set; }
     }

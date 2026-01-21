@@ -79,10 +79,10 @@ namespace RecursosHumanosWeb.Controllers
             {
                 Cortes = cortes,
                 Usuarios = usuarios,
-                FechaDesde = fechaDesde?.ToString("yyyy-MM-dd"),
-                FechaHasta = fechaHasta?.ToString("yyyy-MM-dd"),
-                UsuarioCreadorFilter = usuarioCreadorFilter?.ToString(),
-                StatusFilter = statusFilter?.ToString(),
+                FechaDesde = fechaDesde?.ToString("yyyy-MM-dd")!,
+                FechaHasta = fechaHasta?.ToString("yyyy-MM-dd")!,
+                UsuarioCreadorFilter = usuarioCreadorFilter?.ToString()!,
+                StatusFilter = statusFilter?.ToString()!,
                 IsAdministrador = isAdministrador
             };
 
@@ -95,9 +95,6 @@ namespace RecursosHumanosWeb.Controllers
 
             return View(model);
         }
-
-
-        // ... resto del código del controlador
 
         [HttpGet]
         public async Task<IActionResult> ExportToExcel(int id)
@@ -344,7 +341,7 @@ namespace RecursosHumanosWeb.Controllers
                         workbook.SaveAs(stream);
                         var content = stream.ToArray();
 
-                        string fileName = $"CorteTECNM - {corte.Inicia?.ToString("dddd, dd 'de' MMMM 'del' yyyy") ?? "Sin fecha"}.xlsx";
+                        string fileName = $"CorteTECNM - {corte.Inicia.ToString("dddd, dd 'de' MMMM 'del' yyyy") ?? "Sin fecha"}.xlsx";
 
                         return File(
                             content,
@@ -398,11 +395,11 @@ namespace RecursosHumanosWeb.Controllers
                         $"{p.Fecha2?.ToString("yyyy-MM-dd")}," +
                         $"{(p.Revisado ?? false ? "Sí" : "No")}," +
                         $"\"{p.IdUsuarioAutorizaNavigation?.Nombre}\"," +
-                        $"{p.FechaCreacion?.ToString("yyyy-MM-dd HH:mm")}");
+                        $"{p.FechaCreacion.ToString("yyyy-MM-dd HH:mm")}");
                 }
 
                 var bytes = System.Text.Encoding.UTF8.GetBytes(csv.ToString());
-                string fileName = $"Corte_{corte.Inicia?.ToString("yyyyMMdd") ?? "SinFecha"}.csv";
+                string fileName = $"Corte_{corte.Inicia.ToString("yyyyMMdd") ?? "SinFecha"}.csv";
 
                 return File(bytes, "text/csv", fileName);
             }
@@ -470,7 +467,7 @@ namespace RecursosHumanosWeb.Controllers
 
                 var json = JsonConvert.SerializeObject(data, Formatting.Indented);
                 var bytes = System.Text.Encoding.UTF8.GetBytes(json);
-                string fileName = $"Corte_{corte.Inicia?.ToString("yyyyMMdd") ?? "SinFecha"}.json";
+                string fileName = $"Corte_{corte.Inicia.ToString("yyyyMMdd") ?? "SinFecha"}.json";
 
                 return File(bytes, "application/json", fileName);
             }
@@ -509,8 +506,8 @@ namespace RecursosHumanosWeb.Controllers
                     xmlWriter.WriteStartElement("Corte");
                     
                     xmlWriter.WriteElementString("Id", corte.Id.ToString());
-                    xmlWriter.WriteElementString("FechaInicio", corte.Inicia?.ToString("yyyy-MM-dd") ?? "");
-                    xmlWriter.WriteElementString("FechaFin", corte.Termina?.ToString("yyyy-MM-dd") ?? "");
+                    xmlWriter.WriteElementString("FechaInicio", corte.Inicia.ToString("yyyy-MM-dd") ?? "");
+                    xmlWriter.WriteElementString("FechaFin", corte.Termina.ToString("yyyy-MM-dd") ?? "");
                     xmlWriter.WriteElementString("Estatus", corte.Estatus.ToString());
 
                     xmlWriter.WriteStartElement("Estadisticas");
@@ -535,7 +532,7 @@ namespace RecursosHumanosWeb.Controllers
                         xmlWriter.WriteElementString("AlDia", p.Fecha2?.ToString("yyyy-MM-dd") ?? "");
                         xmlWriter.WriteElementString("Revisado", (p.Revisado ?? false) ? "Sí" : "No");
                         xmlWriter.WriteElementString("AutorizadoPor", p.IdUsuarioAutorizaNavigation?.Nombre ?? "");
-                        xmlWriter.WriteElementString("FechaCreacion", p.FechaCreacion?.ToString("yyyy-MM-dd HH:mm") ?? "");
+                        xmlWriter.WriteElementString("FechaCreacion", p.FechaCreacion.ToString("yyyy-MM-dd HH:mm") ?? "");
                         xmlWriter.WriteEndElement(); // Permiso
                     }
                     xmlWriter.WriteEndElement(); // Permisos
@@ -545,7 +542,7 @@ namespace RecursosHumanosWeb.Controllers
 
                     var xmlString = stringWriter.ToString();
                     var bytes = System.Text.Encoding.UTF8.GetBytes(xmlString);
-                    string fileName = $"Corte_{corte.Inicia?.ToString("yyyyMMdd") ?? "SinFecha"}.xml";
+                    string fileName = $"Corte_{corte.Inicia.ToString("yyyyMMdd") ?? "SinFecha"}.xml";
 
                     return File(bytes, "application/xml", fileName);
                 }
@@ -568,22 +565,14 @@ namespace RecursosHumanosWeb.Controllers
             var viewModel = new CorteCreateViewModel();
 
             // Buscar el último corte con fechas (que sería el corte "actual" o "penúltimo")
-            var ultimoCorteConFechas = await _context.Cortes
-                .Where(c => c.Termina.HasValue)
-                .OrderByDescending(c => c.Termina.Value)
+            var corteActivo = await _context.Cortes
+                .Where(c => c.Estatus)
+                .OrderByDescending(c => c.Termina)
                 .FirstOrDefaultAsync();
 
-            if (ultimoCorteConFechas != null)
-            {
-                // Establecer Inicia sugerido como un segundo después de Termina del último corte real
-                viewModel.Inicia = ultimoCorteConFechas.Termina.Value.AddSeconds(1);
-            }
-            else
-            {
-                // Si no hay cortes previos con fechas, usar la fecha y hora actual
-                viewModel.Inicia = DateTime.Now;
-            }
 
+            // Establecer Inicia sugerido como un segundo después de Termina del último corte real
+            viewModel.Inicia = corteActivo!.Termina.AddSeconds(1);
             return View(viewModel);
         }
 
@@ -597,45 +586,50 @@ namespace RecursosHumanosWeb.Controllers
                 return Unauthorized();
             }
 
-            int idUsuario = int.Parse((string)ViewData["IdUsuario"]);
+             var corteActivo = await _context.Cortes
+                .Where(c => c.Estatus)
+                .OrderByDescending(c => c.Termina)
+                .FirstOrDefaultAsync();
+
+            int idUsuario = int.Parse((string)ViewData["IdUsuario"]!);
             DateTime ahora = DateTime.Now;
 
             // Validaciones estándar
-            if (!viewModel.Inicia.HasValue || !viewModel.Termina.HasValue)
-                ModelState.AddModelError(string.Empty, "Debe proporcionar fechas de inicio y fin.");
-            if (viewModel.Termina < viewModel.Inicia)
+            if (viewModel.Termina <= viewModel.Inicia)
                 ModelState.AddModelError("Termina", "La fecha de fin no puede ser anterior a la fecha de inicio.");
+            if (viewModel.Termina >= viewModel.Termina)
+                ModelState.AddModelError("Termina", "La fecha de fin no puede ser mayor o igual a la fecha de fin en el periodo actual.");
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                // Desactivar corte activo actual (si existe)
-                var corteActivo = await _context.Cortes.Where(c => c.Estatus ?? false).OrderByDescending(c => c.Id).FirstOrDefaultAsync();
-                if (corteActivo != null)
-                {
-                    corteActivo.Estatus = false;
-                    corteActivo.FechaModificacion = ahora;
-                    corteActivo.IdUsuarioModifica = idUsuario;
-                    _context.Update(corteActivo);
-                }
+                return View(viewModel);
 
-                // Crear el nuevo corte activo (sin crear marcadores de futuro)
-                var nuevoCorte = new Corte
-                {
-                    Inicia = viewModel.Inicia,
-                    Termina = viewModel.Termina,
-                    IdUsuarioCrea = idUsuario,
-                    IdUsuarioModifica = idUsuario,
-                    FechaCreacion = ahora,
-                    FechaModificacion = ahora,
-                    Estatus = true
-                };
-                _context.Add(nuevoCorte);
-
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
             }
 
-            return View(viewModel);
+            // Desactivar corte activo actual (si existe)
+            if (corteActivo != null)
+            {
+                corteActivo.Estatus = false;
+                corteActivo.FechaModificacion = ahora;
+                corteActivo.IdUsuarioModifica = idUsuario;
+                _context.Update(corteActivo);
+            }
+
+            // Crear el nuevo corte activo (sin crear marcadores de futuro)
+            var nuevoCorte = new Corte
+            {
+                Inicia = viewModel.Inicia,
+                Termina = viewModel.Termina,
+                IdUsuarioCrea = idUsuario,
+                IdUsuarioModifica = idUsuario,
+                FechaCreacion = ahora,
+                FechaModificacion = ahora,
+                Estatus = true
+            };
+                _context.Add(nuevoCorte);
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Cortes/Edit/5
@@ -731,7 +725,7 @@ namespace RecursosHumanosWeb.Controllers
         // AJAX: Delete via fetch with confirmation flow using ActionRequestDTO and AlertResponseDTO
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteAjax([FromBody] RecursosHumanosWeb.Models.DTOs.ActionRequestDTO request)
+        public async Task<IActionResult> DeleteAjax([FromBody] ActionRequestDTO request)
         {
             if (request == null || request.Id <= 0)
             {
@@ -756,7 +750,7 @@ namespace RecursosHumanosWeb.Controllers
                 {
                     ShowConfirmation = true,
                     Title = "¿Eliminar Corte?",
-                    Message = $"¿Estás seguro de que deseas eliminar el corte que inicia {corte.Inicia?.ToString("dd/MM/yyyy")}? Esta acción es irreversible.",
+                    Message = $"¿Estás seguro de que deseas eliminar el corte que inicia {corte.Inicia.ToString("dd/MM/yyyy")}? Esta acción es irreversible.",
                     Icon = "question",
                     ConfirmButtonText = "Sí, eliminar"
                 });
@@ -792,178 +786,87 @@ namespace RecursosHumanosWeb.Controllers
 
         // Reemplaza tu método [HttpGet] Details(int? id) existente por este:
 
-        [HttpGet]
+       [HttpGet]
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            // 1. Obtener el corte
+            // 1. Obtener el corte y sus datos de auditoría
             var corte = await _context.Cortes
                 .Include(c => c.IdUsuarioCreaNavigation)
                 .Include(c => c.IdUsuarioModificaNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (corte == null)
-            {
-                return NotFound();
-            }
+            if (corte == null) return NotFound();
 
-            // 2. Obtener los permisos filtrados y mapearlos a DTO
+            // 2. Obtener los permisos activos para las estadísticas
             var permisos = await _context.Permisos
                 .Where(p => p.IdCorte == id && p.Estatus != false)
                 .Include(p => p.IdTipoPermisoNavigation)
                 .Include(p => p.IdUsuarioSolicitaNavigation)
                     .ThenInclude(u => u.IdAreaNavigation)
-                .Include(p => p.IdUsuarioAutorizaNavigation)
-                .Include(p => p.IdUsuarioCreaNavigation)
-                .Include(p => p.IdUsuarioModificaNavigation)
-                .Select(p => new PermisosDTO
-                {
-                    Id = p.Id,
-                    Fecha1 = p.Fecha1,
-                    Fecha2 = p.Fecha2,
-                    Dias = p.Dias,
-                    Motivo = p.Motivo,
-                    Evidencia = p.Evidencia,
-                    FechaAutorizacion = p.FechaAutorizacion,
-                    FechaCreacion = p.FechaCreacion.Value,
-                    FechaModificacion = p.FechaModificacion,
-                    Revisado = p.Revisado ?? false,
-                    Goce = p.Goce ?? false,
-                    Estatus = p.Estatus ?? false,
-                    IdCorte = p.IdCorte.Value,
-                    IdTipoPermiso = p.IdTipoPermiso.Value,
-                    IdUsuarioSolicita = p.IdUsuarioSolicita.Value,
-                    IdUsuarioAutoriza = p.IdUsuarioAutoriza,
-                    IdUsuarioCrea = p.IdUsuarioCrea.Value,
-                    IdUsuarioModifica = p.IdUsuarioModifica.Value,
-                    Nombre = p.IdUsuarioSolicitaNavigation != null ? (p.IdUsuarioSolicitaNavigation.Nombre ?? "") : "",
-                    Correo = p.IdUsuarioSolicitaNavigation != null ? (p.IdUsuarioSolicitaNavigation.Correo ?? "") : "",
-                    TipoPermiso = p.IdTipoPermisoNavigation != null ? (p.IdTipoPermisoNavigation.Descripcion ?? "") : "",
-                    Area = p.IdUsuarioSolicitaNavigation != null && p.IdUsuarioSolicitaNavigation.IdAreaNavigation != null ? (p.IdUsuarioSolicitaNavigation.IdAreaNavigation.Descripcion ?? "") : "",
-                    AutorizadoPor = p.IdUsuarioAutorizaNavigation != null ? (p.IdUsuarioAutorizaNavigation.Nombre ?? "") : "",
-                    CreadoPor = p.IdUsuarioCreaNavigation != null ? (p.IdUsuarioCreaNavigation.Nombre ?? "") : "",
-                    ModificadoPor = p.IdUsuarioModificaNavigation != null ? (p.IdUsuarioModificaNavigation.Nombre ?? "") : ""
-                })
                 .ToListAsync();
 
-            // 3. Calcular KPIs - Usar campo Dias que ya fue calculado al crear
-            double diasPromedio = 0;
-            if (permisos.Any())
-            {
-                // Usar el campo Dias que ya contiene el valor calculado
-                var permisosConDias = permisos.Where(p => p.Dias.HasValue && p.Dias > 0).ToList();
-                diasPromedio = permisosConDias.Any() ? permisosConDias.Average(p => p.Dias.Value) : 0;
-            }
-            
-            int totalPermisos = permisos.Count;
-            int aprobados = permisos.Count(p => p.IdUsuarioAutoriza != null);
-            int conGoce = permisos.Count(p => p.Goce);
-            int pendientesPorRevisar = permisos.Count(p => !p.Revisado); // Cambio: contar los que NO están revisados
+            // 3. Paleta de colores para las gráficas
+            string[] palette = new string[] { "#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#ec4899" };
 
-            // 4. Datos para gráficos - Permisos por tipo
-            var permisosPorTipo = permisos
-                .GroupBy(p => p.TipoPermiso ?? "Desconocido")
-                .Select(g => new
-                {
-                    Name = g.Key,
-                    Value = g.Count(),
-                    Color = g.Key switch
-                    {
-                        "Falta" => "#3b82f6",
-                        "Retardo" => "#10b981",
-                        "Cambio de Horario" => "#f59e0b",
-                        "Turno por Turno" => "#8b5cf6",
-                        _ => "#6b7280"
-                    }
-                })
-                .ToList();
-
-            // 5. Permisos por área
+            // 4. Procesar Datos para JSON (Gráficas)
             var permisosPorArea = permisos
-                .GroupBy(p => p.Area ?? "Desconocido")
-                .Select(g => new
-                {
-                    Name = g.Key,
+                .Where(p => p.IdUsuarioSolicitaNavigation?.IdAreaNavigation != null)
+                .GroupBy(p => p.IdUsuarioSolicitaNavigation.IdAreaNavigation)
+                .Select((g, index) => new {
+                    Id = g.Key.Id,
+                    Name = g.Key.Descripcion,
                     Value = g.Count(),
-                    Color = g.Key switch
-                    {
-                        "SUBDIRECCION DE SERVICIOS ADMINISTRATIVOS" => "#3b82f6",
-                        "DIRECCION GENERAL" => "#10b981",
-                        "DIRECCION DE PLANEACION Y VINCULACION" => "#8b5cf6",
-                        "DIRECCION ACADEMICA" => "#f59e0b",
-                        _ => "#6b7280"
-                    }
+                    Color = palette[index % palette.Length]
+                }).OrderByDescending(x => x.Value).ToList();
+
+            var permisosPorTipo = permisos
+                .GroupBy(p => p.IdTipoPermisoNavigation)
+                .Select((g, index) => new {
+                    Name = g.Key?.Descripcion ?? "Otros",
+                    Value = g.Count(),
+                    Color = palette[(index + 2) % palette.Length]
+                }).ToList();
+
+            var tendencia = permisos
+                .OrderBy(p => p.FechaCreacion)
+                .GroupBy(p => p.FechaCreacion.ToString("dd MMM"))
+                .Select(g => new {
+                    Month = g.Key ?? "S/F",
+                    Total = g.Count(),
+                    Aprobados = g.Count(x => x.Goce == true),
+                    Pendientes = g.Count(x => x.Goce != true)
+                }).ToList();
+
+            var heatmap = permisos
+                .GroupBy(p => new { 
+                    Day = p.FechaCreacion.ToString("dddd", new CultureInfo("en-US")), 
+                    Week = (p.FechaCreacion.Day / 7) + 1 
                 })
+                .Select(g => new { Day = g.Key.Day, Week = g.Key.Week, Count = g.Count() })
                 .ToList();
 
-            // 6. Tendencia temporal
-            var permisosValidos = permisos.Where(p => p.Fecha1.HasValue).ToList();
-            var tendencia = permisosValidos
-                .GroupBy(p => new { p.Fecha1.Value.Year, p.Fecha1.Value.Month })
-                .OrderBy(g => g.Key.Year)
-                .ThenBy(g => g.Key.Month)
-                .Select(g => new
-                {
-                    Month = new DateTime(g.Key.Year, g.Key.Month, 1)
-                        .ToString("MMMM yyyy", new CultureInfo("es-ES")),
-
-                    Aprobados = g.Count(p => p.IdUsuarioAutoriza != null),
-                    Pendientes = g.Count(p => p.IdUsuarioAutoriza == null && p.Revisado == false),
-                    Total = g.Count()
-                })
-                .ToList();
-
-            // 7. Mapa de Calor
-            var heatmapData = permisosValidos
-                .GroupBy(p => new
-                {
-                    Day = p.Fecha1.Value.DayOfWeek,
-                    Week = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(
-                        p.Fecha1.Value,
-                        CalendarWeekRule.FirstDay,
-                        DayOfWeek.Monday)
-                })
-                .Select(g => new
-                {
-                    g.Key.Day,
-                    g.Key.Week,
-                    Count = g.Count()
-                })
-                .ToList();
-
-            // 8. Crear el DTO de respuesta
+            // 5. Mapear al DTO
             var model = new CorteDetailsDTO
             {
                 Id = corte.Id,
                 Inicia = corte.Inicia,
                 Termina = corte.Termina,
-                Estatus = corte.Estatus ?? false,
-                FechaCreacion = corte.FechaCreacion.Value,
-                FechaModificacion = corte.FechaModificacion,
-                UsuarioCrea = corte.IdUsuarioCreaNavigation?.Nombre,
+                Estatus = corte.Estatus,
+                UsuarioCrea = corte.IdUsuarioCreaNavigation?.Nombre ?? "Sistema",
                 UsuarioModifica = corte.IdUsuarioModificaNavigation?.Nombre,
-                Permisos = permisos,
-                TotalPermisos = totalPermisos,
-                PermisosAprobados = aprobados,
-                PermisosPendientes = pendientesPorRevisar, // Cambio: usar pendientesPorRevisar
-                DiasPromedio = diasPromedio,
-                ConGoce = conGoce,
-                SinGoce = pendientesPorRevisar, // Reutilizar SinGoce para almacenar pendientesPorRevisar
+                TotalPermisos = permisos.Count,
+                ConGoce = permisos.Count(p => p.Goce == true),
+                SinGoce = permisos.Count(p => p.Goce != true),
+                DiasPromedio = permisos.Any() ? permisos.Average(p => p.Dias ?? 0) : 0,
+                
+                // Serialización
                 PermisosPorTipoJson = JsonConvert.SerializeObject(permisosPorTipo),
                 PermisosPorAreaJson = JsonConvert.SerializeObject(permisosPorArea),
                 TendenciaJson = JsonConvert.SerializeObject(tendencia),
-                HeatmapDataJson = JsonConvert.SerializeObject(heatmapData),
-                KpiDataJson = JsonConvert.SerializeObject(new
-                {
-                    total = totalPermisos,
-                    aprobados = aprobados,
-                    pendientes = pendientesPorRevisar,
-                    diasPromedio = diasPromedio
-                })
+                HeatmapDataJson = JsonConvert.SerializeObject(heatmap),
+                KpiDataJson = JsonConvert.SerializeObject(new { total = permisos.Count })
             };
 
             return View(model);

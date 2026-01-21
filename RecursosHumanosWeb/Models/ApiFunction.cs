@@ -17,7 +17,7 @@ public partial class ApiFunction
 
     public int IdUsuarioCrea { get; set; }
 
-    public int IdUsuarioModifica { get; set; }
+    public int? IdUsuarioModifica { get; set; }
 
     public virtual Usuario IdUsuarioCreaNavigation { get; set; } = null!;
 

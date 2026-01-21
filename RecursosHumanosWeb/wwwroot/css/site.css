@@ -117,9 +117,9 @@ body {
 
 .card-header {
     background: var(--gradient-soft);
-    border-bottom: 1px solid var(--border-light);
+    border-bottom: 45px solid var(--border-light);
     padding: var(--spacing-lg) var(--spacing-xl);
-    font-weight: 600;
+    font-weight: 1200;
 }
 
 .card-body {
@@ -156,25 +156,96 @@ body {
 }
 
 /* =================================
-   BADGES MODERNOS (GLOBALES)
+   SISTEMA DE ESTATUS Y NAVEGACIÓN (NUEVO)
    ================================= */
-.status-badge {
+
+/* Contenedor de Estatus Glassmorphism */
+.status-glass {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 0.6rem 1.25rem;
+    color: var(--white);
+    font-weight: 600;
+    letter-spacing: 0.5px;
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-xs);
-    padding: var(--spacing-xs) var(--spacing-md);
+    transition: all var(--transition-smooth);
+}
+
+.status-glass:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+}
+
+/* Punto de estado con pulso */
+.status-dot {
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 10px;
+    position: relative;
+}
+
+/* Variaciones de color usando tus variables */
+.dot-active { 
+    background-color: var(--success-color); 
+    box-shadow: 0 0 10px var(--success-color);
+}
+.dot-active::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: var(--success-color);
+    border-radius: 50%;
+    animation: status-pulse 2s infinite;
+}
+
+.dot-closed { 
+    background-color: var(--danger-color);
+    box-shadow: 0 0 10px var(--danger-color);
+}
+
+/* Animación de pulso */
+@keyframes status-pulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    70% { transform: scale(2.5); opacity: 0; }
+    100% { transform: scale(1); opacity: 0; }
+}
+
+/* Botón Regresar estilo Hamburguesa (Píldora) */
+.btn-return-pill {
+    background: var(--white);
+    color: var(--primary-dark);
+    border: 2px solid var(--primary-light);
     border-radius: var(--radius-pill);
-    font-size: 0.875rem;
+    padding: 0.6rem 1.5rem;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all var(--transition-spring);
+    box-shadow: 0 4px 10px var(--shadow-color);
 }
 
-.status-badge i {
-    font-size: 0.9rem;
+.btn-return-pill:hover {
+    background: var(--primary-lightest);
+    border-color: var(--primary-medium);
+    color: var(--primary-strong);
+    transform: translateX(-5px);
+    box-shadow: 0 6px 15px var(--shadow-hover);
 }
 
+.btn-return-pill i {
+    transition: transform var(--transition-smooth);
+}
+
+.btn-return-pill:hover i {
+    transform: translateX(-3px);
+}
 /* =================================
    GRID UTILITIES (GLOBALES)
    ================================= */
@@ -466,230 +537,378 @@ body {
 }
 
 /* =================================
-   ANIMACIONES MODERNAS - FONDO DINÁMICO
+   ANIMACIONES MODERNAS - FONDO DINÁMICO MEJORADO
+   Estilo: Minimalista Mágico con Profundidad
    ================================= */
 
-/* Contenedor moderno */
+/* Contenedor principal - Fixed para cubrir siempre toda la pantalla */
 .modern-container {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     overflow: hidden;
     z-index: -1;
+    background: linear-gradient(135deg, 
+        #0a0e27 0%, 
+        #151b35 25%, 
+        #1a1f3a 50%, 
+        #151b35 75%, 
+        #0a0e27 100%);
 }
 
-/* Rejilla dinámica */
+/* Rejilla dinámica infinita - Más sutil y elegante */
 .grid-overlay {
+    position: absolute;
+    top: -100%;
+    left: -100%;
+    width: 300%;
+    height: 300%;
+    background-image: 
+        linear-gradient(rgba(59, 130, 246, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(59, 130, 246, 0.08) 1px, transparent 1px);
+    background-size: 80px 80px;
+    animation: grid-flow 30s linear infinite;
+    opacity: 0.4;
+}
+
+/* Efecto de niebla suave en capas */
+.aurora {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: linear-gradient(rgba(59, 130, 246, 0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(59, 130, 246, 0.15) 1px, transparent 1px);
-    background-size: 60px 60px;
-    animation: grid-flow 25s linear infinite;
-    opacity: 0.6;
+    background: 
+        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(59, 130, 246, 0.12), transparent 60%),
+        radial-gradient(ellipse 60% 40% at 100% 50%, rgba(139, 92, 246, 0.08), transparent 50%),
+        radial-gradient(ellipse 70% 50% at 0% 80%, rgba(6, 182, 212, 0.1), transparent 60%);
+    animation: aurora-breathe 20s ease-in-out infinite;
 }
 
-/* Nebulosas flotantes */
+/* Nebulosas - Más difusas y sutiles */
 .nebula {
     position: absolute;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(59, 130, 246, 0.3), rgba(139, 92, 246, 0.2), transparent 70%);
-    animation: nebula-drift 20s ease-in-out infinite;
-    filter: blur(2px);
+    filter: blur(60px);
+    opacity: 0;
+    animation: nebula-gentle-drift 25s ease-in-out infinite;
+    will-change: transform, opacity;
 }
 
 .nebula-1 {
-    width: 300px;
-    height: 200px;
-    top: 10%;
-    left: -10%;
+    width: 500px;
+    height: 350px;
+    top: 5%;
+    left: -15%;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.2), rgba(6, 182, 212, 0.1), transparent 65%);
     animation-delay: 0s;
-    background: radial-gradient(ellipse, rgba(59, 130, 246, 0.25), rgba(6, 182, 212, 0.15), transparent 70%);
 }
 
 .nebula-2 {
-    width: 250px;
-    height: 180px;
-    top: 60%;
-    right: -15%;
-    animation-delay: -7s;
-    background: radial-gradient(ellipse, rgba(139, 92, 246, 0.25), rgba(168, 85, 247, 0.15), transparent 70%);
+    width: 450px;
+    height: 320px;
+    top: 45%;
+    right: -18%;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.18), rgba(168, 85, 247, 0.09), transparent 65%);
+    animation-delay: -8s;
 }
 
 .nebula-3 {
-    width: 200px;
-    height: 150px;
-    bottom: 20%;
-    left: 70%;
-    animation-delay: -14s;
-    background: radial-gradient(ellipse, rgba(6, 182, 212, 0.25), rgba(59, 130, 246, 0.15), transparent 70%);
+    width: 400px;
+    height: 280px;
+    bottom: 8%;
+    left: 55%;
+    background: radial-gradient(circle, rgba(6, 182, 212, 0.16), rgba(59, 130, 246, 0.08), transparent 65%);
+    animation-delay: -16s;
 }
 
-/* Haces de luz dinámicos */
+/* Haces de luz más sutiles y elegantes */
 .light-ray {
     position: absolute;
-    background: linear-gradient(45deg, transparent 0%, rgba(59, 130, 246, 0.6) 20%, rgba(255, 255, 255, 0.4) 50%, rgba(6, 182, 212, 0.6) 80%, transparent 100%);
-    animation: ray-sweep 18s ease-in-out infinite;
-    transform-origin: center;
-    filter: blur(1px);
-    opacity: 0.8;
+    height: 1px;
+    opacity: 0;
+    animation: ray-elegant-sweep 22s ease-in-out infinite;
+    filter: blur(0.5px);
+    will-change: transform, opacity;
 }
 
 .ray-1 {
-    width: 300px;
-    height: 2px;
-    top: 25%;
-    left: -50px;
-    transform: rotate(15deg);
+    width: 500px;
+    top: 20%;
+    left: -150px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(59, 130, 246, 0.4) 30%, 
+        rgba(255, 255, 255, 0.25) 50%, 
+        rgba(6, 182, 212, 0.4) 70%, 
+        transparent 100%);
+    transform: rotate(12deg);
     animation-delay: 0s;
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
 }
 
 .ray-2 {
-    width: 250px;
-    height: 2px;
-    top: 60%;
-    right: -50px;
-    transform: rotate(-20deg);
-    animation-delay: -6s;
-    background: linear-gradient(45deg, transparent 0%, rgba(139, 92, 246, 0.6) 20%, rgba(255, 255, 255, 0.4) 50%, rgba(168, 85, 247, 0.6) 80%, transparent 100%);
-    box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+    width: 450px;
+    top: 52%;
+    right: -150px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(139, 92, 246, 0.4) 30%, 
+        rgba(255, 255, 255, 0.25) 50%, 
+        rgba(168, 85, 247, 0.4) 70%, 
+        transparent 100%);
+    transform: rotate(-18deg);
+    animation-delay: -7s;
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
 }
 
 .ray-3 {
-    width: 200px;
-    height: 2px;
-    top: 80%;
-    left: 30%;
-    transform: rotate(35deg);
-    animation-delay: -12s;
-    background: linear-gradient(45deg, transparent 0%, rgba(6, 182, 212, 0.6) 20%, rgba(255, 255, 255, 0.4) 50%, rgba(37, 99, 235, 0.6) 80%, transparent 100%);
-    box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+    width: 380px;
+    top: 72%;
+    left: 15%;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(6, 182, 212, 0.4) 30%, 
+        rgba(255, 255, 255, 0.25) 50%, 
+        rgba(37, 99, 235, 0.4) 70%, 
+        transparent 100%);
+    transform: rotate(25deg);
+    animation-delay: -14s;
+    box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
 }
 
-/* Destellos de luz */
-.light-flash {
+/* Rayos verticales más sutiles */
+.light-beam {
     position: absolute;
-    width: 4px;
-    height: 4px;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 50%;
-    animation: flash-pulse 8s ease-in-out infinite;
-    box-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(180deg, 
+        transparent 0%, 
+        rgba(59, 130, 246, 0.15) 25%, 
+        rgba(255, 255, 255, 0.1) 50%, 
+        rgba(6, 182, 212, 0.15) 75%, 
+        transparent 100%);
+    animation: beam-gentle-pulse 15s ease-in-out infinite;
+    filter: blur(1px);
+    opacity: 0.3;
 }
 
-.flash-1 {
-    top: 15%;
-    left: 20%;
+.beam-1 {
+    left: 28%;
     animation-delay: 0s;
 }
 
+.beam-2 {
+    right: 22%;
+    animation-delay: -7.5s;
+    background: linear-gradient(180deg, 
+        transparent 0%, 
+        rgba(139, 92, 246, 0.15) 25%, 
+        rgba(255, 255, 255, 0.1) 50%, 
+        rgba(168, 85, 247, 0.15) 75%, 
+        transparent 100%);
+}
+
+/* Destellos más delicados */
+.light-flash {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+    animation: flash-delicate 10s ease-in-out infinite;
+    will-change: transform, opacity;
+}
+
+.flash-1 {
+    top: 12%;
+    left: 18%;
+    animation-delay: 0s;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
 .flash-2 {
-    top: 45%;
-    right: 25%;
-    animation-delay: -2s;
-    background: rgba(59, 130, 246, 0.9);
-    box-shadow: 0 0 25px rgba(59, 130, 246, 0.8);
+    top: 42%;
+    right: 23%;
+    animation-delay: -2.5s;
+    background: rgba(59, 130, 246, 0.7);
+    box-shadow: 0 0 18px rgba(59, 130, 246, 0.5);
 }
 
 .flash-3 {
-    bottom: 30%;
-    left: 60%;
-    animation-delay: -4s;
-    background: rgba(6, 182, 212, 0.9);
-    box-shadow: 0 0 25px rgba(6, 182, 212, 0.8);
+    bottom: 28%;
+    left: 58%;
+    animation-delay: -5s;
+    background: rgba(6, 182, 212, 0.7);
+    box-shadow: 0 0 18px rgba(6, 182, 212, 0.5);
 }
 
 .flash-4 {
-    top: 70%;
-    left: 15%;
-    animation-delay: -6s;
-    background: rgba(139, 92, 246, 0.9);
-    box-shadow: 0 0 25px rgba(139, 92, 246, 0.8);
+    top: 63%;
+    left: 13%;
+    animation-delay: -7.5s;
+    background: rgba(139, 92, 246, 0.7);
+    box-shadow: 0 0 18px rgba(139, 92, 246, 0.5);
 }
 
-/* Animaciones */
-@keyframes nebula-drift {
+/* Líneas de conexión más sutiles */
+.connection-lines {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+}
+
+.line {
+    position: absolute;
+    height: 1px;
+    opacity: 0;
+    animation: line-gentle-flow 20s linear infinite;
+}
+
+.line-1 {
+    top: 33%;
+    width: 350px;
+    left: -350px;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(59, 130, 246, 0.3), 
+        transparent);
+    animation-delay: 0s;
+}
+
+.line-2 {
+    top: 68%;
+    width: 420px;
+    right: -420px;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(139, 92, 246, 0.3), 
+        transparent);
+    animation-delay: -10s;
+}
+
+/* Campo de estrellas */
+.star-field {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: star-gentle-twinkle 5s ease-in-out infinite;
+    box-shadow: 0 0 2px rgba(255, 255, 255, 0.5);
+}
+
+/* Partículas flotantes - Movimiento más suave y orgánico */
+.floating-particle {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background: rgba(59, 130, 246, 0.7);
+    border-radius: 50%;
+    animation: float-organic 28s ease-in-out infinite;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.6);
+    will-change: transform;
+    opacity: 0.8;
+}
+
+/* Partículas que derivan suavemente */
+.particle-drift {
+    position: absolute;
+    width: 2.5px;
+    height: 2.5px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    animation: particle-gentle-wander 35s ease-in-out infinite;
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+    will-change: transform;
+    opacity: 0.7;
+}
+
+/* Chispas de energía más delicadas */
+.energy-spark {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: rgba(59, 130, 246, 0.8);
+    border-radius: 50%;
+    animation: spark-gentle-dance 18s ease-in-out infinite;
+    box-shadow: 0 0 5px rgba(59, 130, 246, 0.6);
+    will-change: transform, opacity;
+    opacity: 0.75;
+}
+
+/* Meteoros más sutiles */
+.meteor {
+    position: absolute;
+    width: 1.5px;
+    height: 1.5px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 
+        0 0 8px rgba(255, 255, 255, 0.6),
+        -80px 0 15px 1.5px rgba(255, 255, 255, 0.2);
+    animation: meteor-gentle-fall 10s linear infinite;
+    right: -100px;
+    opacity: 0.8;
+}
+
+/* Pulsos de energía más sutiles */
+.energy-pulse {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(59, 130, 246, 0.2);
+    animation: pulse-gentle-expand 8s ease-out infinite;
+}
+
+.pulse-1 {
+    top: 18%;
+    left: 13%;
+    animation-delay: 0s;
+}
+
+.pulse-2 {
+    bottom: 22%;
+    right: 18%;
+    animation-delay: -2.7s;
+    border-color: rgba(139, 92, 246, 0.2);
+}
+
+.pulse-3 {
+    top: 58%;
+    left: 48%;
+    animation-delay: -5.4s;
+    border-color: rgba(6, 182, 212, 0.2);
+}
+
+/* =================================
+   ANIMACIONES SUAVES Y ORGÁNICAS
+   ================================= */
+
+@keyframes aurora-breathe {
     0%, 100% {
-        transform: translate(0, 0) rotate(0deg) scale(1);
         opacity: 0.6;
+        transform: scale(1) rotate(0deg);
     }
-
-    25% {
-        transform: translate(50px, -30px) rotate(5deg) scale(1.1);
+    33% {
         opacity: 0.8;
+        transform: scale(1.05) rotate(1deg);
     }
-
-    50% {
-        transform: translate(100px, 20px) rotate(-3deg) scale(0.9);
+    66% {
         opacity: 0.7;
-    }
-
-    75% {
-        transform: translate(30px, 40px) rotate(8deg) scale(1.05);
-        opacity: 0.9;
-    }
-}
-
-@keyframes ray-sweep {
-    0% {
-        opacity: 0;
-        transform: translateX(-100px) rotate(15deg) scaleX(0.5);
-        filter: blur(3px);
-    }
-
-    25% {
-        opacity: 0.8;
-        transform: translateX(0) rotate(15deg) scaleX(1);
-        filter: blur(1px);
-    }
-
-    50% {
-        opacity: 1;
-        transform: translateX(50px) rotate(15deg) scaleX(1.2);
-        filter: blur(0px);
-    }
-
-    75% {
-        opacity: 0.6;
-        transform: translateX(100px) rotate(15deg) scaleX(0.8);
-        filter: blur(1px);
-    }
-
-    100% {
-        opacity: 0;
-        transform: translateX(200px) rotate(15deg) scaleX(0.3);
-        filter: blur(2px);
-    }
-}
-
-@keyframes flash-pulse {
-    0%, 100% {
-        opacity: 0.3;
-        transform: scale(0.5);
-        box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
-    }
-
-    25% {
-        opacity: 0.8;
-        transform: scale(1.2);
-        box-shadow: 0 0 40px rgba(255, 255, 255, 0.8);
-    }
-
-    50% {
-        opacity: 1;
-        transform: scale(2);
-        box-shadow: 0 0 60px rgba(255, 255, 255, 1);
-    }
-
-    75% {
-        opacity: 0.6;
-        transform: scale(1.5);
-        box-shadow: 0 0 30px rgba(255, 255, 255, 0.6);
+        transform: scale(0.98) rotate(-1deg);
     }
 }
 
@@ -697,9 +916,285 @@ body {
     0% {
         transform: translate(0, 0);
     }
-
     100% {
-        transform: translate(60px, 60px);
+        transform: translate(80px, 80px);
+    }
+}
+
+@keyframes nebula-gentle-drift {
+    0%, 100% {
+        transform: translate(0, 0) rotate(0deg) scale(1);
+        opacity: 0.5;
+    }
+    25% {
+        transform: translate(60px, -40px) rotate(3deg) scale(1.08);
+        opacity: 0.7;
+    }
+    50% {
+        transform: translate(120px, 25px) rotate(-2deg) scale(0.96);
+        opacity: 0.6;
+    }
+    75% {
+        transform: translate(40px, 50px) rotate(4deg) scale(1.04);
+        opacity: 0.75;
+    }
+}
+
+@keyframes ray-elegant-sweep {
+    0% {
+        opacity: 0;
+        transform: translateX(-200px) scaleX(0.6);
+    }
+    15% {
+        opacity: 0.5;
+    }
+    30% {
+        opacity: 0.8;
+        transform: translateX(0) scaleX(1);
+    }
+    50% {
+        opacity: 1;
+        transform: translateX(60px) scaleX(1.15);
+    }
+    70% {
+        opacity: 0.6;
+        transform: translateX(120px) scaleX(0.9);
+    }
+    85% {
+        opacity: 0.3;
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(250px) scaleX(0.4);
+    }
+}
+
+@keyframes beam-gentle-pulse {
+    0%, 100% {
+        opacity: 0.2;
+        transform: scaleY(0.9);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scaleY(1.1);
+    }
+}
+
+@keyframes flash-delicate {
+    0%, 100% {
+        opacity: 0.2;
+        transform: scale(0.6);
+    }
+    20% {
+        opacity: 0.6;
+        transform: scale(1.1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.8);
+    }
+    80% {
+        opacity: 0.5;
+        transform: scale(1.3);
+    }
+}
+
+@keyframes line-gentle-flow {
+    0% {
+        transform: translateX(0);
+        opacity: 0;
+    }
+    15% {
+        opacity: 0.4;
+    }
+    85% {
+        opacity: 0.4;
+    }
+    100% {
+        transform: translateX(calc(100vw + 450px));
+        opacity: 0;
+    }
+}
+
+@keyframes star-gentle-twinkle {
+    0%, 100% {
+        opacity: 0.4;
+        transform: scale(0.9);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.15);
+    }
+}
+
+/* Movimiento orgánico para partículas flotantes */
+@keyframes float-organic {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 0.7;
+    }
+    20% {
+        transform: translate(90px, -60px) rotate(72deg);
+        opacity: 0.9;
+    }
+    40% {
+        transform: translate(160px, 40px) rotate(144deg);
+        opacity: 1;
+    }
+    60% {
+        transform: translate(110px, 100px) rotate(216deg);
+        opacity: 0.85;
+    }
+    80% {
+        transform: translate(30px, 60px) rotate(288deg);
+        opacity: 0.95;
+    }
+    100% {
+        transform: translate(0, 0) rotate(360deg);
+        opacity: 0.7;
+    }
+}
+
+/* Vagabundeo suave de partículas */
+@keyframes particle-gentle-wander {
+    0% {
+        transform: translate(0, 0);
+        opacity: 0.6;
+    }
+    16.67% {
+        transform: translate(110px, -75px);
+        opacity: 0.8;
+    }
+    33.33% {
+        transform: translate(220px, 55px);
+        opacity: 0.9;
+    }
+    50% {
+        transform: translate(330px, -35px);
+        opacity: 0.75;
+    }
+    66.67% {
+        transform: translate(200px, 90px);
+        opacity: 0.85;
+    }
+    83.33% {
+        transform: translate(80px, -45px);
+        opacity: 0.95;
+    }
+    100% {
+        transform: translate(0, 0);
+        opacity: 0.6;
+    }
+}
+
+/* Danza delicada de chispas */
+@keyframes spark-gentle-dance {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.7;
+    }
+    12.5% {
+        transform: translate(45px, -30px) scale(1.3);
+        opacity: 0.95;
+    }
+    25% {
+        transform: translate(85px, 20px) scale(0.9);
+        opacity: 0.8;
+    }
+    37.5% {
+        transform: translate(60px, 60px) scale(1.15);
+        opacity: 0.9;
+    }
+    50% {
+        transform: translate(-30px, 40px) scale(1);
+        opacity: 0.85;
+    }
+    62.5% {
+        transform: translate(-60px, -20px) scale(0.95);
+        opacity: 0.9;
+    }
+    75% {
+        transform: translate(-40px, -50px) scale(1.2);
+        opacity: 1;
+    }
+    87.5% {
+        transform: translate(-15px, -30px) scale(1.05);
+        opacity: 0.95;
+    }
+    100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.7;
+    }
+}
+
+@keyframes meteor-gentle-fall {
+    0% {
+        transform: translate(0, 0);
+        opacity: 0.9;
+    }
+    75% {
+        opacity: 0.9;
+    }
+    100% {
+        transform: translate(-100vw, 100vh);
+        opacity: 0;
+    }
+}
+
+@keyframes pulse-gentle-expand {
+    0% {
+        transform: scale(0.85);
+        opacity: 0.6;
+    }
+    50% {
+        transform: scale(1.4);
+        opacity: 0.15;
+    }
+    100% {
+        transform: scale(1.8);
+        opacity: 0;
+    }
+}
+
+/* Optimización de rendimiento */
+.modern-container * {
+    pointer-events: none;
+}
+
+body {
+    position: relative;
+    z-index: 1;
+}
+
+/* Responsive - Reducir efectos en móviles para mejor rendimiento */
+@media (max-width: 768px) {
+    .nebula {
+        filter: blur(40px);
+        opacity: 0.6 !important;
+    }
+    
+    .floating-particle,
+    .particle-drift,
+    .energy-spark {
+        animation-duration: 20s;
+    }
+    
+    .light-ray,
+    .light-beam {
+        opacity: 0.4;
+    }
+    
+    .grid-overlay {
+        opacity: 0.25;
+    }
+}
+
+/* Accesibilidad - Respetar preferencias de movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+    .modern-container * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
     }
 }
 
@@ -2531,3 +3026,422 @@ body {
         justify-content: center;
     }
 }
+
+/* =================================
+   INFO CARDS - SISTEMA ESTANDARIZADO
+   ================================= */
+
+/* Contenedor principal para vistas de detalles */
+.details-container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    margin-bottom: 20px;
+}
+
+/* Card principal con hover */
+.details-card {
+    transition: transform var(--transition-smooth), box-shadow var(--transition-smooth);
+}
+
+.details-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px var(--shadow-hover);
+}
+
+/* Header con gradiente para cards de detalles */
+.details-header-gradient {
+    background: linear-gradient(90deg, #2563eb 0%, #4f46e5 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.details-header-gradient::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 30%),
+                      radial-gradient(circle at 80% 80%, rgba(79, 70, 229, 0.3) 0%, transparent 40%);
+    pointer-events: none;
+}
+
+/* Avatar en headers */
+.details-avatar {
+    width: 64px;
+    height: 64px;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255,255,255,0.3);
+}
+
+/* =================================
+   INFO-CARD - TARJETAS DE INFORMACIÓN CON ANIMACIÓN DE BORDE
+   ================================= */
+
+.info-card {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    position: relative;
+    transition: all var(--transition-smooth);
+    overflow: hidden;
+}
+
+/* Pseudo-elemento para el borde izquierdo animado */
+.info-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 3px;
+    height: 0;
+    background: linear-gradient(135deg, var(--primary-strong, #4f46e5) 0%, var(--primary-medium, #6366f1) 100%);
+    transform: translateY(-50%);
+    transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 0 2px 2px 0;
+}
+
+.info-card:hover {
+    background-color: #fff;
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.info-card:hover::before {
+    height: 100%;
+}
+
+/* Variantes de colores para el borde */
+.info-card.info-card-primary::before {
+    background: linear-gradient(135deg, var(--primary-strong) 0%, var(--primary-medium) 100%);
+}
+
+.info-card.info-card-success::before {
+    background: linear-gradient(135deg, var(--success-color) 0%, #059669 100%);
+}
+
+.info-card.info-card-warning::before {
+    background: linear-gradient(135deg, var(--warning-color) 0%, #f59e0b 100%);
+}
+
+.info-card.info-card-danger::before {
+    background: linear-gradient(135deg, var(--danger-color) 0%, #dc2626 100%);
+}
+
+.info-card.info-card-purple::before {
+    background: linear-gradient(135deg, #9333ea 0%, #a855f7 100%);
+}
+
+.info-card.info-card-orange::before {
+    background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+}
+
+.info-card.info-card-teal::before {
+    background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
+}
+
+.info-card.info-card-indigo::before {
+    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+}
+
+/* =================================
+   AUDIT-CARD - TARJETAS DE AUDITORÍA
+   ================================= */
+
+.audit-card {
+    border: 1px solid #dee2e6;
+    position: relative;
+    transition: all var(--transition-smooth);
+    overflow: hidden;
+}
+
+.audit-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 3px;
+    height: 0;
+    background: linear-gradient(135deg, var(--primary-medium, #6366f1) 0%, var(--primary-light, #818cf8) 100%);
+    transform: translateY(-50%);
+    transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 0 2px 2px 0;
+}
+
+.audit-card:hover {
+    background-color: #fff;
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.audit-card:hover::before {
+    height: 100%;
+}
+
+/* Variantes para audit-card */
+.audit-card.audit-created::before {
+    background: linear-gradient(135deg, var(--success-color) 0%, #059669 100%);
+}
+
+.audit-card.audit-modified::before {
+    background: linear-gradient(135deg, var(--warning-color) 0%, #f59e0b 100%);
+}
+
+/* =================================
+   ICON-CIRCLE - CÍRCULOS DE ÍCONOS
+   ================================= */
+
+.icon-circle {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: transform var(--transition-smooth);
+}
+
+.info-card:hover .icon-circle,
+.audit-card:hover .icon-circle {
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* Variantes de colores predefinidas para icon-circle */
+.icon-circle.purple-circle {
+    background-color: #f3e8ff;
+    color: #9333ea;
+}
+
+.icon-circle.orange-circle {
+    background-color: #fff7ed;
+    color: #ea580c;
+}
+
+.icon-circle.teal-circle {
+    background-color: #ccfbf1;
+    color: #0d9488;
+}
+
+.icon-circle.indigo-circle {
+    background-color: #e0e7ff;
+    color: #4f46e5;
+}
+
+.icon-circle.green-circle {
+    background-color: #d1fae5;
+    color: #059669;
+}
+
+.icon-circle.blue-circle {
+    background-color: #dbeafe;
+    color: #2563eb;
+}
+
+/* =================================
+   AUDIT-ICON - ÍCONOS PARA AUDITORÍA
+   ================================= */
+
+.audit-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: transform var(--transition-smooth);
+}
+
+.audit-card:hover .audit-icon {
+    transform: scale(1.1);
+}
+
+/* =================================
+   SECTION-TITLE - TÍTULOS DE SECCIÓN
+   ================================= */
+
+.section-title {
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary-strong) 0%, var(--primary-medium) 100%);
+    transition: width var(--transition-smooth);
+}
+
+.section-title:hover::after {
+    width: 120px;
+}
+
+/* =================================
+   DETAIL-GRID - GRID PARA DETALLES
+   ================================= */
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+@media (max-width: 768px) {
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =================================
+   RESPONSIVE PARA INFO-CARDS
+   ================================= */
+
+@media (max-width: 768px) {
+    .details-container {
+        padding: 1rem 0.5rem;
+        margin-bottom: 80px;
+    }
+    
+    .info-card:hover,
+    .audit-card:hover {
+        transform: translateX(3px);
+    }
+    
+    .details-avatar {
+        width: 48px;
+        height: 48px;
+    }
+}
+
+@media (max-width: 576px) {
+    .icon-circle {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .audit-icon {
+        width: 36px;
+        height: 36px;
+    }
+}
+
+/* ==========================================================================
+   RECONSTRUCCIÓN DE ESTILO "TAILWIND-LIKE" CON VARIABLES GLOBALES
+   ========================================================================== */
+
+/* 1. Layout y Rejillas Responsivas (Recuperando el grid original) */
+.layout-grid {
+    display: grid;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+.grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+.span-2 { grid-column: span 2; }
+.span-3 { grid-column: span 3; }
+
+/* Responsive manual */
+@media (max-width: 1024px) {
+    .grid-cols-4, .grid-cols-3 { grid-template-columns: repeat(2, 1fr); }
+    .span-2 { grid-column: span 1; }
+}
+@media (max-width: 768px) {
+    .grid-cols-4, .grid-cols-3, .grid-cols-2 { grid-template-columns: 1fr; }
+}
+
+/* 2. Estilos de Cards "Premium" (Recuperando el efecto flotante) */
+.dashboard-card {
+    background: var(--white);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025); /* Shadow-lg de Tailwind aprox */
+    padding: 1.5rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid var(--border-light);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* 3. Headers y Títulos */
+.card-header-title {
+    font-size: 1.125rem; /* text-lg */
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: 0.75rem;
+}
+
+/* 4. Estilos para Datos Específicos (Fechas y Auditoría) */
+.data-group {
+    background: var(--surface);
+    padding: 1rem;
+    border-radius: var(--radius-lg);
+    border-left: 4px solid var(--primary-medium);
+}
+
+.data-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    display: block;
+}
+
+.data-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0;
+}
+
+/* 5. Contenedores de Gráficos (Para evitar que desaparezcan) */
+.chart-box {
+    position: relative;
+    min-height: 300px; /* Altura forzada */
+    flex-grow: 1;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 6. Utilidades de Flexbox (Reemplazo de flex de Tailwind) */
+.flex-between { display: flex; justify-content: space-between; align-items: center; }
+.flex-center { display: flex; justify-content: center; align-items: center; }
+.flex-column { display: flex; flex-direction: column; }
+.gap-4 { gap: 1rem; }
+
+/* 7. KPIs Cards Coloreadas */
+.kpi-card {
+    color: white;
+    padding: 1.5rem;
+    border-radius: var(--radius-xl);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+.kpi-card h2 { font-size: 2rem; margin: 0.5rem 0; }
+.kpi-card p { opacity: 0.9; margin: 0; font-size: 0.875rem; font-weight: 600; text-transform: uppercase; }

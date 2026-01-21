@@ -35,9 +35,9 @@
                             </p>
                         </div>
                     </div>
-                    <div class="status-badge @((Model.Estatus ?? false) ? "bg-green-500" : "bg-red-500") text-white px-4 py-2 rounded-full text-sm font-medium flex items-center shadow-sm">
-                        <i class="@((Model.Estatus ?? false) ? "fas fa-check-circle" : "fas fa-times-circle") mr-2"></i>
-                        @((Model.Estatus ?? false) ? "Activa" : "Inactiva")
+                    <div class="status-badge @((Model.Estatus) ? "bg-green-500" : "bg-red-500") text-white px-4 py-2 rounded-full text-sm font-medium flex items-center shadow-sm">
+                        <i class="@((Model.Estatus) ? "fas fa-check-circle" : "fas fa-times-circle") mr-2"></i>
+                        @((Model.Estatus) ? "Activa" : "Inactiva")
                     </div>
                 </div>
             </div>
@@ -94,14 +94,14 @@
                         <!-- Estado -->
                         <div class="info-item bg-gray-50 p-4 rounded-lg border border-gray-100">
                             <div class="flex items-center gap-3 mb-2">
-                                <div class="w-8 h-8 @((Model.Estatus ?? false) ? "bg-green-100" : "bg-red-100") rounded-full flex items-center justify-center">
-                                    <i class="fas @((Model.Estatus ?? false) ? "fa-check-circle" : "fa-times-circle") @((Model.Estatus ?? false) ? "text-green-600" : "text-red-600") text-sm"></i>
+                                <div class="w-8 h-8 @((Model.Estatus) ? "bg-green-100" : "bg-red-100") rounded-full flex items-center justify-center">
+                                    <i class="fas @((Model.Estatus) ? "fa-check-circle" : "fa-times-circle") @((Model.Estatus) ? "text-green-600" : "text-red-600") text-sm"></i>
                                 </div>
                                 <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Estado</span>
                             </div>
-                            <p class="text-lg font-semibold ml-11 @((Model.Estatus ?? false) ? "text-green-700" : "text-red-700")">
-                                <i class="fas @((Model.Estatus ?? false) ? "fa-lock-open" : "fa-lock") mr-2"></i>
-                                @((Model.Estatus ?? false) ? "Activa - En Uso" : "Inactiva - Deshabilitada")
+                            <p class="text-lg font-semibold ml-11 @((Model.Estatus) ? "text-green-700" : "text-red-700")">
+                                <i class="fas @((Model.Estatus) ? "fa-lock-open" : "fa-lock") mr-2"></i>
+                                @((Model.Estatus) ? "Activa - En Uso" : "Inactiva - Deshabilitada")
                             </p>
                         </div>
                     </div>
@@ -122,10 +122,10 @@
                                 <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Fecha de Creación</span>
                             </div>
                             <p class="text-lg font-semibold text-gray-900 ml-11">
-                                @Model.FechaCreacion.Value.ToString("dd MMMM yyyy")
+                                @Model.FechaCreacion.ToString("dd MMMM yyyy")
                             </p>
                             <p class="text-sm text-gray-500 ml-11">
-                                @Model.FechaCreacion.Value.ToString("hh:mm tt")
+                                @Model.FechaCreacion.ToString("hh:mm tt")
                             </p>
                         </div>
 
@@ -164,7 +164,7 @@
                             </div>
                             <p class="text-base font-semibold text-gray-900 ml-11">
                                 @{
-                                    var diasCreacion = (DateTime.Now - Model.FechaCreacion.Value).Days;
+                                    var diasCreacion = (DateTime.Now - Model.FechaCreacion).Days;
                                 }
                                 @if (diasCreacion == 0)
                                 {

@@ -99,8 +99,8 @@ namespace RecursosHumanosWeb.Controllers
                 "correo_desc" => query.OrderByDescending(u => u.Correo ?? ""),
                 "departamento" => query.OrderBy(u => u.IdDepartamentoNavigation == null ? "" : (u.IdDepartamentoNavigation.Descripcion ?? "")),
                 "departamento_desc" => query.OrderByDescending(u => u.IdDepartamentoNavigation == null ? "" : (u.IdDepartamentoNavigation.Descripcion ?? "")),
-                "fecha" => query.OrderBy(u => u.FechaCreacion ?? DateTime.MinValue),
-                "fecha_desc" => query.OrderByDescending(u => u.FechaCreacion ?? DateTime.MinValue),
+                "fecha" => query.OrderBy(u => u.FechaCreacion),
+                "fecha_desc" => query.OrderByDescending(u => u.FechaCreacion),
                 _ => query.OrderBy(u => u.Nombre ?? "") // Orden por defecto
             };
 
@@ -133,43 +133,48 @@ namespace RecursosHumanosWeb.Controllers
         }
 
         // GET: Usuarios/Details/5 (Sin cambios)
-        public async Task<IActionResult> Details(int? id)
+        [HttpGet]public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
+            // 1️⃣ Cargar usuario con todas sus relaciones
             var usuario = await _context.Usuarios
+                .AsNoTracking()
                 .Include(u => u.IdAreaNavigation)
                 .Include(u => u.IdDepartamentoNavigation)
                 .Include(u => u.IdPuestoNavigation)
                 .Include(u => u.IdTipoUsuarioNavigation)
                 .Include(u => u.IdUsuarioCreaNavigation)
                 .Include(u => u.IdUsuarioModificaNavigation)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(u => u.Id == id);
 
             if (usuario == null)
-            {
                 return NotFound();
-            }
 
-            var vm = _mapper.Map<RecursosHumanosWeb.Models.ViewModels.Usuario.UsuarioDetailsViewModel>(usuario);
+            // 2️⃣ Mapear a ViewModel
+            var vm = _mapper.Map<UsuarioDetailsViewModel>(usuario);
+
+            if (vm == null)
+                return Problem("Error al mapear Usuario → UsuarioDetailsViewModel");
+
+            // 3️⃣ Renderizar vista por convención: Views/Usuarios/Details.cshtml
             return View(vm);
         }
+
 
         // GET: Usuarios/Create
         public IActionResult Create()
         {
             PrepareUserSelectLists();
-            var vm = new RecursosHumanosWeb.Models.ViewModels.Usuario.UsuarioCreateViewModel();
+            var vm = new UsuarioCreateViewModel();
             return View(vm);
         }
 
         // POST: Usuarios/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(RecursosHumanosWeb.Models.ViewModels.Usuario.UsuarioCreateViewModel model)
+        public async Task<IActionResult> Create(UsuarioCreateViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -201,7 +206,7 @@ namespace RecursosHumanosWeb.Controllers
                 return NotFound();
             }
             // Map entity to UpdateViewModel
-            var vm = _mapper.Map<RecursosHumanosWeb.Models.ViewModels.Usuario.UsuarioUpdateViewModel>(usuario);
+            var vm = _mapper.Map<UsuarioUpdateViewModel>(usuario);
             vm.Clave = null; // do not prefill password
 
             PrepareUserSelectLists(usuario.IdUsuarioCrea, usuario.IdUsuarioModifica);
@@ -211,7 +216,7 @@ namespace RecursosHumanosWeb.Controllers
         // POST: Usuarios/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(RecursosHumanosWeb.Models.ViewModels.Usuario.UsuarioUpdateViewModel model)
+        public async Task<IActionResult> Edit(UsuarioUpdateViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -415,8 +420,8 @@ namespace RecursosHumanosWeb.Controllers
                 .Select(u => new
                 {
                     id = u.Id,
-                    text = u.Nombre ?? "",
-                    areaId = u.IdArea ?? 0
+                    text = u.Nombre,
+                    areaId = u.IdArea
                 })
                 .Take(10)
                 .ToListAsync();

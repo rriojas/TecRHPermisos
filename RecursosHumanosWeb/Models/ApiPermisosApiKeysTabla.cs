@@ -21,7 +21,7 @@ public partial class ApiPermisosApiKeysTabla
 
     public int IdUsuarioCrea { get; set; }
 
-    public int IdUsuarioModifica { get; set; }
+    public int? IdUsuarioModifica { get; set; }
 
     public virtual ApiKey IdApiKeyNavigation { get; set; } = null!;
 
@@ -31,5 +31,5 @@ public partial class ApiPermisosApiKeysTabla
 
     public virtual Usuario IdUsuarioCreaNavigation { get; set; } = null!;
 
-    public virtual Usuario IdUsuarioModificaNavigation { get; set; } = null!;
+    public virtual Usuario? IdUsuarioModificaNavigation { get; set; } = null!;
 }

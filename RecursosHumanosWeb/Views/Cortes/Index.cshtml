@@ -105,21 +105,14 @@
                                 var usuarioCrea = Model.Usuarios.FirstOrDefault(u => u.Id == item.IdUsuarioCrea)?.Nombre ?? "-";
                                 var usuarioModifica = Model.Usuarios.FirstOrDefault(u => u.Id == item.IdUsuarioModifica)?.Nombre ?? "-";
                                 <tr>
-                                    <td>@(item.Inicia?.ToString("dd/MM/yyyy") ?? "-")</td>
-                                    <td>@(item.Termina?.ToString("dd/MM/yyyy") ?? "-")</td>
+                                    <td>@(item.Inicia.ToString("dd/MM/yyyy") ?? "-")</td>
+                                    <td>@(item.Termina.ToString("dd/MM/yyyy") ?? "-")</td>
                                     <td>
-                                        @if (item.FechaCreacion.HasValue)
-                                        {
-                                            <div style="color: var(--text-medium); font-weight: 500;">
-                                                <div style="font-size: 0.875rem;">@item.FechaCreacion.Value.ToString("dd/MM/yyyy")</div>
-                                                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.125rem;">@item.FechaCreacion.Value.ToString("h:mm tt")</div>
+                                        <div style="color: var(--text-medium); font-weight: 500;">
+                                            <div style="font-size: 0.875rem;">@item.FechaCreacion.ToString("dd/MM/yyyy")</div>
+                                                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.125rem;">@item.FechaCreacion.ToString("h:mm tt")</div>
                                             </div>
-                                        }
-                                        else
-                                        {
-                                            <div style="font-style: italic; color: var(--text-muted);">Sin crear</div>
-                                        }
-                                    </td>
+                                        </td>
                                     <td>
                                         @if (item.FechaModificacion.HasValue)
                                         {

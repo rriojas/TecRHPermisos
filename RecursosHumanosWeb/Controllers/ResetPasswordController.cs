@@ -57,7 +57,7 @@ namespace RecursosHumanosWeb.Controllers
             // Validate
             if (string.IsNullOrWhiteSpace(dto.Email) || !new EmailAddressAttribute().IsValid(dto.Email))
             {
-                var bad = new AlertResponseDTO { Success = false, Title = "Error", Message = "Correo inválido.", Icon = "error" };
+                var bad = new AlertResponseDTO { Success = false, Title = "Error", Message = "Correo invï¿½lido.", Icon = "error" };
                 return Json(bad);
             }
 
@@ -107,7 +107,7 @@ namespace RecursosHumanosWeb.Controllers
             var sent = await _emailSender.SendTokenEmailAsync(emailModel);
             if (!sent)
             {
-                var fail = new AlertResponseDTO { Success = false, Title = "Error", Message = "No se pudo enviar el correo. Intente más tarde.", Icon = "error" };
+                var fail = new AlertResponseDTO { Success = false, Title = "Error", Message = "No se pudo enviar el correo. Intente mï¿½s tarde.", Icon = "error" };
                 return Json(fail);
             }
 
@@ -141,7 +141,7 @@ namespace RecursosHumanosWeb.Controllers
 
             if (tokenEntry == null)
             {
-                TempData["ResetPasswordMessage"] = "Token inválido o no encontrado.";
+                TempData["ResetPasswordMessage"] = "Token invï¿½lido o no encontrado.";
                 return RedirectToAction(nameof(RequestToken));
             }
 
@@ -155,7 +155,7 @@ namespace RecursosHumanosWeb.Controllers
             var providedHash = ComputeSha256Hash(tok);
             if (!string.Equals(providedHash, tokenEntry.TokenHash, StringComparison.OrdinalIgnoreCase))
             {
-                TempData["ResetPasswordMessage"] = "Token inválido.";
+                TempData["ResetPasswordMessage"] = "Token invï¿½lido.";
                 return RedirectToAction(nameof(RequestToken));
             }
 
@@ -178,8 +178,8 @@ namespace RecursosHumanosWeb.Controllers
             if (!ModelState.IsValid)
             {
                 var errors = ModelState
-                    .Where(m => m.Value.Errors.Any())
-                    .ToDictionary(k => k.Key, v => v.Value.Errors.Select(e => e.ErrorMessage).ToArray());
+                    .Where(m => m.Value!.Errors.Any())
+                    .ToDictionary(k => k.Key, v => v.Value!.Errors.Select(e => e.ErrorMessage).ToArray());
 
                 // Log ModelState and submitted form keys for debugging
                 try
@@ -202,7 +202,7 @@ namespace RecursosHumanosWeb.Controllers
                 {
                     Success = false,
                     Title = "Error",
-                    Message = "Datos inválidos",
+                    Message = "Datos invï¿½lidos",
                     Icon = "error",
                     Errors = errors
                 };
@@ -218,7 +218,7 @@ namespace RecursosHumanosWeb.Controllers
 
             if (tokenEntry == null)
             {
-                var bad = new AlertResponseDTO { Success = false, Title = "Error", Message = "Token inválido o ya usado.", Icon = "error" };
+                var bad = new AlertResponseDTO { Success = false, Title = "Error", Message = "Token invï¿½lido o ya usado.", Icon = "error" };
                 return Json(bad);
             }
 
@@ -231,7 +231,7 @@ namespace RecursosHumanosWeb.Controllers
             var providedHash = ComputeSha256Hash(model.Token);
             if (!string.Equals(providedHash, tokenEntry.TokenHash, StringComparison.OrdinalIgnoreCase))
             {
-                var bad = new AlertResponseDTO { Success = false, Title = "Error", Message = "Token inválido.", Icon = "error" };
+                var bad = new AlertResponseDTO { Success = false, Title = "Error", Message = "Token invï¿½lido.", Icon = "error" };
                 return Json(bad);
             }
 
@@ -252,9 +252,9 @@ namespace RecursosHumanosWeb.Controllers
             _context.Update(tokenEntry);
             await _context.SaveChangesAsync();
 
-            var successMessage = "Contraseña actualizada correctamente.";
+            var successMessage = "Contraseï¿½a actualizada correctamente.";
 
-            var ok = new AlertResponseDTO { Success = true, Title = "Éxito", Message = successMessage, Icon = "success", RedirectUrl = Url.Action("Login", "Account") };
+            var ok = new AlertResponseDTO { Success = true, Title = "ï¿½xito", Message = successMessage, Icon = "success", RedirectUrl = Url.Action("Login", "Account") };
             return Json(ok);
         }
 
